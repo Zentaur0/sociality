@@ -69,6 +69,7 @@ extension LoginVC {
         loginButton.setTitleColor(.white, for: .normal)
         loginButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
         loginButton.layer.cornerRadius = 25
+        loginButton.addTarget(self, action: #selector(loginButtonTap), for: .touchUpInside)
         
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
@@ -162,5 +163,10 @@ extension LoginVC {
         // Устанавливаем отступ внизу UIScrollView, равный 0
         let contentInsets = UIEdgeInsets.zero
         scrollView?.contentInset = contentInsets
+    }
+    
+    @objc func loginButtonTap() {
+        let vc = RootTBC()
+        navigationController?.pushViewController(vc, animated: true)
     }
 }

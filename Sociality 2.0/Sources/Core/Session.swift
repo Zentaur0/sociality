@@ -14,7 +14,7 @@ final class Session {
     
     // MARK: - Properties
     var token: String = ""
-    var id: Int = Int()
+    var userId: Int = Int()
     
     // MARK: - Init
     private init() {}

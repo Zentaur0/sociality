@@ -22,6 +22,9 @@
 		233CA2E426B3FA2300822550 /* Sociality_2_0Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233CA2E326B3FA2300822550 /* Sociality_2_0Tests.swift */; };
 		233CA2EF26B3FA2300822550 /* Sociality_2_0UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233CA2EE26B3FA2300822550 /* Sociality_2_0UITests.swift */; };
 		239C556726B8907F002F7AF8 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239C556626B8907F002F7AF8 /* Session.swift */; };
+		239C556926B8A7B9002F7AF8 /* FriendsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239C556826B8A7B9002F7AF8 /* FriendsCell.swift */; };
+		239C556B26B8A98E002F7AF8 /* DataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239C556A26B8A98E002F7AF8 /* DataProvider.swift */; };
+		239C556D26B8A9EA002F7AF8 /* Friend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239C556C26B8A9EA002F7AF8 /* Friend.swift */; };
 		46A4F3F9F74E9BFCA021F7FF /* Pods_Sociality_2_0_Sociality_2_0UITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBDC39EB055F994DD57596DA /* Pods_Sociality_2_0_Sociality_2_0UITests.framework */; };
 		74A78D29F4202593F418FBE3 /* Pods_Sociality_2_0Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BBB5996C081BAE8BEC00A /* Pods_Sociality_2_0Tests.framework */; };
 		A982EBF07BFD252ED073EF3E /* Pods_Sociality_2_0.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E0D8BB10D27FFD21941B09F /* Pods_Sociality_2_0.framework */; };
@@ -67,6 +70,9 @@
 		233CA2EE26B3FA2300822550 /* Sociality_2_0UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sociality_2_0UITests.swift; sourceTree = "<group>"; };
 		233CA2F026B3FA2300822550 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		239C556626B8907F002F7AF8 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
+		239C556826B8A7B9002F7AF8 /* FriendsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsCell.swift; sourceTree = "<group>"; };
+		239C556A26B8A98E002F7AF8 /* DataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataProvider.swift; sourceTree = "<group>"; };
+		239C556C26B8A9EA002F7AF8 /* Friend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Friend.swift; sourceTree = "<group>"; };
 		3E0D8BB10D27FFD21941B09F /* Pods_Sociality_2_0.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sociality_2_0.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		400BBB5996C081BAE8BEC00A /* Pods_Sociality_2_0Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sociality_2_0Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DB33C3AF50ECBFB9BA5A3A2 /* Pods-Sociality 2.0-Sociality 2.0UITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sociality 2.0-Sociality 2.0UITests.debug.xcconfig"; path = "Target Support Files/Pods-Sociality 2.0-Sociality 2.0UITests/Pods-Sociality 2.0-Sociality 2.0UITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -134,6 +140,7 @@
 			isa = PBXGroup;
 			children = (
 				231E034B26B86195001E9C0F /* User.swift */,
+				239C556C26B8A9EA002F7AF8 /* Friend.swift */,
 				231E035926B87D00001E9C0F /* Group.swift */,
 			);
 			path = Models;
@@ -217,6 +224,7 @@
 		231E036726B881EC001E9C0F /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				239C556826B8A7B9002F7AF8 /* FriendsCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -282,6 +290,7 @@
 			isa = PBXGroup;
 			children = (
 				239C556626B8907F002F7AF8 /* Session.swift */,
+				239C556A26B8A98E002F7AF8 /* DataProvider.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -547,16 +556,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				231E034C26B86195001E9C0F /* User.swift in Sources */,
+				239C556D26B8A9EA002F7AF8 /* Friend.swift in Sources */,
 				231E035C26B87E38001E9C0F /* RootTBC.swift in Sources */,
 				233CA2D126B3FA2100822550 /* LoginVC.swift in Sources */,
 				231E036426B880B9001E9C0F /* GroupsVC.swift in Sources */,
 				231E036626B88124001E9C0F /* NewsVC.swift in Sources */,
 				231E035A26B87D00001E9C0F /* Group.swift in Sources */,
 				231E036226B88062001E9C0F /* FriendsVC.swift in Sources */,
+				239C556926B8A7B9002F7AF8 /* FriendsCell.swift in Sources */,
 				239C556726B8907F002F7AF8 /* Session.swift in Sources */,
 				233CA2CD26B3FA2100822550 /* AppDelegate.swift in Sources */,
 				231E036026B87EC2001E9C0F /* SetupDelegates.swift in Sources */,
 				231E034826B85EE3001E9C0F /* AppContainer.swift in Sources */,
+				239C556B26B8A98E002F7AF8 /* DataProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
