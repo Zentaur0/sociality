@@ -21,6 +21,7 @@
 		233CA2D926B3FA2300822550 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 233CA2D726B3FA2300822550 /* LaunchScreen.storyboard */; };
 		233CA2E426B3FA2300822550 /* Sociality_2_0Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233CA2E326B3FA2300822550 /* Sociality_2_0Tests.swift */; };
 		233CA2EF26B3FA2300822550 /* Sociality_2_0UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233CA2EE26B3FA2300822550 /* Sociality_2_0UITests.swift */; };
+		239C556726B8907F002F7AF8 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239C556626B8907F002F7AF8 /* Session.swift */; };
 		46A4F3F9F74E9BFCA021F7FF /* Pods_Sociality_2_0_Sociality_2_0UITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBDC39EB055F994DD57596DA /* Pods_Sociality_2_0_Sociality_2_0UITests.framework */; };
 		74A78D29F4202593F418FBE3 /* Pods_Sociality_2_0Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BBB5996C081BAE8BEC00A /* Pods_Sociality_2_0Tests.framework */; };
 		A982EBF07BFD252ED073EF3E /* Pods_Sociality_2_0.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E0D8BB10D27FFD21941B09F /* Pods_Sociality_2_0.framework */; };
@@ -65,6 +66,7 @@
 		233CA2EA26B3FA2300822550 /* Sociality 2.0UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Sociality 2.0UITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		233CA2EE26B3FA2300822550 /* Sociality_2_0UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sociality_2_0UITests.swift; sourceTree = "<group>"; };
 		233CA2F026B3FA2300822550 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		239C556626B8907F002F7AF8 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		3E0D8BB10D27FFD21941B09F /* Pods_Sociality_2_0.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sociality_2_0.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		400BBB5996C081BAE8BEC00A /* Pods_Sociality_2_0Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sociality_2_0Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DB33C3AF50ECBFB9BA5A3A2 /* Pods-Sociality 2.0-Sociality 2.0UITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sociality 2.0-Sociality 2.0UITests.debug.xcconfig"; path = "Target Support Files/Pods-Sociality 2.0-Sociality 2.0UITests/Pods-Sociality 2.0-Sociality 2.0UITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 		231E034926B85F72001E9C0F /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				239C556526B89075002F7AF8 /* Core */,
 				231E035D26B87E9C001E9C0F /* Protocols */,
 				231E035826B87C63001E9C0F /* Extensions */,
 				231E035226B87C1E001E9C0F /* Storyboards */,
@@ -273,6 +276,14 @@
 				233CA2F026B3FA2300822550 /* Info.plist */,
 			);
 			path = "Sociality 2.0UITests";
+			sourceTree = "<group>";
+		};
+		239C556526B89075002F7AF8 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				239C556626B8907F002F7AF8 /* Session.swift */,
+			);
+			path = Core;
 			sourceTree = "<group>";
 		};
 		C75D883C97869A3C07219035 /* Pods */ = {
@@ -542,6 +553,7 @@
 				231E036626B88124001E9C0F /* NewsVC.swift in Sources */,
 				231E035A26B87D00001E9C0F /* Group.swift in Sources */,
 				231E036226B88062001E9C0F /* FriendsVC.swift in Sources */,
+				239C556726B8907F002F7AF8 /* Session.swift in Sources */,
 				233CA2CD26B3FA2100822550 /* AppDelegate.swift in Sources */,
 				231E036026B87EC2001E9C0F /* SetupDelegates.swift in Sources */,
 				231E034826B85EE3001E9C0F /* AppContainer.swift in Sources */,
