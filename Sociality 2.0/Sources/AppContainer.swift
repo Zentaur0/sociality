@@ -7,7 +7,10 @@
 
 import UIKit
 
+let loc = R.string.localizable.self
+
 final class AppContainer {
+    // Methods
     static func makeRootController() -> UINavigationController {
         
         if User.isAuthorized {
@@ -17,4 +20,9 @@ final class AppContainer {
             return UINavigationController(rootViewController: LoginVC())
         }
     }
+    
+    // MARK: - Global Constants
+    static let friendsTitle = loc.friends_title()
+    static let navigationControllerColor = R.color.whiteBlack()
+    static let textColor = R.color.blackWhite()
 }

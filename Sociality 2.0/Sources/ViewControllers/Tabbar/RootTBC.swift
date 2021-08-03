@@ -32,20 +32,22 @@ extension RootTBC {
               let groupsVC = groupsVC,
               let newsVC = newsVC else { return }
         
-//        friendsVC.title = loc.root_screen_title_contacts()
-//        groupsVC.title = loc.root_screen_title_trackers()
-//        newsVC.title = loc.root_screen_title_settings()
 //
 //        friendsVC.tabBarItem.image = R.image.contacts_icon()
 //        groupsVC.tabBarItem.image = R.image.eye_bubble()
 //        newsVC.tabBarItem.image = R.image.settings_icon()
         
         tabBar.isTranslucent = false
-//        tabBar.barTintColor = R.color.nvcTint()
+        tabBar.barTintColor = R.color.whiteBlack()
         
         navigationController?.navigationBar.isTranslucent = false
-//        navigationController?.navigationBar.barTintColor = R.color.nvcTint()
+        navigationController?.navigationBar.barTintColor = R.color.whiteBlack()
         
         setViewControllers([friendsVC, groupsVC, newsVC], animated: true)
     }
+}
+
+// MARK: - Constants
+extension RootTBC {
+    static let friendsTitle = loc.friends_title()
 }

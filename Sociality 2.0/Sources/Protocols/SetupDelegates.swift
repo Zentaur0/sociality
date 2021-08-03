@@ -28,20 +28,20 @@ protocol CellSetupDelegate {
 
 // MARK: - NavigationControllerSearchDelegate
 protocol NavigationControllerSearchDelegate: UISearchResultsUpdating {
-    func addSearchController(_ navigationController: UINavigationController)
+    func addSearchController(_ navigationController: UINavigationController, navigationItem: UINavigationItem)
 }
 
 extension NavigationControllerSearchDelegate {
-    func addSearchController(_ navigationController: UINavigationController) {
+    func addSearchController(_ navigationController: UINavigationController, navigationItem: UINavigationItem) {
         let searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         
-        navigationController.navigationItem.searchController = searchController
+        navigationItem.searchController = searchController
         navigationController.navigationBar.isTranslucent = false
         navigationController.navigationItem.hidesSearchBarWhenScrolling = true
         navigationController.navigationItem.rightBarButtonItem?.isEnabled = true
-//        navigationController.view.backgroundColor = R.color.nvcTint()
-//        navigationController.navigationBar.barTintColor = R.color.nvcTint()
+        navigationController.view.backgroundColor = R.color.whiteBlack()
+        navigationController.navigationBar.barTintColor = R.color.whiteBlack()
     }
 }

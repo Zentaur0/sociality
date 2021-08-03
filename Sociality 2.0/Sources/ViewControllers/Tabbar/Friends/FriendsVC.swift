@@ -31,12 +31,16 @@ extension FriendsVC: ViewControllerSetupDelegate {
         
         guard let tableView = tableView else { return }
         
-        view.addSubview(tableView)
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.backgroundColor = R.color.whiteBlack()
         tableView.register(FriendsCell.self, forCellReuseIdentifier: FriendsCell.reuseID)
         
-        addSearchController((navigationController ?? UINavigationController()).self)
+        view.addSubview(tableView)
+        
+        title = FriendsVC.friendsTitle
+        
+        addSearchController(self.navigationController ?? UINavigationController(), navigationItem: self.navigationItem)
     }
     
     func setupConstraints() {
@@ -51,20 +55,18 @@ extension FriendsVC: ViewControllerSetupDelegate {
 // MARK: - UISearchResultsUpdating
 extension FriendsVC: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-//        guard let text = searchController.searchBar.text else { return }
-//        filteredContacts = []
-//
-//        if text.isEmpty {
-//            filteredContacts = DataProvider.shared.localContacts
-//            tableView?.tableHeaderView = headerView
-//        } else {
-//            tableView?.tableHeaderView = UIView()
-//            for contact in DataProvider.shared.localContacts {
-//                if contact.givenName.lowercased().contains(text.lowercased()) || contact.familyName.lowercased().contains(text.lowercased()) {
-//                    filteredContacts.append(contact)
-//                }
-//            }
-//        }
+        guard let text = searchController.searchBar.text else { return }
+        filteredFriends = []
+
+        if text.isEmpty {
+            filteredFriends = DataProvider.shared.allFriends
+        } else {
+            for friend in DataProvider.shared.allFriends {
+                if friend.givenName.lowercased().contains(text.lowercased()) || friend.familyName.lowercased().contains(text.lowercased()) {
+                    filteredFriends.append(friend)
+                }
+            }
+        }
         
         tableView?.reloadData()
     }
@@ -83,7 +85,7 @@ extension FriendsVC: UITableViewDataSource {
         
         cell.name?.text = friend.givenName + " " + friend.familyName
         cell.age?.text = friend.age
-        cell.avatar?.image = UIImage(systemName: "plus")
+        cell.avatar?.image = UIImage(named: friend.avatar)
         
         return cell
     }
@@ -94,4 +96,9 @@ extension FriendsVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         UITableView.automaticDimension
     }
+}
+
+// MARK: - Constants
+extension FriendsVC {
+    static let friendsTitle = loc.friends_title()
 }

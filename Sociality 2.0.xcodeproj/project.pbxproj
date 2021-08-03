@@ -21,10 +21,12 @@
 		233CA2D926B3FA2300822550 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 233CA2D726B3FA2300822550 /* LaunchScreen.storyboard */; };
 		233CA2E426B3FA2300822550 /* Sociality_2_0Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233CA2E326B3FA2300822550 /* Sociality_2_0Tests.swift */; };
 		233CA2EF26B3FA2300822550 /* Sociality_2_0UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233CA2EE26B3FA2300822550 /* Sociality_2_0UITests.swift */; };
+		239938BB26B9360E00EDC985 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 239938BA26B9360E00EDC985 /* Localizable.strings */; };
 		239C556726B8907F002F7AF8 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239C556626B8907F002F7AF8 /* Session.swift */; };
 		239C556926B8A7B9002F7AF8 /* FriendsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239C556826B8A7B9002F7AF8 /* FriendsCell.swift */; };
 		239C556B26B8A98E002F7AF8 /* DataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239C556A26B8A98E002F7AF8 /* DataProvider.swift */; };
 		239C556D26B8A9EA002F7AF8 /* Friend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239C556C26B8A9EA002F7AF8 /* Friend.swift */; };
+		239C557026B8B44D002F7AF8 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239C556F26B8B44D002F7AF8 /* R.generated.swift */; };
 		46A4F3F9F74E9BFCA021F7FF /* Pods_Sociality_2_0_Sociality_2_0UITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBDC39EB055F994DD57596DA /* Pods_Sociality_2_0_Sociality_2_0UITests.framework */; };
 		74A78D29F4202593F418FBE3 /* Pods_Sociality_2_0Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BBB5996C081BAE8BEC00A /* Pods_Sociality_2_0Tests.framework */; };
 		A982EBF07BFD252ED073EF3E /* Pods_Sociality_2_0.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E0D8BB10D27FFD21941B09F /* Pods_Sociality_2_0.framework */; };
@@ -69,10 +71,12 @@
 		233CA2EA26B3FA2300822550 /* Sociality 2.0UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Sociality 2.0UITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		233CA2EE26B3FA2300822550 /* Sociality_2_0UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sociality_2_0UITests.swift; sourceTree = "<group>"; };
 		233CA2F026B3FA2300822550 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		239938BA26B9360E00EDC985 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		239C556626B8907F002F7AF8 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		239C556826B8A7B9002F7AF8 /* FriendsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsCell.swift; sourceTree = "<group>"; };
 		239C556A26B8A98E002F7AF8 /* DataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataProvider.swift; sourceTree = "<group>"; };
 		239C556C26B8A9EA002F7AF8 /* Friend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Friend.swift; sourceTree = "<group>"; };
+		239C556F26B8B44D002F7AF8 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
 		3E0D8BB10D27FFD21941B09F /* Pods_Sociality_2_0.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sociality_2_0.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		400BBB5996C081BAE8BEC00A /* Pods_Sociality_2_0Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sociality_2_0Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DB33C3AF50ECBFB9BA5A3A2 /* Pods-Sociality 2.0-Sociality 2.0UITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sociality 2.0-Sociality 2.0UITests.debug.xcconfig"; path = "Target Support Files/Pods-Sociality 2.0-Sociality 2.0UITests/Pods-Sociality 2.0-Sociality 2.0UITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -131,7 +135,9 @@
 		231E034A26B85F7C001E9C0F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				239C556F26B8B44D002F7AF8 /* R.generated.swift */,
 				233CA2D526B3FA2300822550 /* Assets.xcassets */,
+				239938BA26B9360E00EDC985 /* Localizable.strings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -326,10 +332,11 @@
 			buildConfigurationList = 233CA2F326B3FA2300822550 /* Build configuration list for PBXNativeTarget "Sociality 2.0" */;
 			buildPhases = (
 				E84BF2405A06F376DFDCEF26 /* [CP] Check Pods Manifest.lock */,
+				239C556E26B8B381002F7AF8 /* ShellScript */,
 				233CA2C526B3FA2100822550 /* Sources */,
 				233CA2C626B3FA2100822550 /* Frameworks */,
 				233CA2C726B3FA2100822550 /* Resources */,
-				E42DA1FF132ABACFAEB15A6B /* [CP] Embed Pods Frameworks */,
+				344C596E9129838D61C925A2 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -367,7 +374,7 @@
 				233CA2E626B3FA2300822550 /* Sources */,
 				233CA2E726B3FA2300822550 /* Frameworks */,
 				233CA2E826B3FA2300822550 /* Resources */,
-				6E4B2A8EF01D6B51E7CF25AF /* [CP] Embed Pods Frameworks */,
+				7DE4E1B04F7E0EC4AA642316 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -427,6 +434,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				233CA2D926B3FA2300822550 /* LaunchScreen.storyboard in Resources */,
+				239938BB26B9360E00EDC985 /* Localizable.strings in Resources */,
 				233CA2D626B3FA2300822550 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -448,6 +456,25 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		239C556E26B8B381002F7AF8 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$TEMP_DIR/rswift-lastrun",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				$SRCROOT/R.generated.swift,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"$PODS_ROOT/R.swift/rswift\" generate \"$SRCROOT/R.generated.swift\"\n";
+		};
 		249502260BA124E71F95BB10 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -468,6 +495,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		344C596E9129838D61C925A2 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Sociality 2.0/Pods-Sociality 2.0-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Sociality 2.0/Pods-Sociality 2.0-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Sociality 2.0/Pods-Sociality 2.0-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		674A1951405CA3F004E81F4E /* [CP] Check Pods Manifest.lock */ = {
@@ -492,7 +536,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		6E4B2A8EF01D6B51E7CF25AF /* [CP] Embed Pods Frameworks */ = {
+		7DE4E1B04F7E0EC4AA642316 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -507,23 +551,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Sociality 2.0-Sociality 2.0UITests/Pods-Sociality 2.0-Sociality 2.0UITests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E42DA1FF132ABACFAEB15A6B /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Sociality 2.0/Pods-Sociality 2.0-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Sociality 2.0/Pods-Sociality 2.0-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Sociality 2.0/Pods-Sociality 2.0-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E84BF2405A06F376DFDCEF26 /* [CP] Check Pods Manifest.lock */ = {
@@ -557,6 +584,7 @@
 			files = (
 				231E034C26B86195001E9C0F /* User.swift in Sources */,
 				239C556D26B8A9EA002F7AF8 /* Friend.swift in Sources */,
+				239C557026B8B44D002F7AF8 /* R.generated.swift in Sources */,
 				231E035C26B87E38001E9C0F /* RootTBC.swift in Sources */,
 				233CA2D126B3FA2100822550 /* LoginVC.swift in Sources */,
 				231E036426B880B9001E9C0F /* GroupsVC.swift in Sources */,
