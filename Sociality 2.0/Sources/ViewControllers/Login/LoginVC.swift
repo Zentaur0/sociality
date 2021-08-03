@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class LoginVC: UIViewController {
+final class LoginVC: UIViewController {
     
     // MARK: - Properties
     private var socialityLabel: UILabel?
@@ -78,7 +78,7 @@ extension LoginVC {
         contentView.addSubview(passwordTextField)
         contentView.addSubview(loginButton)
         
-        view.backgroundColor = .lightGray
+        view.backgroundColor = .systemGray3 
         navigationController?.navigationBar.isHidden = true
         setupConstraints()
         

@@ -66,10 +66,10 @@ extension FriendsCell: CellSetupDelegate {
         avatar.layer.cornerRadius = 25
         
         viewShadow.clipsToBounds = false
-        viewShadow.layer.shadowColor = UIColor.systemGray3.cgColor
+        viewShadow.layer.shadowColor = UIColor.systemGray5.cgColor
         viewShadow.layer.shadowOpacity = 1
         viewShadow.layer.shadowOffset = CGSize.zero
-        viewShadow.layer.shadowRadius = 10
+        viewShadow.layer.shadowPath = UIBezierPath(roundedRect: CGRect(x: -5, y: -5, width: 60, height: 60), cornerRadius: 25).cgPath
         
         contentView.addSubview(name)
         contentView.addSubview(age)
