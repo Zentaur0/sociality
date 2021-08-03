@@ -15,5 +15,5 @@ struct Group {
     var avatar: String
     
     // MARK: - Identifiers
-    let id: Int
+    let id: String
 }
