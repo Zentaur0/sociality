@@ -166,7 +166,7 @@ extension LoginVC {
     }
     
     @objc func loginButtonTap() {
-        let vc = RootTBC()
+        let vc = AppContainer.makeRootTBC()
         navigationController?.pushViewController(vc, animated: true)
     }
 }
