@@ -7,3 +7,6 @@
 */
 
 "friends_title" = "Friends";
+"groups_title" = "Groups";
+"all_groups_title" = "All Groups";
+"news_title" = "News";

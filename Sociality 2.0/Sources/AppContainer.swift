@@ -8,9 +8,21 @@
 import UIKit
 
 let loc = R.string.localizable.self
+typealias EmptyClosure = (() -> Void)
 
 final class AppContainer {
-    // Methods
+    
+    static let shared = AppContainer()
+    
+    // MARK: - App Constants
+    let friendsTitle = loc.friends_title()
+    let groupsTitle = loc.groups_title()
+    let allGroupsTitle = loc.all_groups_title()
+    let newsTitle = loc.news_title()
+    let navigationControllerColor = R.color.whiteBlack()
+    let textColor = R.color.blackWhite()
+    
+    // MARK: - Methods
     static func makeRootController() -> UINavigationController {
         
         if User.isAuthorized {
@@ -21,8 +33,19 @@ final class AppContainer {
         }
     }
     
-    // MARK: - Global Constants
-    static let friendsTitle = loc.friends_title()
-    static let navigationControllerColor = R.color.whiteBlack()
-    static let textColor = R.color.blackWhite()
+    static func makeRootTBC() -> RootTBC {
+        return RootTBC()
+    }
+    
+    static func makeFriendsVC() -> FriendsVC {
+        return FriendsVC()
+    }
+    
+    static func makeGroupsVC() -> GroupsVC {
+        return GroupsVC()
+    }
+    
+    static func makeAllGroupsVC() -> AllGroupsVC {
+        return AllGroupsVC()
+    }
 }
