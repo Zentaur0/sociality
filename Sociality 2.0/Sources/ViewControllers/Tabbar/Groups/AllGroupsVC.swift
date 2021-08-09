@@ -77,7 +77,11 @@ extension AllGroupsVC: UISearchResultsUpdating {
             filteredGroups = DataProvider.shared.allGroups
         } else {
             for group in DataProvider.shared.allGroups {
+
                 if group.nickname.lowercased().contains(text.lowercased()) {
+                    NetworkManager.shared.loadGlobalGroups(token: Session.shared.token,
+                                                           userID: String(Session.shared.userId),
+                                                           text: text)
                     filteredGroups.append(group)
                 }
             }

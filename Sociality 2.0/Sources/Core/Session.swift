@@ -5,15 +5,13 @@
 //  Created by Антон Сивцов on 02.08.2021.
 //
 
-import UIKit
-
 final class Session {
     
     // MARK: - Static
     static let shared = Session()
     
     // MARK: - Properties
-    var token: String = ""
+    var token: String = String()
     var userId: Int = Int()
     
     // MARK: - Init

@@ -19,6 +19,7 @@ final class GroupsVC: UIViewController, NavigationControllerSearchDelegate {
         super.viewDidLoad()
         setupVC()
         setupConstraints()
+        NetworkManager.shared.loadGroups(token: Session.shared.token, userID: String(Session.shared.userId))
     }
     
     override func viewWillAppear(_ animated: Bool) {

@@ -7,9 +7,6 @@
 
 import UIKit
 
-let loc = R.string.localizable.self
-typealias EmptyClosure = (() -> Void)
-
 final class AppContainer {
     
     static let shared = AppContainer()
@@ -23,13 +20,12 @@ final class AppContainer {
     let textColor = R.color.blackWhite()
     
     // MARK: - Methods
-    static func makeRootController() -> UINavigationController {
-        
-        if User.isAuthorized {
-            // TODO: add tabbar when user is autorized
-            return UINavigationController(rootViewController: RootTBC())
+    static func makeRootController() -> UIViewController {
+        let isAuthorized = UserDefaults.standard.bool(forKey: "isAuthorized")
+        if isAuthorized {
+            return RootTBC()
         } else {
-            return UINavigationController(rootViewController: LoginVC())
+            return LoginVC()
         }
     }
     
@@ -47,5 +43,29 @@ final class AppContainer {
     
     static func makeAllGroupsVC() -> AllGroupsVC {
         return AllGroupsVC()
+    }
+    
+    static func makeFriendInfoVC(friend: Friend) -> FriendInformationVC {
+        return FriendInformationVC(friend: friend)
+    }
+    
+    // MARK: Spinner
+    static func createSpinnerView(_ onViewController: UIViewController,
+                                  _ showViewController: UIViewController) {
+        let child = Spinner()
+        
+        // add the spinner view controller
+        onViewController.addChild(child)
+        child.view.frame = onViewController.view.bounds
+        onViewController.view.addSubview(child.view)
+        child.didMove(toParent: onViewController.self)
+        
+        // whait 1.5 seconds to simulate some work happening
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            child.willMove(toParent: nil)
+            child.view.removeFromSuperview()
+            child.removeFromParent()
+            AppDelegate.shared.window?.rootViewController = showViewController
+        }
     }
 }
