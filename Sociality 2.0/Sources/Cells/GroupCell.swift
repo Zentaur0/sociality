@@ -1,25 +1,24 @@
 //
-//  FriendsCell.swift
+//  GroupCell.swift
 //  Sociality 2.0
 //
-//  Created by Антон Сивцов on 03.08.2021.
+//  Created by Антон Сивцов on 04.08.2021.
 //
 
 import UIKit
 
-final class FriendsCell: UITableViewCell {
+final class GroupCell: UITableViewCell {
     
     // MARK: - Static
-    static let reuseID = "FriendsCell"
+    static let reuseID = "GroupCell"
     
     // MARK: - Properties
     // Internal Properties
     internal var name: UILabel?
-    internal var age: UILabel?
     internal var avatar: UIImageView?
     
     // Private Properties
-    private var viewShadow: UIView?
+    private var shadowView: UIView?
     
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -38,66 +37,47 @@ final class FriendsCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         name = nil
-        age = nil
         avatar = nil
     }
 }
 
 // MARK: - CellSetupDelegate
-extension FriendsCell: CellSetupDelegate {
+extension GroupCell: TableViewCellSetupDelegate {
     func setupCell() {
         name = UILabel()
-        age = UILabel()
-        
-        viewShadow = UIView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
-        avatar = UIImageView(frame: viewShadow!.bounds)
+        avatar = UIImageView()
+        shadowView = UIView()
         
         guard let name = name,
-              let age = age,
               let avatar = avatar,
-              let viewShadow = viewShadow else { return }
+              let shadowView = shadowView else { return }
         
         name.font = .systemFont(ofSize: 17, weight: .semibold)
         name.textColor = R.color.blackWhite()
         
-        age.font = .systemFont(ofSize: 13, weight: .thin)
-        
-        avatar.clipsToBounds = true
-        avatar.layer.cornerRadius = 25
-        
-        viewShadow.clipsToBounds = false
-        viewShadow.layer.shadowColor = UIColor.systemGray5.cgColor
-        viewShadow.layer.shadowOpacity = 1
-        viewShadow.layer.shadowOffset = CGSize.zero
-        viewShadow.layer.shadowPath = UIBezierPath(roundedRect: CGRect(x: -5, y: -5, width: 60, height: 60), cornerRadius: 25).cgPath
+        setupShadow(avatar, shadowView)
         
         contentView.addSubview(name)
-        contentView.addSubview(age)
-        contentView.addSubview(viewShadow)
-        viewShadow.addSubview(avatar)
+        contentView.addSubview(shadowView)
+        shadowView.addSubview(avatar)
+        
     }
     
     func setupConstraints() {
         guard let name = name,
-              let age = age,
               let avatar = avatar,
-              let viewShadow = viewShadow else { return }
+              let shadowView = shadowView else { return }
         
         name.snp.makeConstraints {
             $0.leading.equalTo(avatar.snp.trailing).offset(10)
             $0.top.equalToSuperview().inset(10)
         }
         
-        age.snp.makeConstraints {
-            $0.leading.equalTo(avatar.snp.trailing).offset(10)
-            $0.bottom.equalToSuperview().inset(10)
-        }
-        
         avatar.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
         
-        viewShadow.snp.makeConstraints {
+        shadowView.snp.makeConstraints {
             $0.width.height.equalTo(50)
             $0.leading.top.bottom.equalToSuperview().inset(10)
         }

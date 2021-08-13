@@ -22,8 +22,10 @@
 		233CA2E426B3FA2300822550 /* Sociality_2_0Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233CA2E326B3FA2300822550 /* Sociality_2_0Tests.swift */; };
 		233CA2EF26B3FA2300822550 /* Sociality_2_0UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233CA2EE26B3FA2300822550 /* Sociality_2_0UITests.swift */; };
 		239938BB26B9360E00EDC985 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 239938BA26B9360E00EDC985 /* Localizable.strings */; };
+		239938BD26B9F3B400EDC985 /* AllGroupsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239938BC26B9F3B400EDC985 /* AllGroupsVC.swift */; };
+		239938BF26B9F42B00EDC985 /* GroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239938BE26B9F42B00EDC985 /* GroupCell.swift */; };
 		239C556726B8907F002F7AF8 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239C556626B8907F002F7AF8 /* Session.swift */; };
-		239C556926B8A7B9002F7AF8 /* FriendsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239C556826B8A7B9002F7AF8 /* FriendsCell.swift */; };
+		239C556926B8A7B9002F7AF8 /* FriendCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239C556826B8A7B9002F7AF8 /* FriendCell.swift */; };
 		239C556B26B8A98E002F7AF8 /* DataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239C556A26B8A98E002F7AF8 /* DataProvider.swift */; };
 		239C556D26B8A9EA002F7AF8 /* Friend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239C556C26B8A9EA002F7AF8 /* Friend.swift */; };
 		239C557026B8B44D002F7AF8 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239C556F26B8B44D002F7AF8 /* R.generated.swift */; };
@@ -72,8 +74,10 @@
 		233CA2EE26B3FA2300822550 /* Sociality_2_0UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sociality_2_0UITests.swift; sourceTree = "<group>"; };
 		233CA2F026B3FA2300822550 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		239938BA26B9360E00EDC985 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		239938BC26B9F3B400EDC985 /* AllGroupsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllGroupsVC.swift; sourceTree = "<group>"; };
+		239938BE26B9F42B00EDC985 /* GroupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCell.swift; sourceTree = "<group>"; };
 		239C556626B8907F002F7AF8 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
-		239C556826B8A7B9002F7AF8 /* FriendsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsCell.swift; sourceTree = "<group>"; };
+		239C556826B8A7B9002F7AF8 /* FriendCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCell.swift; sourceTree = "<group>"; };
 		239C556A26B8A98E002F7AF8 /* DataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataProvider.swift; sourceTree = "<group>"; };
 		239C556C26B8A9EA002F7AF8 /* Friend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Friend.swift; sourceTree = "<group>"; };
 		239C556F26B8B44D002F7AF8 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
@@ -200,6 +204,7 @@
 			isa = PBXGroup;
 			children = (
 				231E036326B880B9001E9C0F /* GroupsVC.swift */,
+				239938BC26B9F3B400EDC985 /* AllGroupsVC.swift */,
 			);
 			path = Groups;
 			sourceTree = "<group>";
@@ -230,7 +235,8 @@
 		231E036726B881EC001E9C0F /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				239C556826B8A7B9002F7AF8 /* FriendsCell.swift */,
+				239C556826B8A7B9002F7AF8 /* FriendCell.swift */,
+				239938BE26B9F42B00EDC985 /* GroupCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -585,17 +591,19 @@
 				231E034C26B86195001E9C0F /* User.swift in Sources */,
 				239C556D26B8A9EA002F7AF8 /* Friend.swift in Sources */,
 				239C557026B8B44D002F7AF8 /* R.generated.swift in Sources */,
+				239938BF26B9F42B00EDC985 /* GroupCell.swift in Sources */,
 				231E035C26B87E38001E9C0F /* RootTBC.swift in Sources */,
 				233CA2D126B3FA2100822550 /* LoginVC.swift in Sources */,
 				231E036426B880B9001E9C0F /* GroupsVC.swift in Sources */,
 				231E036626B88124001E9C0F /* NewsVC.swift in Sources */,
 				231E035A26B87D00001E9C0F /* Group.swift in Sources */,
 				231E036226B88062001E9C0F /* FriendsVC.swift in Sources */,
-				239C556926B8A7B9002F7AF8 /* FriendsCell.swift in Sources */,
+				239C556926B8A7B9002F7AF8 /* FriendCell.swift in Sources */,
 				239C556726B8907F002F7AF8 /* Session.swift in Sources */,
 				233CA2CD26B3FA2100822550 /* AppDelegate.swift in Sources */,
 				231E036026B87EC2001E9C0F /* SetupDelegates.swift in Sources */,
 				231E034826B85EE3001E9C0F /* AppContainer.swift in Sources */,
+				239938BD26B9F3B400EDC985 /* AllGroupsVC.swift in Sources */,
 				239C556B26B8A98E002F7AF8 /* DataProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

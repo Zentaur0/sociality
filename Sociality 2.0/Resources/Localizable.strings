@@ -6,4 +6,14 @@
   
 */
 
+// MARK: - Friends
 "friends_title" = "Friends";
+"friends_logout" = "Log out";
+
+// MARK: - Groups
+"groups_title" = "Groups";
+"all_groups_title" = "All Groups";
+
+// MARK: - News
+"news_title" = "News";
+

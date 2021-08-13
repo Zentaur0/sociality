@@ -15,7 +15,7 @@ struct User {
     var avatar: String
     
     // MARK: - Identifiers
-    var id: Int
+    var id: String
     var userName: String
     
     // MARK: - Statics

@@ -34,13 +34,14 @@ extension FriendsVC: ViewControllerSetupDelegate {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.backgroundColor = R.color.whiteBlack()
-        tableView.register(FriendsCell.self, forCellReuseIdentifier: FriendsCell.reuseID)
+        tableView.register(FriendCell.self, forCellReuseIdentifier: FriendCell.reuseID)
         
         view.addSubview(tableView)
         
-        title = FriendsVC.friendsTitle
+        title = AppContainer.shared.friendsTitle
         
-        addSearchController(self.navigationController ?? UINavigationController(), navigationItem: self.navigationItem)
+        addSearchController(self.navigationController ?? UINavigationController(),
+                            self.navigationItem)
     }
     
     func setupConstraints() {
@@ -79,7 +80,7 @@ extension FriendsVC: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: FriendsCell.reuseID, for: indexPath) as! FriendsCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: FriendCell.reuseID, for: indexPath) as! FriendCell
         
         let friend = filteredFriends[indexPath.row]
         
@@ -96,9 +97,8 @@ extension FriendsVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         UITableView.automaticDimension
     }
-}
-
-// MARK: - Constants
-extension FriendsVC {
-    static let friendsTitle = loc.friends_title()
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
 }
