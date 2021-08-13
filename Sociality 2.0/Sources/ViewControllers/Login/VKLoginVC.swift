@@ -117,8 +117,6 @@ extension VKLoginVC: WKNavigationDelegate {
                 DataProvider.shared.allFriends = friends
             }
         }
-
-        NetworkManager.shared.loadPhotos(token: token, userID: userIdString)
         
         decisionHandler(.cancel)
     }

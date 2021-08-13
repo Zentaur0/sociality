@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class FriendCollectionCell: UICollectionViewCell {
     
@@ -16,7 +17,7 @@ final class FriendCollectionCell: UICollectionViewCell {
     // Internal Properties
     private var imageView: UIImageView?
     private var infoLabel: UILabel?
-    private var likeControll: UIImageView?
+    private var likeControll: UIButton?
     private var likeCountLabel: UILabel?
     private var shadowView: UIView?
     
@@ -27,6 +28,7 @@ final class FriendCollectionCell: UICollectionViewCell {
         stack.spacing = 5
         stack.layer.cornerRadius = 5
         stack.layer.masksToBounds = true
+        stack.distribution = .fillProportionally
         stack.layer.borderColor = UIColor.black.cgColor
         return stack
     }()
@@ -42,7 +44,7 @@ final class FriendCollectionCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
 }
 
 // MARK: - Methods
@@ -52,11 +54,27 @@ extension FriendCollectionCell {
               let infoLabel = infoLabel,
               let likeControll = likeControll,
               let likeCountLabel = likeCountLabel else { return }
-//        imageView.image = UIImage(named: friend.ava[indexPath.item])
+        imageView.kf.setImage(with: URL(string: friend.images[indexPath.row].pic))
         infoLabel.text = friend.familyName
-//        likeControll
-//        likeCountLabel
+        likeControll.setBackgroundImage(R.image.disliked() ?? R.image.liked(), for: .normal)
+        likeCountLabel.text = String(friend.images[indexPath.row].likes)
     }
+
+}
+
+// MARK: - Actions
+extension FriendCollectionCell {
+    @objc private func likeTap() {
+        guard let likeControll = likeControll else { return }
+        if !likeControll.isHighlighted {
+            likeControll.setBackgroundImage(R.image.disliked(), for: .normal)
+            likeControll.isHighlighted = true
+        } else {
+            likeControll.setBackgroundImage(R.image.liked(), for: .normal)
+            likeControll.isHighlighted = false
+        }
+    }
+
 }
 
 // MARK: - CollectionViewCellSetupDelegate
@@ -64,7 +82,7 @@ extension FriendCollectionCell: CollectionViewCellSetupDelegate {
     func setupCell() {
         imageView = UIImageView()
         infoLabel = UILabel()
-        likeControll = UIImageView()
+        likeControll = UIButton(type: .system)
         likeCountLabel = UILabel()
         shadowView = UIView()
         
@@ -76,10 +94,14 @@ extension FriendCollectionCell: CollectionViewCellSetupDelegate {
         
         imageView.layer.cornerRadius = 5
         imageView.clipsToBounds = true
-        imageView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner]
-        
-        likeCountLabel.text = "0"
-        likeControll.image = R.image.disliked()
+        imageView.contentMode = .scaleAspectFill
+        imageView.frame.size = sizeThatFits(CGSize(width: frame.width - 30, height: frame.width))
+        imageView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+
+        likeCountLabel.textAlignment = .right
+        likeControll.setBackgroundImage(R.image.disliked(), for: .normal)
+        likeControll.addTarget(self, action: #selector(likeTap), for: .touchUpInside)
+
         let view = UIView()
         view.backgroundColor = R.color.whiteBlack()
         view.layer.cornerRadius = 5
@@ -93,6 +115,8 @@ extension FriendCollectionCell: CollectionViewCellSetupDelegate {
         setupShadow(imageView, shadowView)
         
         bottomStackView = UIStackView(arrangedSubviews: [infoLabel, likeCountLabel, likeControll])
+        bottomStackView.setCustomSpacing(10, after: likeCountLabel)
+        bottomStackView.setCustomSpacing(10, after: likeControll)
         bottomStackView.backgroundColor = .white
         
         contentMode = .scaleAspectFit
@@ -107,7 +131,8 @@ extension FriendCollectionCell: CollectionViewCellSetupDelegate {
               let shadowView = shadowView else { return }
         
         bottomStackView.snp.makeConstraints {
-            $0.leading.trailing.bottom.equalToSuperview().inset(3)
+            $0.bottom.equalToSuperview().inset(3)
+            $0.trailing.leading.equalToSuperview().inset(7)
             $0.height.equalTo(30)
         }
         
@@ -121,7 +146,8 @@ extension FriendCollectionCell: CollectionViewCellSetupDelegate {
         }
         
         likeCountLabel.snp.makeConstraints {
-            $0.width.height.equalTo(20)
+            $0.height.equalTo(20)
+            $0.width.equalTo(50)
         }
         
         shadowView.snp.makeConstraints {

@@ -17,8 +17,10 @@ final class Session {
         return UserDefaults.standard.string(forKey: "token") ?? ""
     }
     var userId: Int {
-        return UserDefaults.standard.integer(forKey: "userID") ?? 0
+        return UserDefaults.standard.integer(forKey: "userID")
     }
+
+    var ownerID: String?
     
     // MARK: - Init
     private init() {}

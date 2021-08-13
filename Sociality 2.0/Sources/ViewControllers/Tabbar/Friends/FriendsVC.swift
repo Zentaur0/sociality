@@ -20,9 +20,9 @@ final class FriendsVC: UIViewController, NavigationControllerSearchDelegate {
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        provideFriends()
         setupVC()
         setupConstraints()
-        provideFriends()
     }
 
     override func viewWillAppear(_ animated: Bool) {
