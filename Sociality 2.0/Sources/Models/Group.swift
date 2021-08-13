@@ -7,31 +7,24 @@
 
 import UIKit
 import SwiftyJSON
+import RealmSwift
 
-struct Group: Decodable {
+class Group: Object, Decodable {
     // MARK: - Info
     /// group name
-    var nickname: String
-    /// group bio
-//    var bio: String
-    /// group hashtags
-//    var areaOfInterests: String
+    @objc dynamic var nickname: String = ""
     /// group avatar
-    var avatar: String
+    @objc dynamic var avatar: String = ""
     
     // MARK: - Identifiers
     /// group id
-    let id: Int
+    @objc dynamic var id: Int = 0
 
-    init(json: SwiftyJSON.JSON) {
+    // MARK: - Init
+    convenience init(json: SwiftyJSON.JSON) {
+        self.init()
         self.nickname = json["name"].stringValue
         self.id = json["id"].intValue
         self.avatar = json["photo_100"].stringValue
-    }
-
-    enum CodingKeys: String, CodingKey {
-        case nickname = "name"
-        case id = "id"
-        case avatar = "photo_100"
     }
 }
