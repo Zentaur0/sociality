@@ -8,8 +8,12 @@
 import UIKit
 
 final class AppContainer {
-    
+
+    // MARK: - Static
     static let shared = AppContainer()
+
+    // MARK: - Init
+    private init() {}
     
     // MARK: - App Constants
     let friendsTitle = loc.friends_title()
@@ -22,11 +26,7 @@ final class AppContainer {
     // MARK: - Methods
     static func makeRootController() -> UIViewController {
         let isAuthorized = UserDefaults.standard.bool(forKey: "isAuthorized")
-        if isAuthorized {
-            return RootTBC()
-        } else {
-            return LoginVC()
-        }
+        return isAuthorized ? RootTBC() : LoginVC()
     }
     
     static func makeRootTBC() -> RootTBC {

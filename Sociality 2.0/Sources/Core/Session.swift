@@ -5,14 +5,20 @@
 //  Created by Антон Сивцов on 02.08.2021.
 //
 
+import Foundation
+
 final class Session {
     
     // MARK: - Static
     static let shared = Session()
     
     // MARK: - Properties
-    var token: String = String()
-    var userId: Int = Int()
+    var token: String {
+        return UserDefaults.standard.string(forKey: "token") ?? ""
+    }
+    var userId: Int {
+        return UserDefaults.standard.integer(forKey: "userID") ?? 0
+    }
     
     // MARK: - Init
     private init() {}

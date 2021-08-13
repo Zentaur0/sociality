@@ -79,9 +79,17 @@ extension AllGroupsVC: UISearchResultsUpdating {
             for group in DataProvider.shared.allGroups {
 
                 if group.nickname.lowercased().contains(text.lowercased()) {
-                    NetworkManager.shared.loadGlobalGroups(token: Session.shared.token,
-                                                           userID: String(Session.shared.userId),
-                                                           text: text)
+                    NetworkManager.shared.loadGroups(url: URLs.getSearchGroups) { result in
+                        switch result {
+                        case .failure(let error):
+                            print(error)
+                        case .success(let groups):
+                            print(groups)
+                        }
+                    }
+//                    NetworkManager.shared.loadGlobalGroups(token: Session.shared.token,
+//                                                           userID: String(Session.shared.userId),
+//                                                           text: text)
                     filteredGroups.append(group)
                 }
             }
@@ -98,12 +106,14 @@ extension AllGroupsVC: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: GroupCell.reuseID, for: indexPath) as! GroupCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: GroupCell.reuseID,
+                                                       for: indexPath) as? GroupCell else {
+            return UITableViewCell()
+        }
         
         let group = filteredGroups[indexPath.row]
         
-        cell.name?.text = group.nickname
-        cell.avatar?.image = UIImage(named: group.avatar)
+        cell.configure(group: group)
         
         return cell
     }
@@ -111,7 +121,14 @@ extension AllGroupsVC: UITableViewDataSource {
 
 // MARK: UITableViewDelegate
 extension AllGroupsVC: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        70
+    }
+    
+    // MARK: - Navigation
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        print(indexPath.row)
         tableView.deselectRow(at: indexPath, animated: true)
         
         let group = filteredGroups[indexPath.row]

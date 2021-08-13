@@ -7,13 +7,18 @@
 
 import UIKit
 
-struct Group {
+struct Group: Decodable {
     // MARK: - Info
+    /// group name
     var nickname: String
+    /// group bio
     var bio: String
+    /// group hashtags
     var areaOfInterests: String
+    /// group avatar
     var avatar: String
     
     // MARK: - Identifiers
+    /// group id
     let id: String
 }

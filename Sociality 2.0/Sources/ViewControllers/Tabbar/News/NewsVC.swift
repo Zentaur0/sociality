@@ -10,7 +10,7 @@ import UIKit
 class NewsVC: UIViewController {
     
     // MARK: - Properties
-    private var collectionView: UICollectionView?
+    private var tableView: UITableView?
     
     // MARK: - Life cycle
     override func viewDidLoad() {

@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct User {
+struct User: Decodable {
     // MARK: - Info
     var givenName: String
     var familyName: String
@@ -15,9 +15,11 @@ struct User {
     var avatar: String
     
     // MARK: - Identifiers
-    var id: String
+    let id: String
     var userName: String
     
-    // MARK: - Statics
-    static var isAuthorized: Bool = false
+    // MARK: - Content
+    var images: [String] = []
+    var posts: [Post] = []
+    var groups: [Group] = []
 }

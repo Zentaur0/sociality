@@ -45,9 +45,6 @@ extension VKLoginVC: ViewControllerSetupDelegate {
         }
     }
 
-    @objc func close() {
-        dismiss(animated: true, completion: nil)
-    }
 }
 
 // MARK: - Methods
@@ -78,6 +75,7 @@ extension VKLoginVC {
         guard let url = url else { return URL(fileURLWithPath: "") }
         return url
     }
+
 }
 
 // MARK: - WKNavigationDelegate
@@ -108,12 +106,29 @@ extension VKLoginVC: WKNavigationDelegate {
             return
         }
 
-        Session.shared.token = token
-        Session.shared.userId = Int(userIdString) ?? 0
-        
-        NetworkManager.shared.loadFriend(token: token, userID: userIdString, sender: self)
+        UserDefaults.standard.set(token, forKey: "token")
+        UserDefaults.standard.set(Int(userIdString), forKey: "userID")
+
+        NetworkManager.shared.loadFriends(url: URLs.getFriends, sender: self) { result in
+            switch result {
+            case .failure(let error):
+                print(error)
+            case .success(let friends):
+                DataProvider.shared.allFriends = friends
+            }
+        }
+
         NetworkManager.shared.loadPhotos(token: token, userID: userIdString)
         
         decisionHandler(.cancel)
     }
+
+}
+
+// MARK: - Actions
+extension VKLoginVC {
+    @objc private func close() {
+        dismiss(animated: true, completion: nil)
+    }
+
 }

@@ -19,7 +19,15 @@ final class GroupsVC: UIViewController, NavigationControllerSearchDelegate {
         super.viewDidLoad()
         setupVC()
         setupConstraints()
-        NetworkManager.shared.loadGroups(token: Session.shared.token, userID: String(Session.shared.userId))
+        NetworkManager.shared.loadGroups(url: URLs.getGroups) { result in
+            switch result {
+            case .failure(let error):
+                print(error)
+            case .success(let groups):
+                print(groups)
+            }
+        }
+//        NetworkManager.shared.loadGroups(token: Session.shared.token, userID: String(Session.shared.userId))
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -36,16 +44,20 @@ extension GroupsVC: ViewControllerSetupDelegate {
         
         guard let tableView = tableView else { return }
         
+        tableView.tableFooterView = UIView()
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(GroupCell.self, forCellReuseIdentifier: GroupCell.reuseID)
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addGroupAction))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add,
+                                                            target: self,
+                                                            action: #selector(addGroupAction))
         
         addSearchController(self.navigationController ?? UINavigationController(),
                             self.navigationItem)
         
         title = AppContainer.shared.groupsTitle
+        navigationController?.navigationBar.prefersLargeTitles = true
         view.addSubview(tableView)
     }
     
@@ -53,7 +65,7 @@ extension GroupsVC: ViewControllerSetupDelegate {
         guard let tableView = tableView else { return }
         
         tableView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
     }
 }
@@ -93,12 +105,14 @@ extension GroupsVC: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: GroupCell.reuseID, for: indexPath) as! GroupCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: GroupCell.reuseID,
+                                                       for: indexPath) as? GroupCell else {
+            return UITableViewCell()
+        }
         
         let group = filteredGroups[indexPath.row]
-        
-        cell.name?.text = group.nickname
-        cell.avatar?.image = UIImage(named: group.avatar)
+
+        cell.configure(group: group)
         
         return cell
     }
@@ -106,7 +120,25 @@ extension GroupsVC: UITableViewDataSource {
 
 // MARK: UITableViewDelegate
 extension GroupsVC: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        70
+    }
+    
+    // MARK: - Navigation
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView,
+                   commit editingStyle: UITableViewCell.EditingStyle,
+                   forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            tableView.beginUpdates()
+            DataProvider.shared.myGroups.remove(at: indexPath.row)
+            filteredGroups.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            tableView.endUpdates()
+            tableView.reloadData()
+        }
     }
 }

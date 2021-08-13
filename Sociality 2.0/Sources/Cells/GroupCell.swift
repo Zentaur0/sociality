@@ -13,11 +13,9 @@ final class GroupCell: UITableViewCell {
     static let reuseID = "GroupCell"
     
     // MARK: - Properties
-    // Internal Properties
-    internal var name: UILabel?
-    internal var avatar: UIImageView?
-    
     // Private Properties
+    private var name: UILabel?
+    private var avatar: UIImageView?
     private var shadowView: UIView?
     
     // MARK: - Init
@@ -26,18 +24,19 @@ final class GroupCell: UITableViewCell {
         setupCell()
         setupConstraints()
     }
-    
+
+    @available (*, unavailable)
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupCell()
-        setupConstraints()
+        fatalError("init(coder:) has not been implemented")
     }
-    
-    // MARK: - Override
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        name = nil
-        avatar = nil
+
+}
+
+// MARK: - Methods
+extension GroupCell {
+    func configure(group: Group) {
+        name?.text = group.nickname
+        avatar?.image = UIImage(named: group.avatar)
     }
 }
 
@@ -79,7 +78,7 @@ extension GroupCell: TableViewCellSetupDelegate {
         
         shadowView.snp.makeConstraints {
             $0.width.height.equalTo(50)
-            $0.leading.top.bottom.equalToSuperview().inset(10)
+            $0.leading.bottom.equalToSuperview().inset(10)
         }
     }
 }
