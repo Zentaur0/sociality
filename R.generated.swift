@@ -284,7 +284,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 4 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 5 localization keys.
     struct localizable {
       /// Value: All Groups
       static let all_groups_title = Rswift.StringResource(key: "all_groups_title", tableName: "Localizable", bundle: R.hostingBundle, locales: [], comment: nil)
@@ -292,6 +292,8 @@ struct R: Rswift.Validatable {
       static let friends_title = Rswift.StringResource(key: "friends_title", tableName: "Localizable", bundle: R.hostingBundle, locales: [], comment: nil)
       /// Value: Groups
       static let groups_title = Rswift.StringResource(key: "groups_title", tableName: "Localizable", bundle: R.hostingBundle, locales: [], comment: nil)
+      /// Value: Log out
+      static let friends_logout = Rswift.StringResource(key: "friends_logout", tableName: "Localizable", bundle: R.hostingBundle, locales: [], comment: nil)
       /// Value: News
       static let news_title = Rswift.StringResource(key: "news_title", tableName: "Localizable", bundle: R.hostingBundle, locales: [], comment: nil)
 
@@ -332,6 +334,19 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("groups_title", bundle: bundle, comment: "")
+      }
+
+      /// Value: Log out
+      static func friends_logout(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("friends_logout", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "friends_logout"
+        }
+
+        return NSLocalizedString("friends_logout", bundle: bundle, comment: "")
       }
 
       /// Value: News

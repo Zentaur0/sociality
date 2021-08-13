@@ -8,6 +8,8 @@ target 'Sociality 2.0' do
   # Pods for Sociality 2.0
   pod 'SnapKit'
   pod 'R.swift'
+  pod 'SwiftyJSON'
+  pod 'Kingfisher'
 
   target 'Sociality 2.0Tests' do
     inherit! :search_paths
