@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class GroupCell: UITableViewCell {
     
@@ -36,7 +37,7 @@ final class GroupCell: UITableViewCell {
 extension GroupCell {
     func configure(group: Group) {
         name?.text = group.nickname
-        avatar?.image = UIImage(named: group.avatar)
+        avatar?.kf.setImage(with: URL(string: group.avatar))
     }
 }
 
@@ -53,6 +54,7 @@ extension GroupCell: TableViewCellSetupDelegate {
         
         name.font = .systemFont(ofSize: 17, weight: .semibold)
         name.textColor = R.color.blackWhite()
+        name.numberOfLines = 0
         
         setupShadow(avatar, shadowView)
         
@@ -69,7 +71,7 @@ extension GroupCell: TableViewCellSetupDelegate {
         
         name.snp.makeConstraints {
             $0.leading.equalTo(avatar.snp.trailing).offset(10)
-            $0.top.equalToSuperview().inset(10)
+            $0.top.trailing.equalToSuperview().inset(10)
         }
         
         avatar.snp.makeConstraints {

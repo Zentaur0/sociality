@@ -75,27 +75,21 @@ extension AllGroupsVC: UISearchResultsUpdating {
 
         if text.isEmpty {
             filteredGroups = DataProvider.shared.allGroups
+            tableView?.reloadData()
         } else {
-            for group in DataProvider.shared.allGroups {
-
-                if group.nickname.lowercased().contains(text.lowercased()) {
-                    NetworkManager.shared.loadGroups(url: URLs.getSearchGroups) { result in
-                        switch result {
-                        case .failure(let error):
-                            print(error)
-                        case .success(let groups):
-                            print(groups)
-                        }
+            NetworkManager.shared.loadGlobalGroups(text: text) { [weak self] result in
+                switch result {
+                case .failure(let error):
+                    print(error)
+                case .success(let group):
+                    print(group)
+                    self?.filteredGroups.append(group)
+                    DispatchQueue.main.async { [weak self] in
+                        self?.tableView?.reloadData()
                     }
-//                    NetworkManager.shared.loadGlobalGroups(token: Session.shared.token,
-//                                                           userID: String(Session.shared.userId),
-//                                                           text: text)
-                    filteredGroups.append(group)
                 }
             }
         }
-        
-        tableView?.reloadData()
     }
 }
 
@@ -127,8 +121,7 @@ extension AllGroupsVC: UITableViewDelegate {
     
     // MARK: - Navigation
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        print(indexPath.row)
+
         tableView.deselectRow(at: indexPath, animated: true)
         
         let group = filteredGroups[indexPath.row]

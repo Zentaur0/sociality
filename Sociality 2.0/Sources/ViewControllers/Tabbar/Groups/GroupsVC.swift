@@ -10,40 +10,28 @@ import UIKit
 final class GroupsVC: UIViewController, NavigationControllerSearchDelegate {
     
     // MARK: - Properties
-    private var tableView: UITableView?
+    private let tableView = UITableView()
     
     private var filteredGroups: [Group] = []
     
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        provideGroups()
         setupVC()
         setupConstraints()
-        NetworkManager.shared.loadGroups(url: URLs.getGroups) { result in
-            switch result {
-            case .failure(let error):
-                print(error)
-            case .success(let groups):
-                print(groups)
-            }
-        }
-//        NetworkManager.shared.loadGroups(token: Session.shared.token, userID: String(Session.shared.userId))
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         filteredGroups = DataProvider.shared.myGroups
-        tableView?.reloadData()
+        tableView.reloadData()
     }
 }
 
 // MARK: - ViewControllerSetupDelegate
 extension GroupsVC: ViewControllerSetupDelegate {
     func setupVC() {
-        tableView = UITableView()
-        
-        guard let tableView = tableView else { return }
-        
         tableView.tableFooterView = UIView()
         tableView.delegate = self
         tableView.dataSource = self
@@ -62,8 +50,6 @@ extension GroupsVC: ViewControllerSetupDelegate {
     }
     
     func setupConstraints() {
-        guard let tableView = tableView else { return }
-        
         tableView.snp.makeConstraints {
             $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
@@ -94,7 +80,7 @@ extension GroupsVC: UISearchResultsUpdating {
             }
         }
         
-        tableView?.reloadData()
+        tableView.reloadData()
     }
 }
 
@@ -139,6 +125,24 @@ extension GroupsVC: UITableViewDelegate {
             tableView.deleteRows(at: [indexPath], with: .automatic)
             tableView.endUpdates()
             tableView.reloadData()
+        }
+    }
+}
+
+// MARK: - Methods
+extension GroupsVC {
+    private func provideGroups() {
+        NetworkManager.shared.loadGroups(url: URLs.getGroups) { [weak self] result in
+            switch result {
+            case .failure(let error):
+                print(error)
+            case .success(let groups):
+                DataProvider.shared.myGroups = groups
+                self?.filteredGroups = groups
+                DispatchQueue.main.async { [weak self] in
+                    self?.tableView.reloadData()
+                }
+            }
         }
     }
 }

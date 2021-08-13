@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class FriendInformationVC: UIViewController {
     
@@ -30,8 +31,22 @@ final class FriendInformationVC: UIViewController {
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        NetworkManager.shared.loadFriendsPhotos(ownerID: String(friend.id)) { [weak self] result in
+            switch result {
+            case .success(let photos):
+                self?.friend.images = photos
+                DispatchQueue.main.async { [weak self] in
+                    self?.collectionView?.reloadData()
+                }
+                print(photos)
+//                }
+            case .failure(let error):
+                print(error)
+            }
+        }
         setupVC()
         setupConstraints()
+
     }
 }
 
@@ -66,8 +81,7 @@ extension FriendInformationVC: ViewControllerSetupDelegate {
 extension FriendInformationVC: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-//        friend.images.count
-        1
+        friend.images.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -93,16 +107,18 @@ extension FriendInformationVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        guard let image = UIImage(named: friend.images[indexPath.row]) else { return CGSize()}
 
-        guard let image = UIImage(named: "friend.images[indexPath.row]") else { return CGSize()}
+        let width = friend.images[indexPath.row].width
+        let height = friend.images[indexPath.row].height
+
+        let horizontalSize = CGSize(width: width, height: height)
+        let verticalSize = CGSize(width: width, height: height)
         
-        let horizontalSize = CGSize(width: view.frame.width - 30, height: view.frame.width / 1.5)
-        let verticalSize = CGSize(width: view.frame.width - 30, height: view.frame.width + 100)
-        
-        let size = image.size.width > image.size.height ? horizontalSize : verticalSize
-        
-        return size
+        let size = width > height ? horizontalSize : verticalSize
+
+
+//        return size
+        return view.sizeThatFits(CGSize(width: view.frame.width - 30, height: 100))
     }
     
     func collectionView(_ collectionView: UICollectionView,
