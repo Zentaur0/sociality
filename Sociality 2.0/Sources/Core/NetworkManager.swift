@@ -7,6 +7,7 @@
 
 import UIKit
 import SwiftyJSON
+import RealmSwift
 
 class URLs {
 
@@ -80,6 +81,7 @@ final class NetworkManager: NetworkManagerProtocol {
                 let photoJSON = json["response"]["items"].arrayValue
                 let photos = photoJSON.map { Photo(json: $0) }
                 print(photos)
+                self.saveToRealm(object: photos)
                 completion(.success(photos))
             } catch {
                 completion(.failure(error))
@@ -99,6 +101,7 @@ final class NetworkManager: NetworkManagerProtocol {
                 let json = try JSON(data: data)
                 let groupJSON = json["response"]["items"].arrayValue
                 let groups = groupJSON.map { Group(json: $0)}
+                self.saveToRealm(object: groups)
                 completion(.success(groups))
             } catch {
                 completion(.failure(error))
@@ -110,7 +113,7 @@ final class NetworkManager: NetworkManagerProtocol {
         let url = "https://api.vk.com/method/search.getHints?access_token=\(Session.shared.token)&user_id=\(Session.shared.userId)&q=\(text)&filters=groups&sort=0&search_global=1&v=5.131"
 
         guard let url = URL(string: url) else { return }
-print(url)
+        
         let session = URLSession.shared
 
         session.dataTask(with: url) { data, response, error in
@@ -128,34 +131,14 @@ print(url)
         }.resume()
     }
 
-    func loadGlobalGroups(token: String, userID: String, text: String? = nil) {
-        var urlComponents = URLComponents()
-        urlComponents.scheme = "https"
-        urlComponents.host = "api.vk.com"
-        urlComponents.path = "/method/search.getHints"
-        urlComponents.queryItems = [
-            URLQueryItem(name: "access_token", value: token),
-            URLQueryItem(name: "user_id", value: userID),
-            URLQueryItem(name: "q", value: text),
-            URLQueryItem(name: "sort", value: "0"),
-            URLQueryItem(name: "search_global", value: "1"),
-            URLQueryItem(name: "v", value: "5.131")
-        ]
-
-        guard let url = urlComponents.url else { return }
-        print(url)
-
-        let dataTask = URLSession.shared.dataTask(with: url) { data, response, error in
-            do {
-                guard let data = data else { return }
-                print(url)
-                let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
-                print(json)
-            } catch {
-                print(error, "<--- Search error")
-            }
+    func saveToRealm<T: Object>(object: [T]) {
+        do {
+            let realm = try Realm()
+            realm.beginWrite()
+            realm.add(object)
+            try realm.commitWrite()
+        } catch {
+            print(error)
         }
-
-        dataTask.resume()
     }
 }

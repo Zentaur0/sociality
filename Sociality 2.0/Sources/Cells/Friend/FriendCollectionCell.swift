@@ -65,14 +65,7 @@ extension FriendCollectionCell {
 // MARK: - Actions
 extension FriendCollectionCell {
     @objc private func likeTap() {
-        guard let likeControll = likeControll else { return }
-        if !likeControll.isHighlighted {
-            likeControll.setBackgroundImage(R.image.disliked(), for: .normal)
-            likeControll.isHighlighted = true
-        } else {
-            likeControll.setBackgroundImage(R.image.liked(), for: .normal)
-            likeControll.isHighlighted = false
-        }
+
     }
 
 }
@@ -94,7 +87,7 @@ extension FriendCollectionCell: CollectionViewCellSetupDelegate {
         
         imageView.layer.cornerRadius = 5
         imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFit
         imageView.frame.size = sizeThatFits(CGSize(width: frame.width - 30, height: frame.width))
         imageView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
 
