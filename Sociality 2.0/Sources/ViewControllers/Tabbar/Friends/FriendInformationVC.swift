@@ -28,9 +28,19 @@ final class FriendInformationVC: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Life Cycle
+    // MARK: - Life Cycle   
     override func viewDidLoad() {
         super.viewDidLoad()
+        provideFriendPhotos()
+        setupVC()
+        setupConstraints()
+
+    }
+}
+
+// MARK: - Methods
+extension FriendInformationVC {
+    private func provideFriendPhotos() {
         NetworkManager.shared.loadFriendsPhotos(ownerID: String(friend.id)) { [weak self] result in
             switch result {
             case .success(let photos):
@@ -39,14 +49,10 @@ final class FriendInformationVC: UIViewController {
                     self?.collectionView?.reloadData()
                 }
                 print(photos)
-//                }
             case .failure(let error):
                 print(error)
             }
         }
-        setupVC()
-        setupConstraints()
-
     }
 }
 
