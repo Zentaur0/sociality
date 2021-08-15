@@ -10,7 +10,6 @@ target 'Sociality 2.0' do
   pod 'R.swift'
   pod 'SwiftyJSON'
   pod 'Kingfisher'
-  pod 'RealmSwift'
 
   target 'Sociality 2.0Tests' do
     inherit! :search_paths
