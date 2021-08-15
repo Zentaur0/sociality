@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -42,6 +42,8 @@
 		239C556B26B8A98E002F7AF8 /* DataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239C556A26B8A98E002F7AF8 /* DataProvider.swift */; };
 		239C556D26B8A9EA002F7AF8 /* Friend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239C556C26B8A9EA002F7AF8 /* Friend.swift */; };
 		239C557026B8B44D002F7AF8 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239C556F26B8B44D002F7AF8 /* R.generated.swift */; };
+		23F7E9CA26C93D6D002F661A /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 23F7E9C926C93D6D002F661A /* Realm */; };
+		23F7E9CC26C93D6D002F661A /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 23F7E9CB26C93D6D002F661A /* RealmSwift */; };
 		46A4F3F9F74E9BFCA021F7FF /* Pods_Sociality_2_0_Sociality_2_0UITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBDC39EB055F994DD57596DA /* Pods_Sociality_2_0_Sociality_2_0UITests.framework */; };
 		74A78D29F4202593F418FBE3 /* Pods_Sociality_2_0Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BBB5996C081BAE8BEC00A /* Pods_Sociality_2_0Tests.framework */; };
 		A982EBF07BFD252ED073EF3E /* Pods_Sociality_2_0.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E0D8BB10D27FFD21941B09F /* Pods_Sociality_2_0.framework */; };
@@ -122,6 +124,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23F7E9CC26C93D6D002F661A /* RealmSwift in Frameworks */,
+				23F7E9CA26C93D6D002F661A /* Realm in Frameworks */,
 				A982EBF07BFD252ED073EF3E /* Pods_Sociality_2_0.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -396,6 +400,10 @@
 			dependencies = (
 			);
 			name = "Sociality 2.0";
+			packageProductDependencies = (
+				23F7E9C926C93D6D002F661A /* Realm */,
+				23F7E9CB26C93D6D002F661A /* RealmSwift */,
+			);
 			productName = "Sociality 2.0";
 			productReference = 233CA2C926B3FA2100822550 /* Sociality 2.0.app */;
 			productType = "com.apple.product-type.application";
@@ -470,6 +478,9 @@
 				Base,
 			);
 			mainGroup = 233CA2C026B3FA2100822550;
+			packageReferences = (
+				23F7E9C826C93D6D002F661A /* XCRemoteSwiftPackageReference "realm-cocoa" */,
+			);
 			productRefGroup = 233CA2CA26B3FA2100822550 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -993,6 +1004,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		23F7E9C826C93D6D002F661A /* XCRemoteSwiftPackageReference "realm-cocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-cocoa";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.12.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		23F7E9C926C93D6D002F661A /* Realm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 23F7E9C826C93D6D002F661A /* XCRemoteSwiftPackageReference "realm-cocoa" */;
+			productName = Realm;
+		};
+		23F7E9CB26C93D6D002F661A /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 23F7E9C826C93D6D002F661A /* XCRemoteSwiftPackageReference "realm-cocoa" */;
+			productName = RealmSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 233CA2C126B3FA2100822550 /* Project object */;
 }
