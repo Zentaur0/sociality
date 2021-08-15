@@ -80,9 +80,11 @@ final class NetworkManager: NetworkManagerProtocol {
                 let json = try JSON(data: data)
                 let photoJSON = json["response"]["items"].arrayValue
                 let photos = photoJSON.map { Photo(json: $0) }
-                print(photos)
-                self.saveToRealm(object: photos)
                 completion(.success(photos))
+
+                DispatchQueue.main.async { [weak self] in
+                    self?.saveToRealm(object: photos)
+                }
             } catch {
                 completion(.failure(error))
             }
@@ -101,8 +103,11 @@ final class NetworkManager: NetworkManagerProtocol {
                 let json = try JSON(data: data)
                 let groupJSON = json["response"]["items"].arrayValue
                 let groups = groupJSON.map { Group(json: $0)}
-                self.saveToRealm(object: groups)
                 completion(.success(groups))
+
+                DispatchQueue.main.async { [weak self] in
+                    self?.saveToRealm(object: groups)
+                }
             } catch {
                 completion(.failure(error))
             }

@@ -46,8 +46,3 @@ extension RootTBC {
         setViewControllers([friendsVC, groupsVC, newsVC], animated: true)
     }
 }
-
-// MARK: - Constants
-extension RootTBC {
-    static let friendsTitle = loc.friends_title()
-}

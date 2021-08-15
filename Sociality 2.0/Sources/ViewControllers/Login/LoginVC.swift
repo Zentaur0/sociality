@@ -107,11 +107,12 @@ extension LoginVC: ViewControllerSetupDelegate {
               let vkLoginButton = vkLoginButton else { return }
         
         scrollView.snp.makeConstraints { snp in
-            snp.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
+            snp.edges.equalTo(view.safeAreaLayoutGuide)
         }
         
         contentView.snp.makeConstraints { snp in
-            snp.leading.trailing.top.bottom.height.width.equalTo(scrollView)
+            snp.edges.width.equalTo(scrollView)
+            snp.height.equalToSuperview().priority(400)
         }
         
         socialityLabel.snp.makeConstraints { snp in
@@ -143,6 +144,7 @@ extension LoginVC: ViewControllerSetupDelegate {
         vkLoginButton.snp.makeConstraints {
             $0.leading.trailing.equalTo(contentView).inset(35)
             $0.height.equalTo(50)
+            $0.bottom.equalTo(scrollView).inset(50)
         }
     }
 }
@@ -230,10 +232,6 @@ extension LoginVC {
         guard isAuthorized else { return }
 
         AppContainer.createSpinnerView(self, AppContainer.makeRootController())
-    }
-
-    @objc func someMethod() {
-
     }
 
     @objc func vkButtonTap() {
