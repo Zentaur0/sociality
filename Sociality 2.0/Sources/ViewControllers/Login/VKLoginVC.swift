@@ -26,9 +26,9 @@ final class VKLoginVC: UIViewController {
     }
 }
 
-// MARK: - ViewControllerSetupDelegate
-extension VKLoginVC: ViewControllerSetupDelegate {
-    func setupVC() {
+// MARK: - Methods
+extension VKLoginVC {
+    private func setupVC() {
         webView = WKWebView()
 
         guard let webView = webView else { return }
@@ -38,17 +38,13 @@ extension VKLoginVC: ViewControllerSetupDelegate {
         view.addSubview(webView)
     }
 
-    func setupConstraints() {
+    private func setupConstraints() {
         guard let webView = webView else { return }
         webView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
     }
 
-}
-
-// MARK: - Methods
-extension VKLoginVC {
     private func loadRequest() {
         let url = getURL()
         let request = URLRequest(url: url)
@@ -73,6 +69,7 @@ extension VKLoginVC {
         let url = urlComponents.url
 
         guard let url = url else { return URL(fileURLWithPath: "") }
+        print(url)
         return url
     }
 

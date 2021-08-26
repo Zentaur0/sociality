@@ -57,9 +57,9 @@ final class LoginVC: UIViewController {
     }
 }
 
-// MARK: - ViewControllerSetupDelegate
-extension LoginVC: ViewControllerSetupDelegate {
-    func setupVC() {
+// MARK: - Methods
+extension LoginVC {
+    private func setupVC() {
         scrollView = UIScrollView()
         contentView = UIView()
         socialityLabel = UILabel()
@@ -67,7 +67,7 @@ extension LoginVC: ViewControllerSetupDelegate {
         passwordTextField = setupTextField(text: "password", contentType: .password)
         loginButton = setupLabel(#selector(loginButtonTap), "Login", .systemOrange)
         vkLoginButton = setupLabel(#selector(vkButtonTap), "VK", .systemBlue)
-        
+
         guard let scrollView = scrollView,
               let contentView = contentView,
               let socialityLabel = socialityLabel,
@@ -75,9 +75,9 @@ extension LoginVC: ViewControllerSetupDelegate {
               let passwordTextField = passwordTextField,
               let loginButton = loginButton,
               let vkLoginButton = vkLoginButton else { return }
-        
+
         scrollView.keyboardDismissMode = .onDrag
-        
+
         socialityLabel.text = "Sociality"
         socialityLabel.font = .systemFont(ofSize: 27, weight: .semibold)
         socialityLabel.textAlignment = .center
@@ -89,15 +89,15 @@ extension LoginVC: ViewControllerSetupDelegate {
         contentView.addSubview(passwordTextField)
         contentView.addSubview(loginButton)
         contentView.addSubview(vkLoginButton)
-        
+
         view.backgroundColor = .systemGray3
         navigationController?.navigationBar.isHidden = true
-        
+
         let hideKeyboardGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         scrollView.addGestureRecognizer(hideKeyboardGesture)
     }
-    
-    func setupConstraints() {
+
+    private func setupConstraints() {
         guard let scrollView = scrollView,
               let contentView = contentView,
               let socialityLabel = socialityLabel,
@@ -105,34 +105,34 @@ extension LoginVC: ViewControllerSetupDelegate {
               let passwordTextField = passwordTextField,
               let loginButton = loginButton,
               let vkLoginButton = vkLoginButton else { return }
-        
+
         scrollView.snp.makeConstraints { snp in
             snp.edges.equalTo(view.safeAreaLayoutGuide)
         }
-        
+
         contentView.snp.makeConstraints { snp in
             snp.edges.width.equalTo(scrollView)
             snp.height.equalToSuperview().priority(400)
         }
-        
+
         socialityLabel.snp.makeConstraints { snp in
             snp.centerX.equalTo(contentView.snp.centerX)
             snp.bottom.equalTo(usernameTextField.snp.top).offset(-70)
         }
-        
+
         usernameTextField.snp.makeConstraints { snp in
             snp.centerX.centerY.equalToSuperview()
             snp.leading.trailing.equalTo(contentView).inset(35)
             snp.height.equalTo(40)
         }
-        
+
         passwordTextField.snp.makeConstraints { snp in
             snp.centerX.equalToSuperview()
             snp.leading.trailing.equalTo(contentView).inset(35)
             snp.height.equalTo(40)
             snp.top.equalTo(usernameTextField.snp.bottom).offset(15)
         }
-        
+
         loginButton.snp.makeConstraints { snp in
             snp.centerX.equalToSuperview()
             snp.leading.trailing.equalTo(contentView).inset(35)
@@ -147,10 +147,7 @@ extension LoginVC: ViewControllerSetupDelegate {
             $0.bottom.equalTo(scrollView).inset(50)
         }
     }
-}
-
-// MARK: - Methods
-extension LoginVC {
+    
     private func setupTextField(text: String, contentType: UITextContentType) -> UITextField {
         let attStr = NSAttributedString(string: text,
                                         attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17,

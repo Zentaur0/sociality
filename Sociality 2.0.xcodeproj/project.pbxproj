@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		23041FAE26BAD26A0096A461 /* Spinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23041FAD26BAD26A0096A461 /* Spinner.swift */; };
 		23041FB026BAD65A0096A461 /* GlobalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23041FAF26BAD65A0096A461 /* GlobalConstants.swift */; };
-		23041FB226BC220F0096A461 /* CollectionViewCellSetupDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23041FB126BC220F0096A461 /* CollectionViewCellSetupDelegate.swift */; };
 		23041FB426BC2C700096A461 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23041FB326BC2C700096A461 /* Post.swift */; };
 		23041FB626BC76B70096A461 /* VKLoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23041FB526BC76B70096A461 /* VKLoginVC.swift */; };
 		23041FB826BC78690096A461 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23041FB726BC78690096A461 /* NetworkManager.swift */; };
@@ -32,8 +31,6 @@
 		239938BF26B9F42B00EDC985 /* GroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239938BE26B9F42B00EDC985 /* GroupCell.swift */; };
 		239938C126BAA04A00EDC985 /* FriendInformationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239938C026BAA04A00EDC985 /* FriendInformationVC.swift */; };
 		239938C426BAA45000EDC985 /* FriendCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239938C326BAA45000EDC985 /* FriendCollectionCell.swift */; };
-		239938C626BAA48700EDC985 /* ViewSetupDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239938C526BAA48700EDC985 /* ViewSetupDelegate.swift */; };
-		239938C826BAA49C00EDC985 /* ViewControllerSetupDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239938C726BAA49C00EDC985 /* ViewControllerSetupDelegate.swift */; };
 		239938CA26BAA4B000EDC985 /* TableViewCellSetupDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239938C926BAA4B000EDC985 /* TableViewCellSetupDelegate.swift */; };
 		239938CC26BAA4F000EDC985 /* NavigationControllerSearchDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239938CB26BAA4F000EDC985 /* NavigationControllerSearchDelegate.swift */; };
 		239938CE26BAA93300EDC985 /* UIAplication + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239938CD26BAA93300EDC985 /* UIAplication + Extensions.swift */; };
@@ -70,7 +67,6 @@
 		064006D4A6FCE47837195EED /* Pods-Sociality 2.0Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sociality 2.0Tests.debug.xcconfig"; path = "Target Support Files/Pods-Sociality 2.0Tests/Pods-Sociality 2.0Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		23041FAD26BAD26A0096A461 /* Spinner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spinner.swift; sourceTree = "<group>"; };
 		23041FAF26BAD65A0096A461 /* GlobalConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConstants.swift; sourceTree = "<group>"; };
-		23041FB126BC220F0096A461 /* CollectionViewCellSetupDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCellSetupDelegate.swift; sourceTree = "<group>"; };
 		23041FB326BC2C700096A461 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		23041FB526BC76B70096A461 /* VKLoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VKLoginVC.swift; sourceTree = "<group>"; };
 		23041FB726BC78690096A461 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
@@ -99,8 +95,6 @@
 		239938BE26B9F42B00EDC985 /* GroupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCell.swift; sourceTree = "<group>"; };
 		239938C026BAA04A00EDC985 /* FriendInformationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendInformationVC.swift; sourceTree = "<group>"; };
 		239938C326BAA45000EDC985 /* FriendCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCollectionCell.swift; sourceTree = "<group>"; };
-		239938C526BAA48700EDC985 /* ViewSetupDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewSetupDelegate.swift; sourceTree = "<group>"; };
-		239938C726BAA49C00EDC985 /* ViewControllerSetupDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerSetupDelegate.swift; sourceTree = "<group>"; };
 		239938C926BAA4B000EDC985 /* TableViewCellSetupDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCellSetupDelegate.swift; sourceTree = "<group>"; };
 		239938CB26BAA4F000EDC985 /* NavigationControllerSearchDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationControllerSearchDelegate.swift; sourceTree = "<group>"; };
 		239938CD26BAA93300EDC985 /* UIAplication + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAplication + Extensions.swift"; sourceTree = "<group>"; };
@@ -264,11 +258,8 @@
 		231E035D26B87E9C001E9C0F /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
-				239938C526BAA48700EDC985 /* ViewSetupDelegate.swift */,
-				239938C726BAA49C00EDC985 /* ViewControllerSetupDelegate.swift */,
 				239938C926BAA4B000EDC985 /* TableViewCellSetupDelegate.swift */,
 				239938CB26BAA4F000EDC985 /* NavigationControllerSearchDelegate.swift */,
-				23041FB126BC220F0096A461 /* CollectionViewCellSetupDelegate.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -652,7 +643,6 @@
 				239938C426BAA45000EDC985 /* FriendCollectionCell.swift in Sources */,
 				239C557026B8B44D002F7AF8 /* R.generated.swift in Sources */,
 				239938BF26B9F42B00EDC985 /* GroupCell.swift in Sources */,
-				239938C626BAA48700EDC985 /* ViewSetupDelegate.swift in Sources */,
 				239938CA26BAA4B000EDC985 /* TableViewCellSetupDelegate.swift in Sources */,
 				239938CE26BAA93300EDC985 /* UIAplication + Extensions.swift in Sources */,
 				231E035C26B87E38001E9C0F /* RootTBC.swift in Sources */,
@@ -666,7 +656,6 @@
 				23041FAE26BAD26A0096A461 /* Spinner.swift in Sources */,
 				239C556926B8A7B9002F7AF8 /* FriendTableCell.swift in Sources */,
 				239C556726B8907F002F7AF8 /* Session.swift in Sources */,
-				23041FB226BC220F0096A461 /* CollectionViewCellSetupDelegate.swift in Sources */,
 				233CA2CD26B3FA2100822550 /* AppDelegate.swift in Sources */,
 				239938C126BAA04A00EDC985 /* FriendInformationVC.swift in Sources */,
 				231E034826B85EE3001E9C0F /* AppContainer.swift in Sources */,
@@ -674,7 +663,6 @@
 				239938BD26B9F3B400EDC985 /* AllGroupsVC.swift in Sources */,
 				23041FB426BC2C700096A461 /* Post.swift in Sources */,
 				23041FB626BC76B70096A461 /* VKLoginVC.swift in Sources */,
-				239938C826BAA49C00EDC985 /* ViewControllerSetupDelegate.swift in Sources */,
 				239C556B26B8A98E002F7AF8 /* DataProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

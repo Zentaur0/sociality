@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct Post: Decodable {
+struct Post {
     var id: String
     let user: Friend
     let time: String
