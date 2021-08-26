@@ -18,42 +18,67 @@ final class GroupsVC: UIViewController, NavigationControllerSearchDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         provideGroups()
+        if filteredGroups.isEmpty {
+            provideGroupsFromRealm()
+        }
         setupVC()
         setupConstraints()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        filteredGroups = DataProvider.shared.myGroups
+        provideGroupsFromRealm()
         tableView.reloadData()
     }
 }
 
-// MARK: - ViewControllerSetupDelegate
-extension GroupsVC: ViewControllerSetupDelegate {
-    func setupVC() {
+// MARK: - Methods
+extension GroupsVC {
+    private func setupVC() {
         tableView.tableFooterView = UIView()
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(GroupCell.self, forCellReuseIdentifier: GroupCell.reuseID)
-        
+
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add,
                                                             target: self,
                                                             action: #selector(addGroupAction))
-        
+
         addSearchController(self.navigationController ?? UINavigationController(),
                             self.navigationItem)
-        
+
         title = AppContainer.shared.groupsTitle
         navigationController?.navigationBar.prefersLargeTitles = true
         view.addSubview(tableView)
     }
-    
-    func setupConstraints() {
+
+    private func setupConstraints() {
         tableView.snp.makeConstraints {
             $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
     }
+
+    private func provideGroups() {
+        NetworkManager.shared.loadGroups(url: URLs.getGroups) { [weak self] result in
+            switch result {
+            case .failure(let error):
+                print(error)
+            case .success(let groups):
+                self?.filteredGroups = groups
+                DispatchQueue.main.async { [weak self] in
+                    self?.tableView.reloadData()
+                }
+            }
+        }
+    }
+    
+    private func provideGroupsFromRealm() {
+        filteredGroups = NetworkManager.shared.readFromRealm(object: filteredGroups)
+        DispatchQueue.main.async { [weak self] in
+            self?.tableView.reloadData()
+        }
+    }
+    
 }
 
 // MARK: - Actions
@@ -125,24 +150,6 @@ extension GroupsVC: UITableViewDelegate {
             tableView.deleteRows(at: [indexPath], with: .automatic)
             tableView.endUpdates()
             tableView.reloadData()
-        }
-    }
-}
-
-// MARK: - Methods
-extension GroupsVC {
-    private func provideGroups() {
-        NetworkManager.shared.loadGroups(url: URLs.getGroups) { [weak self] result in
-            switch result {
-            case .failure(let error):
-                print(error)
-            case .success(let groups):
-                DataProvider.shared.myGroups = groups
-                self?.filteredGroups = groups
-                DispatchQueue.main.async { [weak self] in
-                    self?.tableView.reloadData()
-                }
-            }
         }
     }
 }
