@@ -7,7 +7,7 @@
 
 import UIKit
 
-class NewsVC: UIViewController {
+final class NewsVC: UIViewController {
     
     // MARK: - Properties
     private var tableView: UITableView?
@@ -20,13 +20,13 @@ class NewsVC: UIViewController {
     }
 }
 
-// MARK: - ViewControllerSetupDelegate
-extension NewsVC: ViewControllerSetupDelegate {
-    func setupVC() {
+// MARK: - Methods
+extension NewsVC {
+    private func setupVC() {
         
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         
     }
     

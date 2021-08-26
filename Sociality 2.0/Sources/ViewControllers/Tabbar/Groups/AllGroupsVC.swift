@@ -22,41 +22,39 @@ final class AllGroupsVC: UIViewController, NavigationControllerSearchDelegate {
     }
 }
 
-// MARK: - ViewControllerSetupDelegate
-extension AllGroupsVC: ViewControllerSetupDelegate {
-    func setupVC() {
+// MARK: - Methods
+extension AllGroupsVC {
+    private func setupVC() {
         tableView = UITableView()
-        
+
         guard let tableView = tableView else { return }
-        
+
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(GroupCell.self, forCellReuseIdentifier: GroupCell.reuseID)
-        
+
         addSearchController(self.navigationController ?? UINavigationController(),
                             self.navigationItem)
-        
+
         title = AppContainer.shared.groupsTitle
         view.addSubview(tableView)
     }
-    
-    func setupConstraints() {
+
+    private func setupConstraints() {
         guard let tableView = tableView else { return }
-        
+
         tableView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
     }
-}
 
-// MARK: - Methods
-extension AllGroupsVC {
     private func showAlert() {
         let alert = UIAlertController(title: "Ups", message: "Group is already added", preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
     }
+
 }
 
 // MARK: - Actions

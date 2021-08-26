@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct User: Decodable {
+struct User {
     // MARK: - Info
     var givenName: String
     var familyName: String
