@@ -6,13 +6,15 @@
 //
 
 import UIKit
+import RealmSwift
 
 final class GroupsVC: UIViewController, NavigationControllerSearchDelegate {
     
     // MARK: - Properties
     private let tableView = UITableView()
-    
+    private var notificationToken: NotificationToken?
     private var filteredGroups: [Group] = []
+    private let refreshControll = UIRefreshControl()
     
     // MARK: - Life cycle
     override func viewDidLoad() {
@@ -39,6 +41,9 @@ extension GroupsVC {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(GroupCell.self, forCellReuseIdentifier: GroupCell.reuseID)
+        tableView.refreshControl = refreshControll
+        
+        refreshControll.addTarget(self, action: #selector(refresh), for: .valueChanged)
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add,
                                                             target: self,
@@ -77,6 +82,53 @@ extension GroupsVC {
         DispatchQueue.main.async { [weak self] in
             self?.tableView.reloadData()
         }
+    }
+    
+    private func notificate() {
+        do {
+            let realm = try Realm()
+            let realmObject = realm.objects(Group.self)
+            notificationToken = realmObject.observe { (change: RealmCollectionChange) in
+                switch change {
+                case .error(let error):
+                    print(error)
+                case .initial(_):
+                    self.tableView.reloadData()
+                case let .update(_, deletions, insertions, modifications):
+                    self.tableView.beginUpdates()
+                    self.tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}),
+                                         with: .automatic)
+                    self.tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}),
+                                         with: .automatic)
+                    self.tableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0)}),
+                                         with: .automatic)
+                    self.tableView.endUpdates()
+                }
+            }
+        } catch {
+            print(error)
+        }
+        
+    }
+    
+    @objc func refresh() {
+        
+        let network = NetworkManager()
+        network.loadGroups(url: URLs.getGroups) { result in
+            switch result {
+            case .failure(let error):
+                print(error)
+            case .success(let groups):
+                self.filteredGroups = groups
+                DispatchQueue.main.async { [weak self] in
+                    self?.tableView.reloadData()
+                }
+            }
+        }
+        
+        notificate()
+        
+        refreshControll.endRefreshing()
     }
     
 }

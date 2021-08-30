@@ -15,6 +15,8 @@ final class FriendInformationVC: UIViewController {
     // Internal Properties
     internal var friend: Friend
     private var photos: [Photo] = []
+    private let refreshControll = UIRefreshControl()
+    private var notificationToken: NotificationToken?
     
     // Private Properties
     private var collectionView: UICollectionView?
@@ -47,6 +49,9 @@ extension FriendInformationVC {
 
         guard let collectionView = collectionView else { return }
 
+        refreshControll.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        
+        collectionView.refreshControl = refreshControll
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(FriendCollectionCell.self, forCellWithReuseIdentifier: FriendCollectionCell.reuseID)
@@ -85,7 +90,54 @@ extension FriendInformationVC {
         }
         
     }
+    
+    private func notificate() {
+        do {
+            let realm = try Realm()
+            let realmObject = realm.objects(Friend.self)
+            notificationToken = realmObject.observe { (change: RealmCollectionChange) in
+                switch change {
+                case .error(let error):
+                    print(error)
+                case .initial(_):
+                    self.collectionView?.reloadData()
+                case let .update(_, deletions, insertions, modifications):
+                    self.collectionView?.performBatchUpdates({
+                    self.collectionView?.insertItems(at: insertions.map({ IndexPath(row: $0, section: 0) }))
+                    self.collectionView?.deleteItems(at: deletions.map({ IndexPath(row: $0, section: 0)}))
+                    self.collectionView?.reloadItems(at: modifications.map({ IndexPath(row: $0, section: 0) }))
+                }, completion: nil)
+                }
+            }
+        } catch {
+            print(error)
+        }
+        
+    }
 
+}
+
+// MARK: - Actions
+extension FriendInformationVC {
+    @objc func refresh() {
+        
+        NetworkManager.shared.loadFriendsPhotos(ownerID: String(friend.id), friend: friend) { [weak self] result in
+            switch result {
+            case .success(let photos):
+                self?.photos = photos
+                DispatchQueue.main.async { [weak self] in
+                    self?.collectionView?.reloadData()
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
+        
+        notificate()
+        
+        refreshControll.endRefreshing()
+    }
+    
 }
 
 // MARK: - UICollectionViewDataSource
