@@ -7,6 +7,7 @@
 
 import UIKit
 import Kingfisher
+import RealmSwift
 
 final class FriendInformationVC: UIViewController {
     
@@ -34,53 +35,49 @@ final class FriendInformationVC: UIViewController {
         provideFriendPhotos()
         setupVC()
         setupConstraints()
-
     }
+
 }
 
 // MARK: - Methods
 extension FriendInformationVC {
+    private func setupVC() {
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+
+        guard let collectionView = collectionView else { return }
+
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(FriendCollectionCell.self, forCellWithReuseIdentifier: FriendCollectionCell.reuseID)
+
+        collectionView.backgroundColor = R.color.whiteBlack()
+
+        view.addSubview(collectionView)
+
+        title = friend.givenName + " " + friend.familyName
+    }
+
+    private func setupConstraints() {
+        guard let collectionView = collectionView else { return }
+
+        collectionView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+    }
+    
     private func provideFriendPhotos() {
-        NetworkManager.shared.loadFriendsPhotos(ownerID: String(friend.id)) { [weak self] result in
+        NetworkManager.shared.loadFriendsPhotos(ownerID: String(friend.id), friend: friend) { [weak self] result in
             switch result {
-            case .success(let photos):
-                self?.friend.images = photos
+            case .success(_):
                 DispatchQueue.main.async { [weak self] in
                     self?.collectionView?.reloadData()
                 }
-                print(photos)
             case .failure(let error):
                 print(error)
             }
         }
     }
-}
 
-// MARK: - ViewControllerSetupDelegate
-extension FriendInformationVC: ViewControllerSetupDelegate {
-    func setupVC() {
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        
-        guard let collectionView = collectionView else { return }
-        
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.register(FriendCollectionCell.self, forCellWithReuseIdentifier: FriendCollectionCell.reuseID)
-        
-        collectionView.backgroundColor = R.color.whiteBlack()
-        
-        view.addSubview(collectionView)
-        
-        title = friend.givenName + " " + friend.familyName
-    }
-    
-    func setupConstraints() {
-        guard let collectionView = collectionView else { return }
-        
-        collectionView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-        }
-    }
 }
 
 // MARK: - UICollectionViewDataSource
@@ -101,30 +98,18 @@ extension FriendInformationVC: UICollectionViewDataSource {
         
         return cell
     }
+
 }
 
 // MARK: - UICollectionViewDelegate
-extension FriendInformationVC: UICollectionViewDelegate {
-    
-}
+extension FriendInformationVC: UICollectionViewDelegate {}
 
 // MARK: - UICollectionViewDelegateFlowLayout
 extension FriendInformationVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-
-        let width = friend.images[indexPath.row].width
-        let height = friend.images[indexPath.row].height
-
-        let horizontalSize = CGSize(width: width, height: height)
-        let verticalSize = CGSize(width: width, height: height)
-        
-        let size = width > height ? horizontalSize : verticalSize
-
-
-//        return size
-        return view.sizeThatFits(CGSize(width: view.frame.width - 30, height: 100))
+        return view.sizeThatFits(CGSize(width: view.frame.width - 50, height: 100))
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -132,4 +117,5 @@ extension FriendInformationVC: UICollectionViewDelegateFlowLayout {
                         insetForSectionAt section: Int) -> UIEdgeInsets {
         UIEdgeInsets(top: 15, left: 15, bottom: 15, right: 15)
     }
+
 }

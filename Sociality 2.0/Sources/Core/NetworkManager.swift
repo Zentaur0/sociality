@@ -42,10 +42,20 @@ final class NetworkManager: NetworkManagerProtocol {
 
                 let json = try JSON(data: data)
                 let friendJSON = json["response"]["items"].arrayValue
-                let friend = friendJSON.map { Friend(json: $0) }
-
+                let friends = friendJSON.map { Friend(json: $0) }
+                
+                DispatchQueue.main.async {
+                    self.saveToRealm(object: friends)
+                }
+                
+                
+                DispatchQueue.main.async {
+                    let realmRead = self.readFromRealm(object: friends)
+                    completion(.success(realmRead))
+                }
+                
                 UserDefaults.standard.set(true, forKey: "isAuthorized")
-                completion(.success(friend))
+                
                 DispatchQueue.main.async {
                     sender?.dismiss(animated: true) {
                         AppContainer.createSpinnerView(UIApplication.topViewController() ?? UIViewController(),
@@ -66,25 +76,28 @@ final class NetworkManager: NetworkManagerProtocol {
         }.resume()
     }
     
-    func loadFriendsPhotos(ownerID: String, completion: @escaping (Result<[Photo], Error>) -> Void) {
+    func loadFriendsPhotos(ownerID: String, friend: Friend, completion: @escaping (Result<[Photo], Error>) -> Void) {
 
         let url = "https://api.vk.com/method/photos.getAll?access_token=\(Session.shared.token)&owner_id=\(ownerID)&extended=1&v=5.131"
         
         guard let url = URL(string: url) else { return }
 
         let session = URLSession.shared
-
+        
         session.dataTask(with: url) { data, response, error in
             do {
                 guard let data = data else { return }
                 let json = try JSON(data: data)
+//                let photos = try JSONDecoder().decode([Photo].self, from: data)
                 let photoJSON = json["response"]["items"].arrayValue
                 let photos = photoJSON.map { Photo(json: $0) }
-                completion(.success(photos))
-
+                
                 DispatchQueue.main.async { [weak self] in
                     self?.saveToRealm(object: photos)
+                    self?.updateFriendPhotoRealm(photos: photos, friend: friend)
                 }
+                
+                completion(.success(photos))
             } catch {
                 completion(.failure(error))
             }
@@ -107,6 +120,11 @@ final class NetworkManager: NetworkManagerProtocol {
 
                 DispatchQueue.main.async { [weak self] in
                     self?.saveToRealm(object: groups)
+                }
+                
+                DispatchQueue.main.async {
+                    let realmRead = self.readFromRealm(object: groups)
+                    completion(.success(realmRead))
                 }
             } catch {
                 completion(.failure(error))
@@ -136,14 +154,42 @@ final class NetworkManager: NetworkManagerProtocol {
         }.resume()
     }
 
-    func saveToRealm<T: Object>(object: [T]) {
+    private func saveToRealm<T: Object>(object: [T]) {
         do {
             let realm = try Realm()
             realm.beginWrite()
-            realm.add(object)
+            realm.add(object, update: .modified)
             try realm.commitWrite()
         } catch {
             print(error)
         }
     }
+    
+    func readFromRealm<T: Object>(object: [T]) -> [T] {
+        do {
+            let realm = try Realm()
+            let realmObject = realm.objects(T.self)
+            return Array(realmObject)
+        } catch {
+            print(error)
+        }
+        return []
+    }
+    
+    private func updateFriendPhotoRealm(photos: [Photo], friend: Friend) {
+        do {
+            let realm = try Realm()
+            realm.beginWrite()
+            for photo in photos {
+                if !friend.images.contains(photo) {
+                    friend.images.append(photo)
+                }
+            }
+            realm.add(friend, update: .all)
+            try realm.commitWrite()
+        } catch {
+            print(error)
+        }
+    }
+    
 }

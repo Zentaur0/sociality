@@ -28,3 +28,13 @@ class Group: Object, Decodable {
         self.avatar = json["photo_100"].stringValue
     }
 }
+
+// MARK: - Realm
+
+extension Group {
+    
+    override class func primaryKey() -> String? {
+        "id"
+    }
+    
+}

@@ -14,7 +14,7 @@ final class FriendsVC: UIViewController, NavigationControllerSearchDelegate {
     // MARK: - Properties
     // Private Properties
     private var tableView: UITableView?
-    private var filteredFriends: [Friend] = DataProvider.shared.allFriends
+    private var filteredFriends: [Friend] = []
     private var sortedFirstLetters = [String]()
     private var sections = [[Friend]]()
     
@@ -22,6 +22,9 @@ final class FriendsVC: UIViewController, NavigationControllerSearchDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         provideFriends()
+        if filteredFriends.isEmpty {
+            provideFriendsFromRealm()
+        }
         setupVC()
         setupConstraints()
     }
@@ -32,24 +35,24 @@ final class FriendsVC: UIViewController, NavigationControllerSearchDelegate {
     }
 }
 
-// MARK: - ViewControllerSetupDelegate
-extension FriendsVC: ViewControllerSetupDelegate {
-    func setupVC() {
+// MARK: - Methods
+extension FriendsVC {
+    private func setupVC() {
         tableView = UITableView()
-        
+
         guard let tableView = tableView else { return }
-        
+
         tableView.tableFooterView = UIView()
         tableView.delegate = self
         tableView.dataSource = self
         tableView.backgroundColor = R.color.whiteBlack()
         tableView.register(FriendTableCell.self, forCellReuseIdentifier: FriendTableCell.reuseID)
-        
+
         view.addSubview(tableView)
-        
+
         addSearchController(self.navigationController ?? UINavigationController(),
                             self.navigationItem)
-        
+
         title = AppContainer.shared.friendsTitle
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: loc.friends_logout(),
                                                            style: .done,
@@ -57,19 +60,15 @@ extension FriendsVC: ViewControllerSetupDelegate {
                                                            action: #selector(logoutAction))
         navigationController?.navigationBar.prefersLargeTitles = true
     }
-    
-    func setupConstraints() {
+
+    private func setupConstraints() {
         guard let tableView = tableView else { return }
-        
+
         tableView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
     }
 
-}
-
-// MARK: - Methods
-extension FriendsVC {
     private func setupsForSectionsAndHeaders() {
         var firstLetters: [String] = []
         for i in filteredFriends {
@@ -95,14 +94,21 @@ extension FriendsVC {
             switch result {
             case .failure(let error):
                 print(error)
-            case .success(let data):
-                DataProvider.shared.allFriends = data
-                self.filteredFriends = data
+            case .success(let friends):
+                self.filteredFriends = friends
                 self.setupsForSectionsAndHeaders()
                 DispatchQueue.main.async { [weak self] in
                     self?.tableView?.reloadData()
                 }
             }
+        }
+    }
+    
+    private func provideFriendsFromRealm() {
+        filteredFriends = NetworkManager.shared.readFromRealm(object: filteredFriends)
+        self.setupsForSectionsAndHeaders()
+        DispatchQueue.main.async { [weak self] in
+            self?.tableView?.reloadData()
         }
     }
 
