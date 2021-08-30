@@ -73,7 +73,7 @@ extension GroupsVC {
     }
     
     private func provideGroupsFromRealm() {
-        filteredGroups = NetworkManager.shared.readFromRealm(object: filteredGroups)
+        filteredGroups = NetworkManager.shared.readFromRealm()
         DispatchQueue.main.async { [weak self] in
             self?.tableView.reloadData()
         }

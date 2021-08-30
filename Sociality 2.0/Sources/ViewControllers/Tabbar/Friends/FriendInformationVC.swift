@@ -14,6 +14,7 @@ final class FriendInformationVC: UIViewController {
     // MARK: - Properties
     // Internal Properties
     internal var friend: Friend
+    private var photos: [Photo] = []
     
     // Private Properties
     private var collectionView: UICollectionView?
@@ -66,16 +67,23 @@ extension FriendInformationVC {
     }
     
     private func provideFriendPhotos() {
-        NetworkManager.shared.loadFriendsPhotos(ownerID: String(friend.id), friend: friend) { [weak self] result in
-            switch result {
-            case .success(_):
-                DispatchQueue.main.async { [weak self] in
-                    self?.collectionView?.reloadData()
+        let realmCheck: [Photo] = NetworkManager.shared.readPhotosFromRealm(ownerID: friend.id)
+        if realmCheck.isEmpty {
+            NetworkManager.shared.loadFriendsPhotos(ownerID: String(friend.id), friend: friend) { [weak self] result in
+                switch result {
+                case .success(let photos):
+                    self?.photos = photos
+                    DispatchQueue.main.async { [weak self] in
+                        self?.collectionView?.reloadData()
+                    }
+                case .failure(let error):
+                    print(error)
                 }
-            case .failure(let error):
-                print(error)
             }
+        } else {
+            photos = realmCheck
         }
+        
     }
 
 }
@@ -94,7 +102,7 @@ extension FriendInformationVC: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
 
-        cell.config(friend: friend, for: indexPath)
+        cell.config(friend: friend, photos: photos, for: indexPath)
         
         return cell
     }

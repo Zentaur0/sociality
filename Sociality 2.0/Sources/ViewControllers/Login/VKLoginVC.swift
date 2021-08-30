@@ -102,18 +102,17 @@ extension VKLoginVC: WKNavigationDelegate {
             decisionHandler(.allow)
             return
         }
+        
+        guard !token.isEmpty && !userIdString.isEmpty else {
+            NetworkManager.shared.authorize(sender: self, isAuthorized: false)
+            decisionHandler(.allow)
+            return 
+        }
 
         UserDefaults.standard.set(token, forKey: "token")
         UserDefaults.standard.set(Int(userIdString), forKey: "userID")
-
-        NetworkManager.shared.loadFriends(url: URLs.getFriends, sender: self) { result in
-            switch result {
-            case .failure(let error):
-                print(error)
-            case .success(let friends):
-                DataProvider.shared.allFriends = friends
-            }
-        }
+        
+        NetworkManager.shared.authorize(sender: self, isAuthorized: true)
         
         decisionHandler(.cancel)
     }

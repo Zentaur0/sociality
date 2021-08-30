@@ -22,9 +22,6 @@ final class FriendsVC: UIViewController, NavigationControllerSearchDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         provideFriends()
-        if filteredFriends.isEmpty {
-            provideFriendsFromRealm()
-        }
         setupVC()
         setupConstraints()
     }
@@ -89,26 +86,24 @@ extension FriendsVC {
     }
 
     private func provideFriends() {
-        let network = NetworkManager()
-        network.loadFriends(url: URLs.getFriends) { result in
-            switch result {
-            case .failure(let error):
-                print(error)
-            case .success(let friends):
-                self.filteredFriends = friends
-                self.setupsForSectionsAndHeaders()
-                DispatchQueue.main.async { [weak self] in
-                    self?.tableView?.reloadData()
+        let realmCheck: [Friend] = NetworkManager.shared.readFromRealm()
+        if realmCheck.isEmpty {
+            let network = NetworkManager()
+            network.loadFriends(url: URLs.getFriends) { result in
+                switch result {
+                case .failure(let error):
+                    print(error)
+                case .success(let friends):
+                    self.filteredFriends = friends
+                    self.setupsForSectionsAndHeaders()
+                    DispatchQueue.main.async { [weak self] in
+                        self?.tableView?.reloadData()
+                    }
                 }
             }
-        }
-    }
-    
-    private func provideFriendsFromRealm() {
-        filteredFriends = NetworkManager.shared.readFromRealm(object: filteredFriends)
-        self.setupsForSectionsAndHeaders()
-        DispatchQueue.main.async { [weak self] in
-            self?.tableView?.reloadData()
+        } else {
+            filteredFriends = realmCheck
+            setupsForSectionsAndHeaders()
         }
     }
 

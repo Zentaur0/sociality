@@ -29,6 +29,32 @@ final class NetworkManager: NetworkManagerProtocol {
 
     // MARK: - Static
     static let shared = NetworkManager()
+    
+    private var friendNotification: NotificationToken?
+    private var groupsNotification: NotificationToken?
+    
+    func authorize(sender: UIViewController, isAuthorized: Bool) {
+        if isAuthorized {
+            UserDefaults.standard.set(true, forKey: "isAuthorized")
+            
+            DispatchQueue.main.async {
+                sender.dismiss(animated: true) {
+                    AppContainer.createSpinnerView(UIApplication.topViewController() ?? UIViewController(),
+                                                   AppContainer.makeRootController())
+                }
+            }
+        } else {
+            UserDefaults.standard.set(false, forKey: "isAuthorized")
+            
+            DispatchQueue.main.async {
+                sender.dismiss(animated: true) {
+                    AppContainer.createSpinnerView(UIApplication.topViewController() ?? UIViewController(),
+                                                   AppContainer.makeRootController())
+                }
+            }
+
+        }
+    }
 
     func loadFriends(url: String, sender: UIViewController? = nil, completion: @escaping (Result<[Friend], Error>) -> Void) {
 
@@ -44,34 +70,14 @@ final class NetworkManager: NetworkManagerProtocol {
                 let friendJSON = json["response"]["items"].arrayValue
                 let friends = friendJSON.map { Friend(json: $0) }
                 
+                completion(.success(friends))
+                
                 DispatchQueue.main.async {
                     self.saveToRealm(object: friends)
                 }
-                
-                
-                DispatchQueue.main.async {
-                    let realmRead = self.readFromRealm(object: friends)
-                    completion(.success(realmRead))
-                }
-                
-                UserDefaults.standard.set(true, forKey: "isAuthorized")
-                
-                DispatchQueue.main.async {
-                    sender?.dismiss(animated: true) {
-                        AppContainer.createSpinnerView(UIApplication.topViewController() ?? UIViewController(),
-                                                       AppContainer.makeRootController())
-                    }
-                }
             } catch {
                 print(error, "<--- Friends Error")
-                UserDefaults.standard.set(false, forKey: "isAuthorized")
                 completion(.failure(error))
-                DispatchQueue.main.async {
-                    sender?.dismiss(animated: true) {
-                        AppContainer.createSpinnerView(UIApplication.topViewController() ?? UIViewController(),
-                                                       AppContainer.makeRootController())
-                    }
-                }
             }
         }.resume()
     }
@@ -88,16 +94,15 @@ final class NetworkManager: NetworkManagerProtocol {
             do {
                 guard let data = data else { return }
                 let json = try JSON(data: data)
-//                let photos = try JSONDecoder().decode([Photo].self, from: data)
                 let photoJSON = json["response"]["items"].arrayValue
                 let photos = photoJSON.map { Photo(json: $0) }
                 
                 DispatchQueue.main.async { [weak self] in
                     self?.saveToRealm(object: photos)
                     self?.updateFriendPhotoRealm(photos: photos, friend: friend)
+                    completion(.success(photos))
                 }
                 
-                completion(.success(photos))
             } catch {
                 completion(.failure(error))
             }
@@ -122,10 +127,6 @@ final class NetworkManager: NetworkManagerProtocol {
                     self?.saveToRealm(object: groups)
                 }
                 
-                DispatchQueue.main.async {
-                    let realmRead = self.readFromRealm(object: groups)
-                    completion(.success(realmRead))
-                }
             } catch {
                 completion(.failure(error))
             }
@@ -158,6 +159,7 @@ final class NetworkManager: NetworkManagerProtocol {
         do {
             let realm = try Realm()
             realm.beginWrite()
+            print(realm.configuration.fileURL)
             realm.add(object, update: .modified)
             try realm.commitWrite()
         } catch {
@@ -165,10 +167,21 @@ final class NetworkManager: NetworkManagerProtocol {
         }
     }
     
-    func readFromRealm<T: Object>(object: [T]) -> [T] {
+    func readFromRealm<T: Object>() -> [T] {
         do {
             let realm = try Realm()
             let realmObject = realm.objects(T.self)
+            return Array(realmObject)
+        } catch {
+            print(error)
+        }
+        return []
+    }
+    
+    func readPhotosFromRealm(ownerID: Int) -> [Photo] {
+        do {
+            let realm = try Realm()
+            let realmObject = realm.objects(Photo.self).filter { $0.ownerID == ownerID }
             return Array(realmObject)
         } catch {
             print(error)

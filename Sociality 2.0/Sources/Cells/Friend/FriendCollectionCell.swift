@@ -137,15 +137,15 @@ extension FriendCollectionCell {
                                                    cornerRadius: 5).cgPath
     }
 
-    func config(friend: Friend, for indexPath: IndexPath) {
+    func config(friend: Friend, photos: [Photo], for indexPath: IndexPath) {
         guard let imageView = imageView,
               let infoLabel = infoLabel,
               let likeControll = likeControll,
               let likeCountLabel = likeCountLabel else { return }
-        imageView.kf.setImage(with: URL(string: friend.images[indexPath.row].pic))
+        imageView.kf.setImage(with: URL(string: photos[indexPath.row].pic))
         infoLabel.text = friend.familyName
         likeControll.setBackgroundImage(R.image.disliked() ?? R.image.liked(), for: .normal)
-        likeCountLabel.text = String(friend.images[indexPath.row].likes)
+        likeCountLabel.text = String(photos[indexPath.row].likes)
     }
 
 }
