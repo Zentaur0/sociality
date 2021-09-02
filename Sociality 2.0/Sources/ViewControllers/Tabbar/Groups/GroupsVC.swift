@@ -6,28 +6,40 @@
 //
 
 import UIKit
+import RealmSwift
 
 final class GroupsVC: UIViewController, NavigationControllerSearchDelegate {
     
     // MARK: - Properties
-    private let tableView = UITableView()
+    weak var network: NetworkManagerProtocol?
     
+    private let tableView = UITableView()
+    private var notificationToken: NotificationToken?
     private var filteredGroups: [Group] = []
+    private let refreshControll = UIRefreshControl()
+    
+    // MARK: - Init
+    init(network: NetworkManagerProtocol? = nil) {
+        self.network = network
+        super.init(nibName: nil, bundle: nil)
+        setupBindings()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         provideGroups()
-        if filteredGroups.isEmpty {
-            provideGroupsFromRealm()
-        }
         setupVC()
         setupConstraints()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        provideGroupsFromRealm()
+        provideGroups()
         tableView.reloadData()
     }
 }
@@ -39,6 +51,9 @@ extension GroupsVC {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(GroupCell.self, forCellReuseIdentifier: GroupCell.reuseID)
+        tableView.refreshControl = refreshControll
+        
+        refreshControll.addTarget(self, action: #selector(refresh), for: .valueChanged)
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add,
                                                             target: self,
@@ -57,9 +72,9 @@ extension GroupsVC {
             $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
     }
-
-    private func provideGroups() {
-        NetworkManager.shared.loadGroups(url: URLs.getGroups) { [weak self] result in
+    
+    private func setupBindings() {
+        network?.loadGroups(url: URLs.getGroups) { [weak self] result in
             switch result {
             case .failure(let error):
                 print(error)
@@ -71,12 +86,64 @@ extension GroupsVC {
             }
         }
     }
-    
-    private func provideGroupsFromRealm() {
-        filteredGroups = NetworkManager.shared.readFromRealm()
-        DispatchQueue.main.async { [weak self] in
-            self?.tableView.reloadData()
+
+    private func provideGroups() {
+        let realmCheck: [Group] = NetworkManager.shared.readFromRealm()
+        if realmCheck.isEmpty {
+            setupBindings()
+        } else {
+            filteredGroups = realmCheck
+            DispatchQueue.main.async { [weak self] in
+                self?.tableView.reloadData()
+            }
         }
+    }
+    
+    private func notificate() {
+        do {
+            let realm = try Realm()
+            let realmObject = realm.objects(Group.self)
+            notificationToken = realmObject.observe { (change: RealmCollectionChange) in
+                switch change {
+                case .error(let error):
+                    print(error)
+                case .initial(_):
+                    self.tableView.reloadData()
+                case let .update(_, deletions, insertions, modifications):
+                    self.tableView.beginUpdates()
+                    self.tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}),
+                                         with: .automatic)
+                    self.tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}),
+                                         with: .automatic)
+                    self.tableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0)}),
+                                         with: .automatic)
+                    self.tableView.endUpdates()
+                }
+            }
+        } catch {
+            print(error)
+        }
+        
+    }
+    
+    @objc func refresh() {
+        
+        let network = NetworkManager()
+        network.loadGroups(url: URLs.getGroups) { result in
+            switch result {
+            case .failure(let error):
+                print(error)
+            case .success(let groups):
+                self.filteredGroups = groups
+                DispatchQueue.main.async { [weak self] in
+                    self?.tableView.reloadData()
+                }
+            }
+        }
+        
+        notificate()
+        
+        refreshControll.endRefreshing()
     }
     
 }

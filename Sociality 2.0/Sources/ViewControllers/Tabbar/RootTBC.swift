@@ -24,8 +24,9 @@ final class RootTBC: UITabBarController {
 // MARK: - Methods
 extension RootTBC {
     private func setupVC() {
-        friendsVC = UINavigationController(rootViewController: FriendsVC())
-        groupsVC = UINavigationController(rootViewController: GroupsVC())
+        let network = NetworkManager()
+        friendsVC = UINavigationController(rootViewController: FriendsVC(network: network))
+        groupsVC = UINavigationController(rootViewController: GroupsVC(network: network))
         newsVC = UINavigationController(rootViewController: NewsVC())
         
         guard let friendsVC = friendsVC,

@@ -13,10 +13,25 @@ final class FriendsVC: UIViewController, NavigationControllerSearchDelegate {
     
     // MARK: - Properties
     // Private Properties
+    
+    weak var network: NetworkManagerProtocol?
+    
     private var tableView: UITableView?
     private var filteredFriends: [Friend] = []
     private var sortedFirstLetters = [String]()
     private var sections = [[Friend]]()
+    private var notificationToken: NotificationToken?
+    private let refreshControll = UIRefreshControl()
+    
+    init(network: NetworkManagerProtocol? = nil) {
+        self.network = network
+        super.init(nibName: nil, bundle: nil)
+        setupBindings()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Life cycle
     override func viewDidLoad() {
@@ -39,6 +54,8 @@ extension FriendsVC {
 
         guard let tableView = tableView else { return }
 
+        refreshControll.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        tableView.refreshControl = refreshControll
         tableView.tableFooterView = UIView()
         tableView.delegate = self
         tableView.dataSource = self
@@ -88,23 +105,59 @@ extension FriendsVC {
     private func provideFriends() {
         let realmCheck: [Friend] = NetworkManager.shared.readFromRealm()
         if realmCheck.isEmpty {
-            let network = NetworkManager()
-            network.loadFriends(url: URLs.getFriends) { result in
-                switch result {
-                case .failure(let error):
-                    print(error)
-                case .success(let friends):
-                    self.filteredFriends = friends
-                    self.setupsForSectionsAndHeaders()
-                    DispatchQueue.main.async { [weak self] in
-                        self?.tableView?.reloadData()
-                    }
-                }
-            }
+            setupBindings()
         } else {
             filteredFriends = realmCheck
             setupsForSectionsAndHeaders()
         }
+    }
+    
+    private func notificate() {
+        do {
+            let realm = try Realm()
+            let realmObject = realm.objects(Friend.self)
+            notificationToken = realmObject.observe { (change: RealmCollectionChange) in
+                switch change {
+                case .error(let error):
+                    print(error)
+                case .initial(_):
+                    self.tableView?.reloadData()
+                case let .update(_, deletions, insertions, modifications):
+                    self.tableView?.beginUpdates()
+                    self.tableView?.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}),
+                                         with: .automatic)
+                    self.tableView?.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}),
+                                         with: .automatic)
+                    self.tableView?.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0)}),
+                                         with: .automatic)
+                    self.tableView?.endUpdates()
+                }
+            }
+        } catch {
+            print(error)
+        }
+        
+    }
+    
+    private func setupBindings() {
+        network?.loadFriends(url: URLs.getFriends) { [weak self] result in
+            switch result {
+            case .failure(let error):
+                print(error)
+            case .success(let friends):
+                self?.filteredFriends = friends
+                self?.setupsForSectionsAndHeaders()
+                DispatchQueue.main.async { [weak self] in
+                    self?.tableView?.reloadData()
+                }
+            }
+        }
+    }
+    
+    @objc func refresh() {
+        setupBindings()
+        notificate()
+        refreshControll.endRefreshing()
     }
 
 }

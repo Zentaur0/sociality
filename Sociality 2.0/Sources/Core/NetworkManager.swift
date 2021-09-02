@@ -20,9 +20,9 @@ class URLs {
 
 }
 
-protocol NetworkManagerProtocol {
-    func loadFriends(url: String, sender: UIViewController?, completion: @escaping (Result<[Friend], Error>) -> Void)
-
+protocol NetworkManagerProtocol: AnyObject {
+    func loadFriends(url: String, completion: @escaping (Result<[Friend], Error>) -> Void)
+    func loadGroups(url: String, completion: @escaping (Result<[Group], Error>) -> Void)
 }
 
 final class NetworkManager: NetworkManagerProtocol {
@@ -32,6 +32,8 @@ final class NetworkManager: NetworkManagerProtocol {
     
     private var friendNotification: NotificationToken?
     private var groupsNotification: NotificationToken?
+    private var friendPhotosNotification: NotificationToken?
+    private var notificationToken: NotificationToken?
     
     func authorize(sender: UIViewController, isAuthorized: Bool) {
         if isAuthorized {
@@ -56,7 +58,7 @@ final class NetworkManager: NetworkManagerProtocol {
         }
     }
 
-    func loadFriends(url: String, sender: UIViewController? = nil, completion: @escaping (Result<[Friend], Error>) -> Void) {
+    func loadFriends(url: String, completion: @escaping (Result<[Friend], Error>) -> Void) {
 
         guard let url = URL(string: url) else { return }
 
@@ -158,10 +160,27 @@ final class NetworkManager: NetworkManagerProtocol {
     private func saveToRealm<T: Object>(object: [T]) {
         do {
             let realm = try Realm()
-            realm.beginWrite()
-            print(realm.configuration.fileURL)
-            realm.add(object, update: .modified)
-            try realm.commitWrite()
+            if realm.isEmpty {
+                realm.beginWrite()
+                print(realm.configuration.fileURL)
+                realm.add(object, update: .modified)
+                try realm.commitWrite()
+            } else {
+                let realmObject = realm.objects(T.self)
+                notificationToken = realmObject.observe { change in
+                    switch change {
+                    case .error(let error):
+                        print(error)
+                    case .initial(let object):
+                        print(object)
+                    case .update(let object, let deletions, let insertions, let modifications):
+                        print(object)
+                        print(deletions)
+                        print(insertions)
+                        print(modifications)
+                    }
+                }
+            }
         } catch {
             print(error)
         }
