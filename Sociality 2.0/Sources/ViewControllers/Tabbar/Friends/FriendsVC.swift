@@ -13,12 +13,25 @@ final class FriendsVC: UIViewController, NavigationControllerSearchDelegate {
     
     // MARK: - Properties
     // Private Properties
+    
+    weak var network: NetworkManagerProtocol?
+    
     private var tableView: UITableView?
     private var filteredFriends: [Friend] = []
     private var sortedFirstLetters = [String]()
     private var sections = [[Friend]]()
     private var notificationToken: NotificationToken?
     private let refreshControll = UIRefreshControl()
+    
+    init(network: NetworkManagerProtocol? = nil) {
+        self.network = network
+        super.init(nibName: nil, bundle: nil)
+        setupBindings()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Life cycle
     override func viewDidLoad() {
@@ -92,19 +105,7 @@ extension FriendsVC {
     private func provideFriends() {
         let realmCheck: [Friend] = NetworkManager.shared.readFromRealm()
         if realmCheck.isEmpty {
-            let network = NetworkManager()
-            network.loadFriends(url: URLs.getFriends) { result in
-                switch result {
-                case .failure(let error):
-                    print(error)
-                case .success(let friends):
-                    self.filteredFriends = friends
-                    self.setupsForSectionsAndHeaders()
-                    DispatchQueue.main.async { [weak self] in
-                        self?.tableView?.reloadData()
-                    }
-                }
-            }
+            setupBindings()
         } else {
             filteredFriends = realmCheck
             setupsForSectionsAndHeaders()
@@ -138,24 +139,24 @@ extension FriendsVC {
         
     }
     
-    @objc func refresh() {
-        
-        let network = NetworkManager()
-        network.loadFriends(url: URLs.getFriends) { result in
+    private func setupBindings() {
+        network?.loadFriends(url: URLs.getFriends) { [weak self] result in
             switch result {
             case .failure(let error):
                 print(error)
             case .success(let friends):
-                self.filteredFriends = friends
-                self.setupsForSectionsAndHeaders()
+                self?.filteredFriends = friends
+                self?.setupsForSectionsAndHeaders()
                 DispatchQueue.main.async { [weak self] in
                     self?.tableView?.reloadData()
                 }
             }
         }
-        
+    }
+    
+    @objc func refresh() {
+        setupBindings()
         notificate()
-        
         refreshControll.endRefreshing()
     }
 

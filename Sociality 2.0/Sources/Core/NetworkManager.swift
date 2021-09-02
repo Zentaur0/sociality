@@ -20,9 +20,9 @@ class URLs {
 
 }
 
-protocol NetworkManagerProtocol {
-    func loadFriends(url: String, sender: UIViewController?, completion: @escaping (Result<[Friend], Error>) -> Void)
-
+protocol NetworkManagerProtocol: AnyObject {
+    func loadFriends(url: String, completion: @escaping (Result<[Friend], Error>) -> Void)
+    func loadGroups(url: String, completion: @escaping (Result<[Group], Error>) -> Void)
 }
 
 final class NetworkManager: NetworkManagerProtocol {
@@ -58,7 +58,7 @@ final class NetworkManager: NetworkManagerProtocol {
         }
     }
 
-    func loadFriends(url: String, sender: UIViewController? = nil, completion: @escaping (Result<[Friend], Error>) -> Void) {
+    func loadFriends(url: String, completion: @escaping (Result<[Friend], Error>) -> Void) {
 
         guard let url = URL(string: url) else { return }
 
@@ -181,10 +181,6 @@ final class NetworkManager: NetworkManagerProtocol {
                     }
                 }
             }
-            realm.beginWrite()
-            print(realm.configuration.fileURL)
-            realm.add(object, update: .modified)
-            try realm.commitWrite()
         } catch {
             print(error)
         }

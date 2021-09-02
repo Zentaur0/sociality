@@ -11,25 +11,35 @@ import RealmSwift
 final class GroupsVC: UIViewController, NavigationControllerSearchDelegate {
     
     // MARK: - Properties
+    weak var network: NetworkManagerProtocol?
+    
     private let tableView = UITableView()
     private var notificationToken: NotificationToken?
     private var filteredGroups: [Group] = []
     private let refreshControll = UIRefreshControl()
     
+    // MARK: - Init
+    init(network: NetworkManagerProtocol? = nil) {
+        self.network = network
+        super.init(nibName: nil, bundle: nil)
+        setupBindings()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         provideGroups()
-        if filteredGroups.isEmpty {
-            provideGroupsFromRealm()
-        }
         setupVC()
         setupConstraints()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        provideGroupsFromRealm()
+        provideGroups()
         tableView.reloadData()
     }
 }
@@ -62,9 +72,9 @@ extension GroupsVC {
             $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
     }
-
-    private func provideGroups() {
-        NetworkManager.shared.loadGroups(url: URLs.getGroups) { [weak self] result in
+    
+    private func setupBindings() {
+        network?.loadGroups(url: URLs.getGroups) { [weak self] result in
             switch result {
             case .failure(let error):
                 print(error)
@@ -76,11 +86,16 @@ extension GroupsVC {
             }
         }
     }
-    
-    private func provideGroupsFromRealm() {
-        filteredGroups = NetworkManager.shared.readFromRealm()
-        DispatchQueue.main.async { [weak self] in
-            self?.tableView.reloadData()
+
+    private func provideGroups() {
+        let realmCheck: [Group] = NetworkManager.shared.readFromRealm()
+        if realmCheck.isEmpty {
+            setupBindings()
+        } else {
+            filteredGroups = realmCheck
+            DispatchQueue.main.async { [weak self] in
+                self?.tableView.reloadData()
+            }
         }
     }
     
