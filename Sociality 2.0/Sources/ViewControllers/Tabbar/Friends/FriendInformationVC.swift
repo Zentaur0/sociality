@@ -9,22 +9,23 @@ import UIKit
 import Kingfisher
 import RealmSwift
 
+// MARK: - FriendInformationVC
+
 final class FriendInformationVC: UIViewController {
     
     // MARK: - Properties
-    // Internal Properties
-    internal var friend: Friend
-    private var photos: [Photo] = []
+    
+    var friend: Friend
     private let refreshControll = UIRefreshControl()
     private var notificationToken: NotificationToken?
-    
-    // Private Properties
     private var collectionView: UICollectionView?
     
     // MARK: - Init
+    
     init(friend: Friend) {
         self.friend = friend
         super.init(nibName: nil, bundle: nil)
+        provideFriendPhotos()
     }
 
     @available (*, unavailable)
@@ -32,20 +33,23 @@ final class FriendInformationVC: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Life Cycle   
+    // MARK: - Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        provideFriendPhotos()
         setupVC()
         setupConstraints()
     }
-
+    
 }
 
 // MARK: - Methods
+
 extension FriendInformationVC {
+    
     private func setupVC() {
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        let layout = UICollectionViewFlowLayout()
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
 
         guard let collectionView = collectionView else { return }
 
@@ -59,6 +63,7 @@ extension FriendInformationVC {
         collectionView.backgroundColor = R.color.whiteBlack()
 
         view.addSubview(collectionView)
+        view.backgroundColor = R.color.whiteBlack()
 
         title = friend.givenName + " " + friend.familyName
     }
@@ -72,23 +77,16 @@ extension FriendInformationVC {
     }
     
     private func provideFriendPhotos() {
-        let realmCheck: [Photo] = NetworkManager.shared.readPhotosFromRealm(ownerID: friend.id)
+        let realmCheck: [Photo] = RealmManager.shared.readPhotosFromRealm(ownerID: self.friend.id)
         if realmCheck.isEmpty {
-            NetworkManager.shared.loadFriendsPhotos(ownerID: String(friend.id), friend: friend) { [weak self] result in
-                switch result {
-                case .success(let photos):
-                    self?.photos = photos
-                    DispatchQueue.main.async { [weak self] in
-                        self?.collectionView?.reloadData()
-                    }
-                case .failure(let error):
-                    print(error)
+            self.fetchData()
+        } else {
+            if friend.images.isEmpty {
+                for image in realmCheck {
+                    self.friend.images.append(image)
                 }
             }
-        } else {
-            photos = realmCheck
         }
-        
     }
     
     private func notificate() {
@@ -112,36 +110,39 @@ extension FriendInformationVC {
         } catch {
             print(error)
         }
-        
     }
-
-}
-
-// MARK: - Actions
-extension FriendInformationVC {
-    @objc func refresh() {
-        
-        NetworkManager.shared.loadFriendsPhotos(ownerID: String(friend.id), friend: friend) { [weak self] result in
+    
+    private func fetchData() {
+        NetworkManager.shared.loadFriendsPhotos(friend: friend) { [weak self] result in
             switch result {
-            case .success(let photos):
-                self?.photos = photos
-                DispatchQueue.main.async { [weak self] in
+            case .success(_):
+                DispatchQueue.main.async {
                     self?.collectionView?.reloadData()
                 }
             case .failure(let error):
                 print(error)
             }
         }
-        
+    }
+
+}
+
+// MARK: - Actions
+
+extension FriendInformationVC {
+    
+    @objc func refresh() {
+        provideFriendPhotos()
         notificate()
-        
         refreshControll.endRefreshing()
     }
     
 }
 
 // MARK: - UICollectionViewDataSource
+
 extension FriendInformationVC: UICollectionViewDataSource {
+    
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
         friend.images.count
@@ -153,8 +154,8 @@ extension FriendInformationVC: UICollectionViewDataSource {
                                                             for: indexPath) as? FriendCollectionCell else {
             return UICollectionViewCell()
         }
-
-        cell.config(friend: friend, photos: photos, for: indexPath)
+        
+        cell.config(friend: friend, for: indexPath)
         
         return cell
     }
@@ -162,14 +163,22 @@ extension FriendInformationVC: UICollectionViewDataSource {
 }
 
 // MARK: - UICollectionViewDelegate
+
 extension FriendInformationVC: UICollectionViewDelegate {}
 
 // MARK: - UICollectionViewDelegateFlowLayout
+
 extension FriendInformationVC: UICollectionViewDelegateFlowLayout {
+    
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return view.sizeThatFits(CGSize(width: view.frame.width - 50, height: 100))
+        let oldWidth = CGFloat(friend.images[indexPath.item].width)
+        let oldHeight = CGFloat(friend.images[indexPath.item].height)
+        let scaleFactor = view.frame.width / oldWidth
+        let newHeight = CGFloat(oldHeight) * scaleFactor
+        let size = CGSize(width: view.frame.width - 50, height: newHeight)
+        return size
     }
     
     func collectionView(_ collectionView: UICollectionView,

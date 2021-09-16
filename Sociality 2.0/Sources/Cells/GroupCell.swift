@@ -8,18 +8,23 @@
 import UIKit
 import Kingfisher
 
+// MARK: - GroupCell
+
 final class GroupCell: UITableViewCell {
     
     // MARK: - Static
+    
     static let reuseID = "GroupCell"
     
     // MARK: - Properties
+    
     // Private Properties
     private var name: UILabel?
     private var avatar: UIImageView?
     private var shadowView: UIView?
     
     // MARK: - Init
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupCell()
@@ -34,15 +39,20 @@ final class GroupCell: UITableViewCell {
 }
 
 // MARK: - Methods
+
 extension GroupCell {
+    
     func configure(group: Group) {
         name?.text = group.nickname
         avatar?.kf.setImage(with: URL(string: group.avatar))
     }
+    
 }
 
 // MARK: - CellSetupDelegate
+
 extension GroupCell: TableViewCellSetupDelegate {
+    
     func setupCell() {
         name = UILabel()
         avatar = UIImageView()
@@ -83,4 +93,5 @@ extension GroupCell: TableViewCellSetupDelegate {
             $0.leading.bottom.equalToSuperview().inset(10)
         }
     }
+    
 }

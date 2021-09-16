@@ -8,26 +8,29 @@
 import UIKit
 import WebKit
 
+// MARK: - VKLoginVC
+
 final class VKLoginVC: UIViewController {
 
     // MARK: - Properties
+    
     private var webView: WKWebView?
 
     // MARK: - Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupVC()
         setupConstraints()
         loadRequest()
     }
-
-    deinit {
-        print("VKLoginVC is deinitialized")
-    }
+    
 }
 
 // MARK: - Methods
+
 extension VKLoginVC {
+    
     private func setupVC() {
         webView = WKWebView()
 
@@ -76,7 +79,9 @@ extension VKLoginVC {
 }
 
 // MARK: - WKNavigationDelegate
+
 extension VKLoginVC: WKNavigationDelegate {
+    
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse,
                  decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
         guard let url = navigationResponse.response.url,
@@ -120,7 +125,9 @@ extension VKLoginVC: WKNavigationDelegate {
 }
 
 // MARK: - Actions
+
 extension VKLoginVC {
+    
     @objc private func close() {
         dismiss(animated: true, completion: nil)
     }
