@@ -7,15 +7,20 @@
 
 import UIKit
 
+// MARK: - AppContainer
+
 final class AppContainer {
 
     // MARK: - Static
+    
     static let shared = AppContainer()
 
     // MARK: - Init
+    
     private init() {}
     
     // MARK: - App Constants
+    
     let friendsTitle = loc.friends_title()
     let groupsTitle = loc.groups_title()
     let allGroupsTitle = loc.all_groups_title()
@@ -24,6 +29,7 @@ final class AppContainer {
     let textColor = R.color.blackWhite()
     
     // MARK: - Methods
+    
     static func makeRootController() -> UIViewController {
         let isAuthorized = UserDefaults.standard.bool(forKey: "isAuthorized")
         return isAuthorized ? RootTBC() : LoginVC()
@@ -50,6 +56,7 @@ final class AppContainer {
     }
     
     // MARK: Spinner
+    
     static func createSpinnerView(_ onViewController: UIViewController,
                                   _ showViewController: UIViewController) {
         let child = Spinner()
@@ -68,4 +75,5 @@ final class AppContainer {
             AppDelegate.shared.window?.rootViewController = showViewController
         }
     }
+    
 }

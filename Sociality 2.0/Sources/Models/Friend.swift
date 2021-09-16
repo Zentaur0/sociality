@@ -9,9 +9,12 @@ import UIKit
 import SwiftyJSON
 import RealmSwift
 
+// MARK: - Friend
+
 final class Friend: Object, Decodable {
     
     // MARK: - Info
+    
     /// Friend given name
     @objc dynamic var givenName: String = ""
     /// Friend famaly name
@@ -22,14 +25,17 @@ final class Friend: Object, Decodable {
     @objc dynamic var city: String = ""
     
     // MARK: - Identifiers
+    
     /// Friend ID
     @objc dynamic var id: Int = 0
     
     // MARK: - Content
+    
     /// Friend's images
     var images = List<Photo>()
 
     // MARK: - Init
+    
     convenience init(json: SwiftyJSON.JSON) {
         self.init()
         self.id = json["id"].intValue
@@ -59,6 +65,7 @@ final class Friend: Object, Decodable {
 }
 
 // MARK: - PrimaryKey
+
 extension Friend {
     
     override class func primaryKey() -> String? {

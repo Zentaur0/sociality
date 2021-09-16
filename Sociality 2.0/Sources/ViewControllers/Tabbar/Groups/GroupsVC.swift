@@ -8,17 +8,20 @@
 import UIKit
 import RealmSwift
 
+// MARK: - GroupsVC
+
 final class GroupsVC: UIViewController, NavigationControllerSearchDelegate {
     
     // MARK: - Properties
-    weak var network: NetworkManagerProtocol?
     
+    weak var network: NetworkManagerProtocol?
     private let tableView = UITableView()
     private var notificationToken: NotificationToken?
     private var filteredGroups: [Group] = []
     private let refreshControll = UIRefreshControl()
     
     // MARK: - Init
+    
     init(network: NetworkManagerProtocol? = nil) {
         self.network = network
         super.init(nibName: nil, bundle: nil)
@@ -30,6 +33,7 @@ final class GroupsVC: UIViewController, NavigationControllerSearchDelegate {
     }
     
     // MARK: - Life cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         provideGroups()
@@ -42,10 +46,13 @@ final class GroupsVC: UIViewController, NavigationControllerSearchDelegate {
         provideGroups()
         tableView.reloadData()
     }
+    
 }
 
 // MARK: - Methods
+
 extension GroupsVC {
+    
     private func setupVC() {
         tableView.tableFooterView = UIView()
         tableView.delegate = self
@@ -88,7 +95,7 @@ extension GroupsVC {
     }
 
     private func provideGroups() {
-        let realmCheck: [Group] = NetworkManager.shared.readFromRealm()
+        let realmCheck: [Group] = RealmManager.shared.readFromRealm()
         if realmCheck.isEmpty {
             setupBindings()
         } else {
@@ -126,6 +133,17 @@ extension GroupsVC {
         
     }
     
+}
+
+// MARK: - Actions
+
+extension GroupsVC {
+    
+    @objc func addGroupAction() {
+        let vc = AppContainer.makeAllGroupsVC()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
     @objc func refresh() {
         
         let network = NetworkManager()
@@ -148,16 +166,10 @@ extension GroupsVC {
     
 }
 
-// MARK: - Actions
-extension GroupsVC {
-    @objc func addGroupAction() {
-        let vc = AppContainer.makeAllGroupsVC()
-        navigationController?.pushViewController(vc, animated: true)
-    }
-}
-
 // MARK: - UISearchResultsUpdating
+
 extension GroupsVC: UISearchResultsUpdating {
+    
     func updateSearchResults(for searchController: UISearchController) {
         guard let text = searchController.searchBar.text else { return }
         filteredGroups = []
@@ -174,10 +186,13 @@ extension GroupsVC: UISearchResultsUpdating {
         
         tableView.reloadData()
     }
+    
 }
 
 // MARK: UITableViewDataSource
+
 extension GroupsVC: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         filteredGroups.count
     }
@@ -194,15 +209,18 @@ extension GroupsVC: UITableViewDataSource {
         
         return cell
     }
+    
 }
 
 // MARK: UITableViewDelegate
+
 extension GroupsVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         70
     }
     
     // MARK: - Navigation
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -219,4 +237,5 @@ extension GroupsVC: UITableViewDelegate {
             tableView.reloadData()
         }
     }
+    
 }

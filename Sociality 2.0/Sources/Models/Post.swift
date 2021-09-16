@@ -7,6 +7,8 @@
 
 import UIKit
 
+// MARK: Post
+
 struct Post {
     var id: String
     let user: Friend

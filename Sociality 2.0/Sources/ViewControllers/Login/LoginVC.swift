@@ -9,9 +9,12 @@ import UIKit
 import SnapKit
 import WebKit
 
+// MARK: - LoginVC
+
 final class LoginVC: UIViewController {
     
     // MARK: - Properties
+    
     private var socialityLabel: UILabel?
     private var usernameTextField: UITextField?
     private var passwordTextField: UITextField?
@@ -22,6 +25,7 @@ final class LoginVC: UIViewController {
     private var spinner = Spinner()
     
     // MARK: - Life cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupVC()
@@ -32,10 +36,6 @@ final class LoginVC: UIViewController {
         if isAuthorized {
             AppContainer.createSpinnerView(self, AppContainer.makeRootController())
         }
-    }
-    
-    deinit {
-        print("login screen is deinitialized")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -55,10 +55,13 @@ final class LoginVC: UIViewController {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
+    
 }
 
 // MARK: - Methods
+
 extension LoginVC {
+    
     private func setupVC() {
         scrollView = UIScrollView()
         contentView = UIView()
@@ -201,7 +204,9 @@ extension LoginVC {
 }
 
 // MARK: - Actions
+
 extension LoginVC {
+    
     @objc func hideKeyboard() {
         scrollView?.endEditing(true)
     }
@@ -237,4 +242,5 @@ extension LoginVC {
         vc.modalPresentationStyle = .overFullScreen
         present(vc, animated: true, completion: nil)
     }
+    
 }

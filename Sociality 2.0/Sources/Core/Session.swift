@@ -24,4 +24,5 @@ final class Session {
     
     // MARK: - Init
     private init() {}
+    
 }

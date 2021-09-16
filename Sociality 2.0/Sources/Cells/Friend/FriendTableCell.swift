@@ -8,12 +8,16 @@
 import UIKit
 import Kingfisher
 
+// MARK: - FriendTableCell
+
 final class FriendTableCell: UITableViewCell {
     
     // MARK: - Static
+    
     static let reuseID = "FriendsCell"
     
     // MARK: - Properties
+    
     // Private Properties
     private var name: UILabel?
     private var age: UILabel?
@@ -21,6 +25,7 @@ final class FriendTableCell: UITableViewCell {
     private var shadowView: UIView?
     
     // MARK: - Init
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupCell()
@@ -35,7 +40,9 @@ final class FriendTableCell: UITableViewCell {
 }
 
 // MARK: - Methods
+
 extension FriendTableCell {
+    
     func configure(friend: Friend) {
         guard let name = name,
               let age = age,
@@ -43,14 +50,14 @@ extension FriendTableCell {
         name.text = friend.givenName + " " + friend.familyName
 //        age.text = "\(friend.age) years"
         avatar.kf.setImage(with: URL(string: friend.avatar))
-
-
     }
     
 }
 
 // MARK: - CellSetupDelegate
+
 extension FriendTableCell: TableViewCellSetupDelegate {
+    
     func setupCell() {
         name = UILabel()
         age = UILabel()

@@ -7,20 +7,27 @@
 
 import UIKit
 
+// MARK: - Spinner
+
 final class Spinner: UIViewController {
     
     // MARK: - Properties
+    
     let spinner = UIActivityIndicatorView(style: .large)
     
     // MARK: - Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSpinner()
     }
+    
 }
 
 // MARK: - Methods
+
 extension Spinner {
+    
     private func setupSpinner() {
         view = UIView()
         view.backgroundColor = UIColor(white: 0, alpha: 0.5)
@@ -33,4 +40,5 @@ extension Spinner {
         
         spinner.startAnimating()
     }
+    
 }

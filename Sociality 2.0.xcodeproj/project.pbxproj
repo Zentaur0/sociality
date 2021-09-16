@@ -26,6 +26,7 @@
 		233CA2E426B3FA2300822550 /* Sociality_2_0Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233CA2E326B3FA2300822550 /* Sociality_2_0Tests.swift */; };
 		233CA2EF26B3FA2300822550 /* Sociality_2_0UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233CA2EE26B3FA2300822550 /* Sociality_2_0UITests.swift */; };
 		2354D02526C729E900DFBF35 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2354D02426C729E900DFBF35 /* Photo.swift */; };
+		23713B4F26F3EA6800D1FB93 /* NewsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23713B4E26F3EA6800D1FB93 /* NewsDataSource.swift */; };
 		239938BB26B9360E00EDC985 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 239938BA26B9360E00EDC985 /* Localizable.strings */; };
 		239938BD26B9F3B400EDC985 /* AllGroupsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239938BC26B9F3B400EDC985 /* AllGroupsVC.swift */; };
 		239938BF26B9F42B00EDC985 /* GroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239938BE26B9F42B00EDC985 /* GroupCell.swift */; };
@@ -39,6 +40,10 @@
 		239C556B26B8A98E002F7AF8 /* DataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239C556A26B8A98E002F7AF8 /* DataProvider.swift */; };
 		239C556D26B8A9EA002F7AF8 /* Friend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239C556C26B8A9EA002F7AF8 /* Friend.swift */; };
 		239C557026B8B44D002F7AF8 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239C556F26B8B44D002F7AF8 /* R.generated.swift */; };
+		23B9E57A26F134F900B53EE4 /* NewsHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B9E57926F134F900B53EE4 /* NewsHeaderCell.swift */; };
+		23B9E57C26F1379A00B53EE4 /* NewsFooterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B9E57B26F1379A00B53EE4 /* NewsFooterCell.swift */; };
+		23B9E57E26F13C9800B53EE4 /* NewsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B9E57D26F13C9800B53EE4 /* NewsCell.swift */; };
+		23B9E58026F15FC000B53EE4 /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B9E57F26F15FC000B53EE4 /* RealmManager.swift */; };
 		23F7E9CA26C93D6D002F661A /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 23F7E9C926C93D6D002F661A /* Realm */; };
 		23F7E9CC26C93D6D002F661A /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 23F7E9CB26C93D6D002F661A /* RealmSwift */; };
 		46A4F3F9F74E9BFCA021F7FF /* Pods_Sociality_2_0_Sociality_2_0UITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBDC39EB055F994DD57596DA /* Pods_Sociality_2_0_Sociality_2_0UITests.framework */; };
@@ -90,6 +95,7 @@
 		233CA2EE26B3FA2300822550 /* Sociality_2_0UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sociality_2_0UITests.swift; sourceTree = "<group>"; };
 		233CA2F026B3FA2300822550 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2354D02426C729E900DFBF35 /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
+		23713B4E26F3EA6800D1FB93 /* NewsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsDataSource.swift; sourceTree = "<group>"; };
 		239938BA26B9360E00EDC985 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		239938BC26B9F3B400EDC985 /* AllGroupsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllGroupsVC.swift; sourceTree = "<group>"; };
 		239938BE26B9F42B00EDC985 /* GroupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCell.swift; sourceTree = "<group>"; };
@@ -103,6 +109,10 @@
 		239C556A26B8A98E002F7AF8 /* DataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataProvider.swift; sourceTree = "<group>"; };
 		239C556C26B8A9EA002F7AF8 /* Friend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Friend.swift; sourceTree = "<group>"; };
 		239C556F26B8B44D002F7AF8 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
+		23B9E57926F134F900B53EE4 /* NewsHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsHeaderCell.swift; sourceTree = "<group>"; };
+		23B9E57B26F1379A00B53EE4 /* NewsFooterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsFooterCell.swift; sourceTree = "<group>"; };
+		23B9E57D26F13C9800B53EE4 /* NewsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsCell.swift; sourceTree = "<group>"; };
+		23B9E57F26F15FC000B53EE4 /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
 		3E0D8BB10D27FFD21941B09F /* Pods_Sociality_2_0.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sociality_2_0.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		400BBB5996C081BAE8BEC00A /* Pods_Sociality_2_0Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sociality_2_0Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DB33C3AF50ECBFB9BA5A3A2 /* Pods-Sociality 2.0-Sociality 2.0UITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sociality 2.0-Sociality 2.0UITests.debug.xcconfig"; path = "Target Support Files/Pods-Sociality 2.0-Sociality 2.0UITests/Pods-Sociality 2.0-Sociality 2.0UITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -180,6 +190,7 @@
 				2354D02426C729E900DFBF35 /* Photo.swift */,
 				231E034B26B86195001E9C0F /* User.swift */,
 				23041FB326BC2C700096A461 /* Post.swift */,
+				23713B4E26F3EA6800D1FB93 /* NewsDataSource.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -267,6 +278,7 @@
 		231E036726B881EC001E9C0F /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				23713B4D26F3C5B700D1FB93 /* NewsCells */,
 				239938C226BAA43100EDC985 /* Friend */,
 				239938BE26B9F42B00EDC985 /* GroupCell.swift */,
 			);
@@ -330,6 +342,16 @@
 			path = "Sociality 2.0UITests";
 			sourceTree = "<group>";
 		};
+		23713B4D26F3C5B700D1FB93 /* NewsCells */ = {
+			isa = PBXGroup;
+			children = (
+				23B9E57926F134F900B53EE4 /* NewsHeaderCell.swift */,
+				23B9E57B26F1379A00B53EE4 /* NewsFooterCell.swift */,
+				23B9E57D26F13C9800B53EE4 /* NewsCell.swift */,
+			);
+			path = NewsCells;
+			sourceTree = "<group>";
+		};
 		239938C226BAA43100EDC985 /* Friend */ = {
 			isa = PBXGroup;
 			children = (
@@ -345,6 +367,7 @@
 				239C556626B8907F002F7AF8 /* Session.swift */,
 				239C556A26B8A98E002F7AF8 /* DataProvider.swift */,
 				23041FB726BC78690096A461 /* NetworkManager.swift */,
+				23B9E57F26F15FC000B53EE4 /* RealmManager.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -640,6 +663,8 @@
 				231E034C26B86195001E9C0F /* User.swift in Sources */,
 				239938CC26BAA4F000EDC985 /* NavigationControllerSearchDelegate.swift in Sources */,
 				239C556D26B8A9EA002F7AF8 /* Friend.swift in Sources */,
+				23B9E57C26F1379A00B53EE4 /* NewsFooterCell.swift in Sources */,
+				23B9E57E26F13C9800B53EE4 /* NewsCell.swift in Sources */,
 				239938C426BAA45000EDC985 /* FriendCollectionCell.swift in Sources */,
 				239C557026B8B44D002F7AF8 /* R.generated.swift in Sources */,
 				239938BF26B9F42B00EDC985 /* GroupCell.swift in Sources */,
@@ -657,8 +682,11 @@
 				239C556926B8A7B9002F7AF8 /* FriendTableCell.swift in Sources */,
 				239C556726B8907F002F7AF8 /* Session.swift in Sources */,
 				233CA2CD26B3FA2100822550 /* AppDelegate.swift in Sources */,
+				23B9E57A26F134F900B53EE4 /* NewsHeaderCell.swift in Sources */,
+				23713B4F26F3EA6800D1FB93 /* NewsDataSource.swift in Sources */,
 				239938C126BAA04A00EDC985 /* FriendInformationVC.swift in Sources */,
 				231E034826B85EE3001E9C0F /* AppContainer.swift in Sources */,
+				23B9E58026F15FC000B53EE4 /* RealmManager.swift in Sources */,
 				2354D02526C729E900DFBF35 /* Photo.swift in Sources */,
 				239938BD26B9F3B400EDC985 /* AllGroupsVC.swift in Sources */,
 				23041FB426BC2C700096A461 /* Post.swift in Sources */,
@@ -999,7 +1027,7 @@
 			repositoryURL = "https://github.com/realm/realm-cocoa";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 10.12.0;
+				minimumVersion = 10.15.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
