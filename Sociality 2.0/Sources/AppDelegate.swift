@@ -10,10 +10,16 @@ import UIKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
+    // MARK: - Static
+    
     static let shared = UIApplication.shared.delegate as! AppDelegate
 
+    // MARK: Properties
+    
     var window: UIWindow?
 
+    // MARK: - Methods
+    
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         

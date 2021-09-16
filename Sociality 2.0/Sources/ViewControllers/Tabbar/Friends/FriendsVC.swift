@@ -9,19 +9,22 @@ import UIKit
 import SnapKit
 import RealmSwift
 
+// MARK: - FriendsVC
+
 final class FriendsVC: UIViewController, NavigationControllerSearchDelegate {
     
     // MARK: - Properties
     // Private Properties
     
     weak var network: NetworkManagerProtocol?
-    
     private var tableView: UITableView?
     private var filteredFriends: [Friend] = []
     private var sortedFirstLetters = [String]()
     private var sections = [[Friend]]()
     private var notificationToken: NotificationToken?
     private let refreshControll = UIRefreshControl()
+    
+    // MARK: - Init
     
     init(network: NetworkManagerProtocol? = nil) {
         self.network = network
@@ -34,6 +37,7 @@ final class FriendsVC: UIViewController, NavigationControllerSearchDelegate {
     }
     
     // MARK: - Life cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         provideFriends()
@@ -45,10 +49,13 @@ final class FriendsVC: UIViewController, NavigationControllerSearchDelegate {
         super.viewWillAppear(animated)
         tableView?.reloadData()
     }
+    
 }
 
 // MARK: - Methods
+
 extension FriendsVC {
+    
     private func setupVC() {
         tableView = UITableView()
 
@@ -103,13 +110,14 @@ extension FriendsVC {
     }
 
     private func provideFriends() {
-        let realmCheck: [Friend] = NetworkManager.shared.readFromRealm()
+        let realmCheck: [Friend] = RealmManager.shared.readFromRealm()
         if realmCheck.isEmpty {
             setupBindings()
         } else {
             filteredFriends = realmCheck
             setupsForSectionsAndHeaders()
         }
+        tableView?.reloadData()
     }
     
     private func notificate() {
@@ -154,16 +162,12 @@ extension FriendsVC {
         }
     }
     
-    @objc func refresh() {
-        setupBindings()
-        notificate()
-        refreshControll.endRefreshing()
-    }
-
 }
 
 // MARK: - Actions
+
 extension FriendsVC {
+    
     @objc private func logoutAction() {
         let alert = UIAlertController(title: "Log Out", message: "Are you sure?", preferredStyle: .alert)
         let yesAction = UIAlertAction(title: "Yes", style: .destructive, handler: {_ in
@@ -177,11 +181,19 @@ extension FriendsVC {
         
         present(alert, animated: true, completion: nil)
     }
+    
+    @objc func refresh() {
+        setupBindings()
+        notificate()
+        refreshControll.endRefreshing()
+    }
 
 }
 
 // MARK: - UISearchResultsUpdating
+
 extension FriendsVC: UISearchResultsUpdating {
+    
     func updateSearchResults(for searchController: UISearchController) {
         guard let text = searchController.searchBar.text else { return }
         filteredFriends = []
@@ -206,6 +218,7 @@ extension FriendsVC: UISearchResultsUpdating {
 }
 
 // MARK: - UITableViewDataSource
+
 extension FriendsVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -240,7 +253,9 @@ extension FriendsVC: UITableViewDataSource {
 }
 
 // MARK: - UITableViewDelegate
+
 extension FriendsVC: UITableViewDelegate {
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         70
     }

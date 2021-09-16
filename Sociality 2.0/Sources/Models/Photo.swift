@@ -9,6 +9,8 @@ import UIKit
 import SwiftyJSON
 import RealmSwift
 
+// MARK: Photo
+
 final class Photo: Object, Decodable {
     /// Photo id
     @objc dynamic var ownerID: Int = 0

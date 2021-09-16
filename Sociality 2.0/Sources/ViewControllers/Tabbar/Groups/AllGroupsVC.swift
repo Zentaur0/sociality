@@ -7,6 +7,8 @@
 
 import UIKit
 
+// MARK: - AllGroupsVC
+
 final class AllGroupsVC: UIViewController, NavigationControllerSearchDelegate {
     
     // MARK: - Properties
@@ -15,15 +17,19 @@ final class AllGroupsVC: UIViewController, NavigationControllerSearchDelegate {
     private var filteredGroups: [Group] = DataProvider.shared.allGroups
     
     // MARK: - Life cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupVC()
         setupConstraints()
     }
+    
 }
 
 // MARK: - Methods
+
 extension AllGroupsVC {
+    
     private func setupVC() {
         tableView = UITableView()
 
@@ -58,15 +64,20 @@ extension AllGroupsVC {
 }
 
 // MARK: - Actions
+
 extension AllGroupsVC {
+    
     @objc func addGroupAction() {
         let vc = AppContainer.makeAllGroupsVC()
         navigationController?.pushViewController(vc, animated: true)
     }
+    
 }
 
 // MARK: - UISearchResultsUpdating
+
 extension AllGroupsVC: UISearchResultsUpdating {
+    
     func updateSearchResults(for searchController: UISearchController) {
         guard let text = searchController.searchBar.text else { return }
         filteredGroups = []
@@ -89,10 +100,13 @@ extension AllGroupsVC: UISearchResultsUpdating {
             }
         }
     }
+    
 }
 
 // MARK: UITableViewDataSource
+
 extension AllGroupsVC: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         filteredGroups.count
     }
@@ -109,10 +123,13 @@ extension AllGroupsVC: UITableViewDataSource {
         
         return cell
     }
+    
 }
 
 // MARK: UITableViewDelegate
+
 extension AllGroupsVC: UITableViewDelegate {
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         70
     }
@@ -132,4 +149,5 @@ extension AllGroupsVC: UITableViewDelegate {
         DataProvider.shared.myGroups.append(group)
         navigationController?.popViewController(animated: true)
     }
+    
 }

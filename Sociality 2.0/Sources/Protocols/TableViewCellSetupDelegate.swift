@@ -15,6 +15,7 @@ protocol TableViewCellSetupDelegate {
 }
 
 extension TableViewCellSetupDelegate {
+    
     func setupShadow(_ avatar: UIImageView, _ shadowView: UIView) {
         avatar.clipsToBounds = true
         avatar.layer.cornerRadius = 25
@@ -26,4 +27,5 @@ extension TableViewCellSetupDelegate {
         shadowView.layer.shadowPath = UIBezierPath(roundedRect: CGRect(x: -5, y: -5, width: 60, height: 60),
                                                    cornerRadius: 25).cgPath
     }
+    
 }

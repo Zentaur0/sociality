@@ -14,6 +14,7 @@ protocol NavigationControllerSearchDelegate: UISearchResultsUpdating {
 }
 
 extension NavigationControllerSearchDelegate {
+    
     func addSearchController(_ navController: UINavigationController,
                              _ navItem: UINavigationItem) {
         
@@ -28,4 +29,5 @@ extension NavigationControllerSearchDelegate {
         navController.view.backgroundColor = AppContainer.shared.navigationControllerColor
         navController.navigationBar.barTintColor = AppContainer.shared.navigationControllerColor
     }
+    
 }

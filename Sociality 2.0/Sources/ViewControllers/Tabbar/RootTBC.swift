@@ -7,22 +7,29 @@
 
 import UIKit
 
+// MARK: - RootTBC
+
 final class RootTBC: UITabBarController {
     
     // MARK: - Properties
+    
     private var friendsVC: UINavigationController?
     private var groupsVC: UINavigationController?
     private var newsVC: UINavigationController?
     
     // MARK: - Life cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupVC()
     }
+    
 }
 
 // MARK: - Methods
+
 extension RootTBC {
+    
     private func setupVC() {
         let network = NetworkManager()
         friendsVC = UINavigationController(rootViewController: FriendsVC(network: network))
@@ -46,4 +53,5 @@ extension RootTBC {
         
         setViewControllers([friendsVC, groupsVC, newsVC], animated: true)
     }
+    
 }

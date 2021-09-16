@@ -8,20 +8,27 @@
 import UIKit
 import Kingfisher
 
+// MARK: - FriendCollectionCell
+
 final class FriendCollectionCell: UICollectionViewCell {
     
     // MARK: - Static
+    
     static let reuseID = "FriendCollectionCell"
     
     // MARK: - Properties
+    
     // Internal Properties
+    
+    var onLike: (() -> Void)?
+    
+    // Private Properties
+    
     private var imageView: UIImageView?
     private var infoLabel: UILabel?
     private var likeControll: UIButton?
     private var likeCountLabel: UILabel?
     private var shadowView: UIView?
-    
-    // Private Properties
     private lazy var bottomStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
@@ -33,7 +40,10 @@ final class FriendCollectionCell: UICollectionViewCell {
         return stack
     }()
     
+    private var size: CGSize?
+    
     // MARK: - Init
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupCell()
@@ -45,10 +55,42 @@ final class FriendCollectionCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageView?.image = nil
+        shadowView = nil
+    }
+    
 }
 
 // MARK: - Methods
+
 extension FriendCollectionCell {
+    
+    func config(friend: Friend, for indexPath: IndexPath) {
+        guard let imageView = imageView,
+              let infoLabel = infoLabel,
+              let likeControll = likeControll,
+              let likeCountLabel = likeCountLabel else { return }
+        let photos = Array(friend.images)
+        imageView.kf.setImage(with: URL(string: photos[indexPath.row].pic))
+        infoLabel.text = friend.familyName
+        likeControll.setBackgroundImage(R.image.disliked() ?? R.image.liked(), for: .normal)
+        likeCountLabel.text = String(photos[indexPath.row].likes)
+    }
+    
+    func setupShadow(_ avatar: UIImageView, _ shadowView: UIView) {
+        shadowView.clipsToBounds = false
+        shadowView.layer.shadowColor = UIColor.systemGray4.cgColor
+        shadowView.layer.shadowOpacity = 1
+        shadowView.layer.shadowOffset = CGSize.zero
+        shadowView.layer.shadowPath = UIBezierPath(roundedRect: CGRect(x: 5,
+                                                                       y: 5,
+                                                                       width: contentView.frame.width,
+                                                                       height: contentView.frame.height),
+                                                   cornerRadius: 5).cgPath
+    }
+    
     private func setupCell() {
         imageView = UIImageView()
         infoLabel = UILabel()
@@ -67,6 +109,8 @@ extension FriendCollectionCell {
         imageView.contentMode = .scaleAspectFit
         imageView.frame.size = sizeThatFits(CGSize(width: frame.width - 30, height: frame.width))
         imageView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        imageView.contentMode = .scaleAspectFill
+        imageView.setContentHuggingPriority(.defaultLow, for: .vertical)
 
         likeCountLabel.textAlignment = .right
         likeControll.setBackgroundImage(R.image.disliked(), for: .normal)
@@ -104,11 +148,13 @@ extension FriendCollectionCell {
             $0.bottom.equalToSuperview().inset(3)
             $0.trailing.leading.equalToSuperview().inset(7)
             $0.height.equalTo(30)
+            $0.top.equalTo(imageView.snp.bottom).offset(10)
         }
 
         imageView.snp.makeConstraints {
-            $0.bottom.equalTo(bottomStackView.snp.top).offset(-10)
-            $0.top.leading.trailing.equalToSuperview()
+            $0.top.equalToSuperview()
+            $0.width.equalToSuperview()
+            $0.height.equalToSuperview().priority(999)
         }
 
         likeControll.snp.makeConstraints {
@@ -116,7 +162,6 @@ extension FriendCollectionCell {
         }
 
         likeCountLabel.snp.makeConstraints {
-            $0.height.equalTo(20)
             $0.width.equalTo(50)
         }
 
@@ -125,35 +170,14 @@ extension FriendCollectionCell {
         }
     }
 
-    func setupShadow(_ avatar: UIImageView, _ shadowView: UIView) {
-        shadowView.clipsToBounds = false
-        shadowView.layer.shadowColor = UIColor.systemGray4.cgColor
-        shadowView.layer.shadowOpacity = 1
-        shadowView.layer.shadowOffset = CGSize.zero
-        shadowView.layer.shadowPath = UIBezierPath(roundedRect: CGRect(x: 5,
-                                                                       y: 5,
-                                                                       width: contentView.frame.width,
-                                                                       height: contentView.frame.height),
-                                                   cornerRadius: 5).cgPath
-    }
-
-    func config(friend: Friend, photos: [Photo], for indexPath: IndexPath) {
-        guard let imageView = imageView,
-              let infoLabel = infoLabel,
-              let likeControll = likeControll,
-              let likeCountLabel = likeCountLabel else { return }
-        imageView.kf.setImage(with: URL(string: photos[indexPath.row].pic))
-        infoLabel.text = friend.familyName
-        likeControll.setBackgroundImage(R.image.disliked() ?? R.image.liked(), for: .normal)
-        likeCountLabel.text = String(photos[indexPath.row].likes)
-    }
-
 }
 
 // MARK: - Actions
-extension FriendCollectionCell {
-    @objc private func likeTap() {
 
+extension FriendCollectionCell {
+    
+    @objc private func likeTap() {
+        onLike?()
     }
 
 }
