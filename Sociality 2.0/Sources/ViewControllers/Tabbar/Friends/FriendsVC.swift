@@ -148,7 +148,7 @@ extension FriendsVC {
     }
     
     private func setupBindings() {
-        network?.loadFriends(url: URLs.getFriends) { [weak self] result in
+        network?.loadFriends(url: URLs.getFriendsURL()) { [weak self] result in
             switch result {
             case .failure(let error):
                 print(error)

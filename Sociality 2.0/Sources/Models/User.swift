@@ -26,7 +26,6 @@ struct User {
     // MARK: - Content
     
     var images: [String] = []
-    var posts: [Post] = []
     var groups: [Group] = []
     
 }

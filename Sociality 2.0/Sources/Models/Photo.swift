@@ -41,8 +41,8 @@ final class Photo: Object, Decodable {
     
     /// for conforming to decodable, not using them
     private enum CodingKeys: String, CodingKey {
-        case ownerID
-        case photoID
+        case ownerID = "owner_id"
+        case photoID = "id"
         case pic
         case width
         case height

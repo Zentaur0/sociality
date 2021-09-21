@@ -64,7 +64,7 @@ extension VKLoginVC {
             URLQueryItem(name: "client_id", value: "7802232"),
             URLQueryItem(name: "redirect_uri", value: "https://oauth.vk.com/blank.html"),
             URLQueryItem(name: "display", value: "mobile"),
-            URLQueryItem(name: "scope", value: "262150"),
+            URLQueryItem(name: "scope", value: "270342"),
             URLQueryItem(name: "response_type", value: "token"),
             URLQueryItem(name: "state", value: "succeded")
         ]
