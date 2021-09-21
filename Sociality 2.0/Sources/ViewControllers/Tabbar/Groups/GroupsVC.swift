@@ -22,7 +22,7 @@ final class GroupsVC: UIViewController, NavigationControllerSearchDelegate {
     
     // MARK: - Init
     
-    init(network: NetworkManagerProtocol? = nil) {
+    init(network: NetworkManagerProtocol?) {
         self.network = network
         super.init(nibName: nil, bundle: nil)
         setupBindings()
@@ -81,7 +81,7 @@ extension GroupsVC {
     }
     
     private func setupBindings() {
-        network?.loadGroups(url: URLs.getGroups) { [weak self] result in
+        network?.loadGroups(url: URLs.getGroupsURL()) { [weak self] result in
             switch result {
             case .failure(let error):
                 print(error)
@@ -147,7 +147,7 @@ extension GroupsVC {
     @objc func refresh() {
         
         let network = NetworkManager()
-        network.loadGroups(url: URLs.getGroups) { result in
+        network.loadGroups(url: URLs.getGroupsURL()) { result in
             switch result {
             case .failure(let error):
                 print(error)
