@@ -23,6 +23,7 @@ final class FriendsVC: UIViewController, NavigationControllerSearchDelegate {
     private var sections = [[Friend]]()
     private var notificationToken: NotificationToken?
     private let refreshControll = UIRefreshControl()
+    private let realmCheck: [Friend] = RealmManager.shared.readFromRealm()
     
     // MARK: - Init
     
@@ -110,7 +111,6 @@ extension FriendsVC {
     }
 
     private func provideFriends() {
-        let realmCheck: [Friend] = RealmManager.shared.readFromRealm()
         if realmCheck.isEmpty {
             setupBindings()
         } else {
@@ -201,10 +201,10 @@ extension FriendsVC: UISearchResultsUpdating {
         sortedFirstLetters = []
 
         if text.isEmpty {
-            filteredFriends = DataProvider.shared.allFriends
+            filteredFriends = realmCheck
             setupsForSectionsAndHeaders()
         } else {
-            for friend in DataProvider.shared.allFriends {
+            for friend in realmCheck {
                 if friend.givenName.lowercased().contains(text.lowercased()) || friend.familyName.lowercased().contains(text.lowercased()) {
                     filteredFriends.append(friend)
                     setupsForSectionsAndHeaders()
