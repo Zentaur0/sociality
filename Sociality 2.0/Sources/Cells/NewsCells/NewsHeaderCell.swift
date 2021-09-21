@@ -53,7 +53,8 @@ final class NewsHeaderCell: UITableViewCell {
 
 extension NewsHeaderCell {
     
-    func configure(news: NewsDataSource) {
+    func configure() {
+        let news = NewsDataSource(author: "vlad", avatar: "FedericoBruno_Avatar", time: "19:32:22", likes: "9", comments: "0", text: "alskdfj alkdsj cibuoxp jbiwuet mvk zxclh; boimwei tng;zlkdfn biso;f vjoapkrw phviuzb")
         authorImageView.image = UIImage(named: news.avatar)
         nameLabel.text = news.author
         timeLabel.text = news.time

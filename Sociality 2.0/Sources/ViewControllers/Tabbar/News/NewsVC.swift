@@ -7,25 +7,52 @@
 
 import UIKit
 
+struct ProfileModel {
+    let id: Int
+    let firstName: String
+    let lastName: String
+    let photo: String
+}
+
+struct GroupModel {
+    let id: Int
+    let name: String
+    let photo: String
+}
+
+struct ItemsModel {
+    let id: Int
+    let text: String?
+    let photoURL: String?
+    let photoWidth: Int?
+    let photoHeight: Int?
+}
+
 // MARK: - NewsVC
 
 final class NewsVC: UIViewController {
     
     // MARK: - Properties
     
+    weak var network: NewsFeedProtocol?
     private var tableView = UITableView(frame: .zero, style: .insetGrouped)
-    private var news: [NewsDataSource] = [
-        NewsDataSource(author: "anton", avatar: "carsAvatar", time: "19:32:22", likes: "71", comments: "9", image: "images", text: "aksjdfxibux buxoivcub iu cxiovb qifiu izuop xicubit w9ij ifjz ;oiub 8vjt49i uscovj8357g izuop xicubit w9ij ifjz ;oiub 8vjt49i uscovj8357g izuop xicubit w9ij ifjz ;oiub 8vjt49i uscovj8357g izuop xicubit w9ij ifjz ;oiub 8vjt49i uscovj8357g izuop xicubit w9ij ifjz ;oiub 8vjt49i uscovj8357g izuop xicubit w9ij ifjz ;oiub 8vjt49i uscovj8357g izuop xicubit w9ij ifjz ;oiub 8vjt49i uscovj8357g izuop xicubit w9ij ifjz ;oiub 8vjt49i uscovj8357g 8jdofi uv3w589t7 fujosdsfj v35"),
-        NewsDataSource(author: "vlad", avatar: "FedericoBruno_Avatar", time: "19:32:22", likes: "9", comments: "0", text: "alskdfj alkdsj cibuoxp jbiwuet mvk zxclh; boimwei tng;zlkdfn biso;f vjoapkrw phviuzb"),
-        NewsDataSource(author: "rina", avatar: "GulertAnastasia_Avatar", time: "1:23:24", likes: "92", comments: "0"),
-        NewsDataSource(author: "borya", avatar: "TompsonAlisha_Avatar", time: "1:23:24", likes: "55", comments: "6", text: "alskdjf asdlkfj lksdjfa; lkjsdflka jsdlkfja ;lsdkjfiawojf lasdk fjaiwoj flasdkj oiwqj;p ifae f"),
-        NewsDataSource(author: "yaroslav", avatar: "TomVekerfield_Avatar", time: "19:32:22", likes: "21", comments: "4"),
-        NewsDataSource(author: "alexsander", avatar: "VictorMiheev_Avatar", time: "19:32:22", likes: "66", comments: "4"),
-        NewsDataSource(author: "renat", avatar: "accecoriesAvatar", time: "1:23:24", likes: "45", comments: "3", text: "asflcb"),
-        NewsDataSource(author: "violetta", avatar: "memsAvatar", time: "1:23:24", likes: "23", comments: "1"),
-        NewsDataSource(author: "yana", avatar: "psychologyAvatar", time: "19:32:22", likes: "773", comments: "22", image: "images"),
-        NewsDataSource(author: "andrey", avatar: "travelAvatar", time: "19:32:22", likes: "45", comments: "2")
-    ]
+    private var groups: [GroupModel] = []
+    private var items: [ItemsModel] = []
+    private var profiles: [ProfileModel] = []
+    private var news: [NewsDataSource] = []
+    
+    // MARK: - Init
+    
+    init(network: NewsFeedProtocol) {
+        self.network = network
+        super.init(nibName: nil, bundle: nil)
+        loadNewsPosts()
+        loadNewsPhotos()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Life cycle
     
@@ -60,6 +87,75 @@ extension NewsVC {
         }
     }
     
+    private func loadNewsPosts() {
+        network?.getNewsPosts(httpMethod: .GET) { result in
+            switch result {
+            case .failure(let error):
+                print(error)
+            case .success(let success):
+                let response = success.response
+                let dispatchGroup = DispatchGroup()
+                
+                var profiles = [ProfileModel]()
+                var groups = [GroupModel]()
+                var items = [ItemsModel]()
+                
+                DispatchQueue.global(qos: .userInteractive).async(group: dispatchGroup) {
+                    for group in response.groups {
+                        let model = GroupModel(id: group.id, name: group.name, photo: group.photo)
+                        groups.append(model)
+                    }
+                }
+                
+                DispatchQueue.global(qos: .userInteractive).async(group: dispatchGroup) {
+                    for item in response.items {
+                        let model = ItemsModel(
+                            id: item.id,
+                            text: item.text,
+                            photoURL: item.attachments?.last?.photo?.sizes.last?.url ?? "",
+                            photoWidth: item.attachments?.last?.photo?.sizes.last?.width ?? 0,
+                            photoHeight: item.attachments?.last?.photo?.sizes.last?.height ?? 0
+                        )
+                        items.append(model)
+                    }
+                }
+                
+                DispatchQueue.global(qos: .userInteractive).async(group: dispatchGroup) {
+                    for profile in response.profiles {
+                        let model = ProfileModel(id: profile.id,
+                                                 firstName: profile.firstName,
+                                                 lastName: profile.lastName,
+                                                 photo: profile.photo
+                        )
+                        profiles.append(model)
+                    }
+                }
+                
+                dispatchGroup.notify(queue: .main) {
+                    self.groups = groups
+                    self.items = items
+                    self.profiles = profiles
+                    
+                    print(self.groups)
+                    print(self.items)
+                    print(self.profiles)
+                    self.tableView.reloadData()
+                }
+            }
+        }
+    }
+    
+    private func loadNewsPhotos() {
+        network?.getNewsPhotos(httpMethod: .GET, completion: { result in
+            switch result {
+            case .failure(let error):
+                print(error)
+            case .success(let success):
+                print(success)
+            }
+        })
+    }
+    
 }
 
 // MARK: - UITableViewDataSource
@@ -67,7 +163,7 @@ extension NewsVC {
 extension NewsVC: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        news.count
+        items.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -82,7 +178,7 @@ extension NewsVC: UITableViewDataSource {
                 return UITableViewCell()
             }
             
-            cell.configure(news: news[indexPath.section])
+            cell.configure()
             
             return cell
             
@@ -92,7 +188,7 @@ extension NewsVC: UITableViewDataSource {
                 return UITableViewCell()
             }
             
-            cell.configure(news: news[indexPath.section])
+            cell.configure(news: items[indexPath.section])
             
             return cell
         default:
@@ -103,10 +199,10 @@ extension NewsVC: UITableViewDataSource {
             
             cell.onLike = { [weak self] in
                 // MARK: TODO: reuse of button and count of likes
-                self?.news[indexPath.section].likeOrDislike()
+//                self?.news[indexPath.section].likeOrDislike()
             }
             
-            cell.configure(news: news[indexPath.section])
+            cell.configure()
             
             return cell
         }
@@ -129,9 +225,9 @@ extension NewsVC: UITableViewDelegate {
         case 1:
             
             // MARK: TODO - height of the cell must be equal to imageHeight + textHeight
-            if let image = UIImage(named: news[indexPath.section].image ?? "") {
-                let oldWidth = CGFloat(image.size.width)
-                let oldHeight = CGFloat(image.size.height)
+            if let photoURL = items[indexPath.section].photoURL, !photoURL.isEmpty {
+                let oldWidth = CGFloat(items[indexPath.section].photoWidth ?? 0)
+                let oldHeight = CGFloat(items[indexPath.section].photoHeight ?? 0)
                 let scaleFactor = view.frame.width / oldWidth
                 let newHeight = CGFloat(oldHeight) * scaleFactor
                 return newHeight
