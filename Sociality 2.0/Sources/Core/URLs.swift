@@ -105,21 +105,4 @@ final class URLs {
         return url
     }
     
-    static func getNewsPhotoURL() -> URL {
-        var urlComponents = URLComponents()
-        urlComponents.scheme = scheme
-        urlComponents.host = host
-        urlComponents.path = path + URLMethods.news.rawValue
-        urlComponents.queryItems = [
-            URLQueryItem(name: "access_token", value: token),
-            URLQueryItem(name: "user_id", value: userID),
-            URLQueryItem(name: "filters", value: "photo"),
-            URLQueryItem(name: "v", value: v)
-        ]
-        
-        guard let url = urlComponents.url else { return URL(fileURLWithPath: "") }
-        
-        return url
-    }
-    
 }

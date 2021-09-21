@@ -7,25 +7,10 @@
 
 import UIKit
 
-struct ProfileModel {
-    let id: Int
-    let firstName: String
-    let lastName: String
-    let photo: String
-}
-
-struct GroupModel {
-    let id: Int
-    let name: String
-    let photo: String
-}
-
-struct ItemsModel {
-    let id: Int
-    let text: String?
-    let photoURL: String?
-    let photoWidth: Int?
-    let photoHeight: Int?
+private enum NewsCellType: Int {
+    case header
+    case post
+    case footer
 }
 
 // MARK: - NewsVC
@@ -39,7 +24,6 @@ final class NewsVC: UIViewController {
     private var groups: [GroupModel] = []
     private var items: [ItemsModel] = []
     private var profiles: [ProfileModel] = []
-    private var news: [NewsDataSource] = []
     
     // MARK: - Init
     
@@ -47,7 +31,6 @@ final class NewsVC: UIViewController {
         self.network = network
         super.init(nibName: nil, bundle: nil)
         loadNewsPosts()
-        loadNewsPhotos()
     }
     
     required init?(coder: NSCoder) {
@@ -108,19 +91,6 @@ extension NewsVC {
                 }
                 
                 DispatchQueue.global(qos: .userInteractive).async(group: dispatchGroup) {
-                    for item in response.items {
-                        let model = ItemsModel(
-                            id: item.id,
-                            text: item.text,
-                            photoURL: item.attachments?.last?.photo?.sizes.last?.url ?? "",
-                            photoWidth: item.attachments?.last?.photo?.sizes.last?.width ?? 0,
-                            photoHeight: item.attachments?.last?.photo?.sizes.last?.height ?? 0
-                        )
-                        items.append(model)
-                    }
-                }
-                
-                DispatchQueue.global(qos: .userInteractive).async(group: dispatchGroup) {
                     for profile in response.profiles {
                         let model = ProfileModel(id: profile.id,
                                                  firstName: profile.firstName,
@@ -131,29 +101,31 @@ extension NewsVC {
                     }
                 }
                 
+                DispatchQueue.global(qos: .userInteractive).async(group: dispatchGroup) {
+                    for item in response.items {
+                        let model = ItemsModel(
+                            id: item.id,
+                            sourceID: item.sourceID,
+                            comments: item.comments?.count ?? 0,
+                            likes: item.likes?.count ?? 0,
+                            text: item.text,
+                            photoURL: item.attachments?.last?.photo?.sizes.last?.url ?? "",
+                            photoWidth: item.attachments?.last?.photo?.sizes.last?.width ?? 0,
+                            photoHeight: item.attachments?.last?.photo?.sizes.last?.height ?? 0
+                        )
+                        items.append(model)
+                    }
+                }
+                
                 dispatchGroup.notify(queue: .main) {
                     self.groups = groups
                     self.items = items
                     self.profiles = profiles
                     
-                    print(self.groups)
-                    print(self.items)
-                    print(self.profiles)
                     self.tableView.reloadData()
                 }
             }
         }
-    }
-    
-    private func loadNewsPhotos() {
-        network?.getNewsPhotos(httpMethod: .GET, completion: { result in
-            switch result {
-            case .failure(let error):
-                print(error)
-            case .success(let success):
-                print(success)
-            }
-        })
     }
     
 }
@@ -171,18 +143,32 @@ extension NewsVC: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.row {
-        case 0:
+        let cellType = NewsCellType(rawValue: indexPath.row)
+        
+        switch cellType {
+        case .header:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsHeaderCell.reuseID,
                                                            for: indexPath) as? NewsHeaderCell else {
                 return UITableViewCell()
             }
+            let item = self.items[indexPath.section]
             
-            cell.configure()
+            for group in groups {
+                if "-\(group.id)" == String(item.sourceID) {
+                    cell.configure(model: group)
+                }
+            }
+            
+            for profile in profiles {
+                if "-\(profile.id)" == String(item.sourceID) {
+                    let profileModel = GroupModel(id: profile.id, name: profile.firstName + " " + profile.lastName, photo: profile.photo)
+                    print(profileModel)
+                    cell.configure(model: profileModel)
+                }
+            }
             
             return cell
-            
-        case 1:
+        case .post:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsCell.reuseID,
                                                            for: indexPath) as? NewsCell else {
                 return UITableViewCell()
@@ -191,20 +177,27 @@ extension NewsVC: UITableViewDataSource {
             cell.configure(news: items[indexPath.section])
             
             return cell
-        default:
+        case .footer:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsFooterCell.reuseID,
                                                            for: indexPath) as? NewsFooterCell else {
                 return UITableViewCell()
             }
             
+            let item = items[indexPath.section]
+            
             cell.onLike = { [weak self] in
                 // MARK: TODO: reuse of button and count of likes
-//                self?.news[indexPath.section].likeOrDislike()
+                var likedItem = self?.items[indexPath.section]
+                likedItem?.likeOrDislike()
+                self?.items.remove(at: indexPath.section)
+                self?.items.insert(likedItem!, at: indexPath.section)
             }
             
-            cell.configure()
+            cell.configure(model: item)
             
             return cell
+        case .none:
+            return UITableViewCell()
         }
     }
     

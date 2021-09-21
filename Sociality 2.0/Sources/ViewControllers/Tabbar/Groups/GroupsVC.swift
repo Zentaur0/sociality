@@ -153,6 +153,7 @@ extension GroupsVC {
                 print(error)
             case .success(let groups):
                 self.filteredGroups = groups
+                DataProvider.shared.myGroups = groups
                 DispatchQueue.main.async { [weak self] in
                     self?.tableView.reloadData()
                 }

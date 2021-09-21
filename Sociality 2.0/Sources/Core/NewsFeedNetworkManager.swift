@@ -18,7 +18,6 @@ enum HTTPMethod {
 
 protocol NewsFeedProtocol: AnyObject {
     func getNewsPosts(httpMethod: HTTPMethod, completion: @escaping (Result<NewsResponse, Error>) -> Void)
-    func getNewsPhotos(httpMethod: HTTPMethod, completion: @escaping (Result<NewsResponse, Error>) -> Void)
 }
 
 // MARK: - NewsFeedNetworkManager
@@ -52,16 +51,6 @@ extension NewsFeedNetworkManager: NewsFeedProtocol {
         switch httpMethod {
         case .GET:
             let url = URLs.getNewsPostURL()
-            getData(url: url, completion: completion)
-        case .POST:
-            break
-        }
-    }
-    
-    func getNewsPhotos(httpMethod: HTTPMethod, completion: @escaping (Result<NewsResponse, Error>) -> Void) {
-        switch httpMethod {
-        case .GET:
-            let url = URLs.getNewsPhotoURL()
             getData(url: url, completion: completion)
         case .POST:
             break
