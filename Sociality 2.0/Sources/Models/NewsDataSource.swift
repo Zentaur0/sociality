@@ -35,7 +35,7 @@ struct ItemsModel {
     let photoURL: String?
     let photoWidth: Int?
     let photoHeight: Int?
-    var isLiked: Bool = false
+    var isLiked: Bool
     
     mutating func likeOrDislike() {
         isLiked = !isLiked

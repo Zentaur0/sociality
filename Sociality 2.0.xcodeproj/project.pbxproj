@@ -46,6 +46,10 @@
 		23B9E57C26F1379A00B53EE4 /* NewsFooterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B9E57B26F1379A00B53EE4 /* NewsFooterCell.swift */; };
 		23B9E57E26F13C9800B53EE4 /* NewsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B9E57D26F13C9800B53EE4 /* NewsCell.swift */; };
 		23B9E58026F15FC000B53EE4 /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B9E57F26F15FC000B53EE4 /* RealmManager.swift */; };
+		23D5405F26FE0E01003645CF /* GroupsRequestOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D5405E26FE0E01003645CF /* GroupsRequestOperation.swift */; };
+		23D5406126FE0E49003645CF /* GroupsLoadAsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D5406026FE0E49003645CF /* GroupsLoadAsyncOperation.swift */; };
+		23D5406326FE0EAD003645CF /* DisplayGroupsOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D5406226FE0EAD003645CF /* DisplayGroupsOperation.swift */; };
+		23D5406526FE0F13003645CF /* SaveGroupsToRealmOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D5406426FE0F13003645CF /* SaveGroupsToRealmOperation.swift */; };
 		23F7E9CA26C93D6D002F661A /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 23F7E9C926C93D6D002F661A /* Realm */; };
 		23F7E9CC26C93D6D002F661A /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 23F7E9CB26C93D6D002F661A /* RealmSwift */; };
 		46A4F3F9F74E9BFCA021F7FF /* Pods_Sociality_2_0_Sociality_2_0UITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBDC39EB055F994DD57596DA /* Pods_Sociality_2_0_Sociality_2_0UITests.framework */; };
@@ -117,6 +121,10 @@
 		23B9E57B26F1379A00B53EE4 /* NewsFooterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsFooterCell.swift; sourceTree = "<group>"; };
 		23B9E57D26F13C9800B53EE4 /* NewsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsCell.swift; sourceTree = "<group>"; };
 		23B9E57F26F15FC000B53EE4 /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
+		23D5405E26FE0E01003645CF /* GroupsRequestOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsRequestOperation.swift; sourceTree = "<group>"; };
+		23D5406026FE0E49003645CF /* GroupsLoadAsyncOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsLoadAsyncOperation.swift; sourceTree = "<group>"; };
+		23D5406226FE0EAD003645CF /* DisplayGroupsOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayGroupsOperation.swift; sourceTree = "<group>"; };
+		23D5406426FE0F13003645CF /* SaveGroupsToRealmOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveGroupsToRealmOperation.swift; sourceTree = "<group>"; };
 		3E0D8BB10D27FFD21941B09F /* Pods_Sociality_2_0.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sociality_2_0.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		400BBB5996C081BAE8BEC00A /* Pods_Sociality_2_0Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sociality_2_0Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DB33C3AF50ECBFB9BA5A3A2 /* Pods-Sociality 2.0-Sociality 2.0UITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sociality 2.0-Sociality 2.0UITests.debug.xcconfig"; path = "Target Support Files/Pods-Sociality 2.0-Sociality 2.0UITests/Pods-Sociality 2.0-Sociality 2.0UITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -368,6 +376,7 @@
 		239C556526B89075002F7AF8 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				23D5405C26FE0DEB003645CF /* Operations */,
 				239C556626B8907F002F7AF8 /* Session.swift */,
 				239C556A26B8A98E002F7AF8 /* DataProvider.swift */,
 				23041FB726BC78690096A461 /* NetworkManager.swift */,
@@ -376,6 +385,25 @@
 				23251EF526F92CEB005393D6 /* URLs.swift */,
 			);
 			path = Core;
+			sourceTree = "<group>";
+		};
+		23D5405C26FE0DEB003645CF /* Operations */ = {
+			isa = PBXGroup;
+			children = (
+				23D5405D26FE0DF2003645CF /* GroupOperations */,
+			);
+			path = Operations;
+			sourceTree = "<group>";
+		};
+		23D5405D26FE0DF2003645CF /* GroupOperations */ = {
+			isa = PBXGroup;
+			children = (
+				23D5405E26FE0E01003645CF /* GroupsRequestOperation.swift */,
+				23D5406026FE0E49003645CF /* GroupsLoadAsyncOperation.swift */,
+				23D5406226FE0EAD003645CF /* DisplayGroupsOperation.swift */,
+				23D5406426FE0F13003645CF /* SaveGroupsToRealmOperation.swift */,
+			);
+			path = GroupOperations;
 			sourceTree = "<group>";
 		};
 		C75D883C97869A3C07219035 /* Pods */ = {
@@ -675,6 +703,7 @@
 				239938C426BAA45000EDC985 /* FriendCollectionCell.swift in Sources */,
 				239C557026B8B44D002F7AF8 /* R.generated.swift in Sources */,
 				239938BF26B9F42B00EDC985 /* GroupCell.swift in Sources */,
+				23D5405F26FE0E01003645CF /* GroupsRequestOperation.swift in Sources */,
 				239938CA26BAA4B000EDC985 /* TableViewCellSetupDelegate.swift in Sources */,
 				239938CE26BAA93300EDC985 /* UIAplication + Extensions.swift in Sources */,
 				231E035C26B87E38001E9C0F /* RootTBC.swift in Sources */,
@@ -686,12 +715,15 @@
 				231E035A26B87D00001E9C0F /* Group.swift in Sources */,
 				231E036226B88062001E9C0F /* FriendsVC.swift in Sources */,
 				23041FAE26BAD26A0096A461 /* Spinner.swift in Sources */,
+				23D5406326FE0EAD003645CF /* DisplayGroupsOperation.swift in Sources */,
 				239C556926B8A7B9002F7AF8 /* FriendTableCell.swift in Sources */,
 				239C556726B8907F002F7AF8 /* Session.swift in Sources */,
+				23D5406126FE0E49003645CF /* GroupsLoadAsyncOperation.swift in Sources */,
 				233CA2CD26B3FA2100822550 /* AppDelegate.swift in Sources */,
 				23B9E57A26F134F900B53EE4 /* NewsHeaderCell.swift in Sources */,
 				23713B4F26F3EA6800D1FB93 /* NewsDataSource.swift in Sources */,
 				239938C126BAA04A00EDC985 /* FriendInformationVC.swift in Sources */,
+				23D5406526FE0F13003645CF /* SaveGroupsToRealmOperation.swift in Sources */,
 				231E034826B85EE3001E9C0F /* AppContainer.swift in Sources */,
 				23B9E58026F15FC000B53EE4 /* RealmManager.swift in Sources */,
 				2354D02526C729E900DFBF35 /* Photo.swift in Sources */,

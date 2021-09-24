@@ -8,16 +8,25 @@
 import UIKit
 import SwiftyJSON
 
+// MARK: - NetworkManagerProtocol
+
 protocol NetworkManagerProtocol: AnyObject {
     func loadFriends(url: URL, completion: @escaping (Result<[Friend], Error>) -> Void)
-    func loadGroups(url: URL, completion: @escaping (Result<[Group], Error>) -> Void)
     func loadGlobalGroups(url: URL, completion: @escaping (Result<Group, Error>) -> Void)
 }
 
-final class NetworkManager: NetworkManagerProtocol {
+// MARK: - NetworkManager
+
+final class NetworkManager {
 
     // MARK: - Static
     static let shared = NetworkManager()
+    
+}
+
+// MARK: - Methods
+
+extension NetworkManager: NetworkManagerProtocol {
     
     func authorize(sender: UIViewController, isAuthorized: Bool) {
         if isAuthorized {
@@ -91,27 +100,6 @@ final class NetworkManager: NetworkManagerProtocol {
         }.resume()
     }
 
-    func loadGroups(url: URL, completion: @escaping (Result<[Group], Error>) -> Void) {
-        let session = URLSession.shared
-
-        session.dataTask(with: url) { data, response, error in
-            do {
-                guard let data = data else { return }
-                let json = try JSON(data: data)
-                let groupJSON = json["response"]["items"].arrayValue
-                let groups = groupJSON.map { Group(json: $0)}
-                completion(.success(groups))
-
-                DispatchQueue.main.async {
-                    RealmManager.shared.saveToRealm(object: groups)
-                }
-                
-            } catch {
-                completion(.failure(error))
-            }
-        }.resume()
-    }
-
     func loadGlobalGroups(url: URL, completion: @escaping (Result<Group, Error>) -> Void) {
         let session = URLSession.shared
 
@@ -129,5 +117,5 @@ final class NetworkManager: NetworkManagerProtocol {
             }
         }.resume()
     }
-
+    
 }
