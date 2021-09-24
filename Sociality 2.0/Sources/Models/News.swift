@@ -65,6 +65,12 @@ struct NewsItemComments: Decodable {
 
 struct NewsItemLikes: Decodable {
     let count: Int
+    let userLikes: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case count
+        case userLikes = "user_likes"
+    }
 }
 
 // MARK: - NewsProfile

@@ -49,7 +49,7 @@ final class AppContainer {
     }
     
     static func makeGroupsVC() -> GroupsVC {
-        return GroupsVC(network: network)
+        return GroupsVC()
     }
     
     static func makeAllGroupsVC() -> AllGroupsVC {

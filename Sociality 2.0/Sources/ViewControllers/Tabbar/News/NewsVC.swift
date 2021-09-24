@@ -111,7 +111,8 @@ extension NewsVC {
                             text: item.text,
                             photoURL: item.attachments?.last?.photo?.sizes.last?.url ?? "",
                             photoWidth: item.attachments?.last?.photo?.sizes.last?.width ?? 0,
-                            photoHeight: item.attachments?.last?.photo?.sizes.last?.height ?? 0
+                            photoHeight: item.attachments?.last?.photo?.sizes.last?.height ?? 0,
+                            isLiked: item.likes?.userLikes == 1 ? true : false
                         )
                         items.append(model)
                     }
