@@ -7,31 +7,38 @@
 
 import Foundation
 
-// MARK: - NewsDataSourceProtocol
+// MARK: - ProfileModel
 
-protocol NewsDataSourceProtocol {
-    var author: String { get }
-    var time: String { get }
-    var avatar: String { get }
-    var image: String? { get set }
-    var text: String? { get set }
-    var likes: String { get set }
-    var comments: String { get set }
+struct ProfileModel {
+    let id: Int
+    let firstName: String
+    let lastName: String
+    let photo: String
 }
 
-// MARK: - NewsDataSource
+// MARK: - GroupModel
 
-struct NewsDataSource: NewsDataSourceProtocol {
-    let author: String
-    let avatar: String
-    let time: String
-    var likes: String
-    var comments: String
-    var image: String?
-    var text: String?
-    var isLiked: Bool = false
+struct GroupModel {
+    let id: Int
+    let name: String
+    let photo: String
+}
+
+// MARK: - ItemsModel
+
+struct ItemsModel {
+    let id: Int
+    let sourceID: Int
+    let comments: Int?
+    var likes: Int
+    let text: String?
+    let photoURL: String?
+    let photoWidth: Int?
+    let photoHeight: Int?
+    var isLiked: Bool
     
     mutating func likeOrDislike() {
         isLiked = !isLiked
+        likes = isLiked ? likes + 1 : likes - 1
     }
 }

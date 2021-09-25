@@ -73,7 +73,7 @@ extension FriendCollectionCell {
               let likeControll = likeControll,
               let likeCountLabel = likeCountLabel else { return }
         let photos = Array(friend.images)
-        imageView.kf.setImage(with: URL(string: photos[indexPath.row].pic))
+        imageView.kf.setImage(with: URL(string: photos[indexPath.row].imageURL))
         infoLabel.text = friend.familyName
         likeControll.setBackgroundImage(R.image.disliked() ?? R.image.liked(), for: .normal)
         likeCountLabel.text = String(photos[indexPath.row].likes)

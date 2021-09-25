@@ -14,6 +14,11 @@ final class AppContainer {
     // MARK: - Static
     
     static let shared = AppContainer()
+    
+    // MARK: - Properties
+
+    private static let network = NetworkManager()
+    private static let newsNetwork = NewsFeedNetworkManager()
 
     // MARK: - Init
     
@@ -40,7 +45,7 @@ final class AppContainer {
     }
     
     static func makeFriendsVC() -> FriendsVC {
-        return FriendsVC()
+        return FriendsVC(network: network)
     }
     
     static func makeGroupsVC() -> GroupsVC {
@@ -48,11 +53,15 @@ final class AppContainer {
     }
     
     static func makeAllGroupsVC() -> AllGroupsVC {
-        return AllGroupsVC()
+        return AllGroupsVC(network: network)
     }
     
     static func makeFriendInfoVC(friend: Friend) -> FriendInformationVC {
         return FriendInformationVC(friend: friend)
+    }
+    
+    static func makeNewsVC() -> NewsVC {
+        return NewsVC(network: newsNetwork)
     }
     
     // MARK: Spinner

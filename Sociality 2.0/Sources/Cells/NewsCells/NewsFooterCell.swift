@@ -49,9 +49,10 @@ final class NewsFooterCell: UITableViewCell {
 
 extension NewsFooterCell {
     
-    func configure(news: NewsDataSource) {
-        likeCountLabel.text = news.likes
-        commentCountLabel.text = news.comments
+    func configure(model: ItemsModel) {
+        likeButton.setBackgroundImage(model.isLiked ? R.image.liked() : R.image.disliked(), for: .normal)
+        likeCountLabel.text = String(model.likes)
+        commentCountLabel.text = String(model.comments ?? 0)
     }
     
     private func setupCell() {
@@ -79,6 +80,15 @@ extension NewsFooterCell {
         }
     }
     
+    private func changeLikeState() {
+        isLiked = !isLiked
+        likeButton.setBackgroundImage(isLiked ? R.image.liked() : R.image.disliked(), for: .normal)
+        if let text = likeCountLabel.text, var number = Int(text) {
+            number = isLiked ? number + 1 : number - 1
+            likeCountLabel.text = String(number)
+        }
+    }
+    
 }
 
 // MARK: - Actions
@@ -86,12 +96,7 @@ extension NewsFooterCell {
 extension NewsFooterCell {
     
     @objc private func likeOrDislike() {
-        isLiked = !isLiked
-        likeButton.setBackgroundImage(isLiked ? R.image.liked() : R.image.disliked(), for: .normal)
-        if let text = likeCountLabel.text, var number = Int(text) {
-            number = isLiked ? number + 1 : number - 1
-            likeCountLabel.text = String(number)
-        }
+        changeLikeState()
         onLike?()
     }
     

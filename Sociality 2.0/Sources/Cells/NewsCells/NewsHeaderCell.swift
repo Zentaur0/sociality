@@ -53,18 +53,14 @@ final class NewsHeaderCell: UITableViewCell {
 
 extension NewsHeaderCell {
     
-    func configure(news: NewsDataSource) {
-        authorImageView.image = UIImage(named: news.avatar)
-        nameLabel.text = news.author
-        timeLabel.text = news.time
+    func configure(model: GroupModel) {
+        authorImageView.kf.setImage(with: URL(string: model.photo))
+        nameLabel.text = model.name
+        timeLabel.text = String(model.id)
     }
     
     private func setupCell() {
         selectionStyle = .none
-        
-        authorImageView.image = R.image.accecoriesAvatar()
-        nameLabel.text = "alskdfjlkasdjf"
-        timeLabel.text = "19:32:22"
         
         timeLabel.textColor = .lightGray
         

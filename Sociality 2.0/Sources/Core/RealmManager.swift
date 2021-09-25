@@ -63,7 +63,8 @@ final class RealmManager {
     
     func readFromRealm<T: Object>() -> [T] {
         do {
-            let realm = try Realm()
+            let config = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
+            let realm = try Realm(configuration: config)
             let realmObject = realm.objects(T.self)
             return Array(realmObject)
         } catch {
@@ -74,7 +75,8 @@ final class RealmManager {
     
     func readPhotosFromRealm(ownerID: Int) -> [Photo] {
         do {
-            let realm = try Realm()
+            let config = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
+            let realm = try Realm(configuration: config)
             let realmObject = realm.objects(Photo.self).filter { $0.ownerID == ownerID }
             return Array(realmObject)
         } catch {
@@ -85,7 +87,8 @@ final class RealmManager {
     
     func updateFriendPhotoRealm(photos: [Photo], friend: Friend) {
         do {
-            let realm = try Realm()
+            let config = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
+            let realm = try Realm(configuration: config)
             realm.beginWrite()
             for photo in photos {
                 if !friend.images.contains(photo) {

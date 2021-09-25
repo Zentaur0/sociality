@@ -46,10 +46,9 @@ final class NewsCell: UITableViewCell {
 
 extension NewsCell {
     
-    func configure(news: NewsDataSource) {
-        if let image = news.image {
-            newsImageView.image = UIImage(named: image)
-//        newsImageView.kf.setImage(with: URL(string: News.self))
+    func configure(news: ItemsModel) {
+        if let photoURL = news.photoURL {
+            newsImageView.kf.setImage(with: URL(string: photoURL))
         }
         if let text = news.text {
             newsTextLabel.text = text
@@ -71,11 +70,10 @@ extension NewsCell {
     private func setupConstraints() {
         newsTextLabel.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview().inset(10)
-            $0.bottom.equalTo(newsImageView.snp.top).offset(-5)
         }
         
         newsImageView.snp.makeConstraints {
-            $0.height.equalToSuperview().priority(.low)
+            $0.top.equalTo(newsTextLabel.snp.bottom).offset(5)
             $0.leading.trailing.bottom.equalToSuperview()
         }
     }
