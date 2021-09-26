@@ -54,14 +54,16 @@ extension NewsVC {
     private func setupVC() {
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.separatorInset = .zero
         tableView.register(NewsCell.self, forCellReuseIdentifier: NewsCell.reuseID)
         tableView.register(NewsHeaderCell.self, forCellReuseIdentifier: NewsHeaderCell.reuseID)
         tableView.register(NewsFooterCell.self, forCellReuseIdentifier: NewsFooterCell.reuseID)
         
         view.addSubview(tableView)
-        view.backgroundColor = .lightGray
+        view.backgroundColor = AppContainer.shared.navigationControllerColor
+        navigationController?.navigationBar.prefersLargeTitles = true
         
-        title = "News"
+        title = AppContainer.shared.newsTitle
     }
     
     private func setupConstraints() {
@@ -161,7 +163,7 @@ extension NewsVC: UITableViewDataSource {
             }
             
             for profile in profiles {
-                if "-\(profile.id)" == String(item.sourceID) {
+                if profile.id == item.sourceID {
                     let profileModel = GroupModel(id: profile.id, name: profile.firstName + " " + profile.lastName, photo: profile.photo)
                     print(profileModel)
                     cell.configure(model: profileModel)
@@ -187,11 +189,11 @@ extension NewsVC: UITableViewDataSource {
             let item = items[indexPath.section]
             
             cell.onLike = { [weak self] in
-                // MARK: TODO: reuse of button and count of likes
                 var likedItem = self?.items[indexPath.section]
                 likedItem?.likeOrDislike()
                 self?.items.remove(at: indexPath.section)
-                self?.items.insert(likedItem!, at: indexPath.section)
+                guard let likedItem = likedItem else { return }
+                self?.items.insert(likedItem, at: indexPath.section)
             }
             
             cell.configure(model: item)
@@ -217,7 +219,6 @@ extension NewsVC: UITableViewDelegate {
         case 0:
             return 60
         case 1:
-            
             // MARK: TODO - height of the cell must be equal to imageHeight + textHeight
             if let photoURL = items[indexPath.section].photoURL, !photoURL.isEmpty {
                 let oldWidth = CGFloat(items[indexPath.section].photoWidth ?? 0)

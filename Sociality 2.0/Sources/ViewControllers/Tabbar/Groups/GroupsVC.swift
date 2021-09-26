@@ -44,6 +44,7 @@ extension GroupsVC {
     
     private func setupVC() {
         tableView.tableFooterView = UIView()
+        tableView.backgroundColor = R.color.whiteBlack()
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(GroupCell.self, forCellReuseIdentifier: GroupCell.reuseID)
@@ -142,7 +143,9 @@ extension GroupsVC {
         
         notificate()
         
-        refreshControll.endRefreshing()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+            self?.refreshControll.endRefreshing()
+        }
     }
     
 }
