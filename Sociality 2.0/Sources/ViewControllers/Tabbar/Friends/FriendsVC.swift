@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import RealmSwift
+import PromiseKit
 
 // MARK: - FriendsVC
 
@@ -148,17 +149,17 @@ extension FriendsVC {
     }
     
     private func setupBindings() {
-        network?.loadFriends(url: URLs.getFriendsURL()) { [weak self] result in
-            switch result {
-            case .failure(let error):
-                print(error)
-            case .success(let friends):
-                self?.filteredFriends = friends
-                self?.setupsForSectionsAndHeaders()
-                DispatchQueue.main.async { [weak self] in
-                    self?.tableView?.reloadData()
-                }
-            }
+        firstly {
+            FriendsNetworkManager.shared.loadFriendsWithPromise(url: URLs.getFriendsURL())
+        }.get { friends in
+            RealmManager.shared.saveToRealm(object: friends)
+        }.map { [weak self] friends in
+            self?.filteredFriends = friends
+        }.done { [weak self] in
+            self?.setupsForSectionsAndHeaders()
+            self?.tableView?.reloadData()
+        }.catch { error in
+            print(error.localizedDescription)
         }
     }
     
