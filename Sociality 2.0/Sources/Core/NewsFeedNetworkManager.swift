@@ -45,6 +45,8 @@ final class NewsFeedNetworkManager {
     
 }
 
+// MARK: - NewsFeedProtocol
+
 extension NewsFeedNetworkManager: NewsFeedProtocol {
     
     func getNewsPosts(httpMethod: HTTPMethod, completion: @escaping (Result<NewsResponse, Error>) -> Void) {
