@@ -7,6 +7,14 @@
 
 import Foundation
 
+// MARK: - NewsFeedModel
+
+struct NewsFeedItems {
+    let groups: [GroupModel]
+    let items: [ItemsModel]
+    let profiles: [ProfileModel]
+}
+
 // MARK: - ProfileModel
 
 struct ProfileModel {
@@ -22,12 +30,14 @@ struct GroupModel {
     let id: Int
     let name: String
     let photo: String
+    let date: Date
 }
 
 // MARK: - ItemsModel
 
 struct ItemsModel {
     let id: Int
+    let date: Date
     let sourceID: Int
     let comments: Int?
     var likes: Int

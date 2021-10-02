@@ -21,6 +21,12 @@ final class NewsHeaderCell: UITableViewCell {
     private let nameLabel = UILabel()
     private let timeLabel = UILabel()
     private let closeButton = UIButton(type: .system)
+    private let dateFormatter: DateFormatter = {
+        let formater = DateFormatter()
+        formater.dateFormat = "dd-MMM hh:mm"
+        return formater
+    }()
+    
     private lazy var labelStack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [nameLabel, timeLabel])
         stack.axis = .vertical
@@ -56,7 +62,7 @@ extension NewsHeaderCell {
     func configure(model: GroupModel) {
         authorImageView.kf.setImage(with: URL(string: model.photo))
         nameLabel.text = model.name
-        timeLabel.text = String(model.id)
+        timeLabel.text = dateFormatter.string(from: model.date)
     }
     
     private func setupCell() {

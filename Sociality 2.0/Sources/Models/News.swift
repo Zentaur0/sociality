@@ -39,6 +39,7 @@ struct NewsGroup: Decodable {
 
 struct NewsItem: Decodable {
     let id: Int
+    let date: Date
     let text: String
     let attachments: [NewsItemAttachment]?
     let sourceID: Int
@@ -47,6 +48,7 @@ struct NewsItem: Decodable {
     
     enum CodingKeys: String, CodingKey {
         case id = "post_id"
+        case date
         case text
         case attachments
         case sourceID = "source_id"

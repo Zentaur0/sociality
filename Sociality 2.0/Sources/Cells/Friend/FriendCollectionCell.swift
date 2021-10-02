@@ -41,6 +41,7 @@ final class FriendCollectionCell: UICollectionViewCell {
     }()
     
     private var size: CGSize?
+    private var isLiked = false
     
     // MARK: - Init
     
@@ -58,7 +59,6 @@ final class FriendCollectionCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         imageView?.image = nil
-        shadowView = nil
     }
     
 }
@@ -77,18 +77,6 @@ extension FriendCollectionCell {
         infoLabel.text = friend.familyName
         likeControll.setBackgroundImage(R.image.disliked() ?? R.image.liked(), for: .normal)
         likeCountLabel.text = String(photos[indexPath.row].likes)
-    }
-    
-    func setupShadow(_ avatar: UIImageView, _ shadowView: UIView) {
-        shadowView.clipsToBounds = false
-        shadowView.layer.shadowColor = UIColor.systemGray4.cgColor
-        shadowView.layer.shadowOpacity = 1
-        shadowView.layer.shadowOffset = CGSize.zero
-        shadowView.layer.shadowPath = UIBezierPath(roundedRect: CGRect(x: 5,
-                                                                       y: 5,
-                                                                       width: contentView.frame.width,
-                                                                       height: contentView.frame.height),
-                                                   cornerRadius: 5).cgPath
     }
     
     private func setupCell() {
@@ -116,26 +104,19 @@ extension FriendCollectionCell {
         likeControll.setBackgroundImage(R.image.disliked(), for: .normal)
         likeControll.addTarget(self, action: #selector(likeTap), for: .touchUpInside)
 
-        let view = UIView()
-        view.backgroundColor = R.color.whiteBlack()
-        view.layer.cornerRadius = 5
-        view.clipsToBounds = true
-
-        contentView.addSubview(shadowView)
-        contentView.addSubview(view)
-        view.snp.makeConstraints {
-            $0.edges.equalToSuperview().inset(3)
-        }
-        setupShadow(imageView, shadowView)
-
+        shadowView.layer.borderColor = UIColor.gray.withAlphaComponent(0.6).cgColor
+        shadowView.layer.borderWidth = 0.5
+        shadowView.layer.cornerRadius = 5
+        
         bottomStackView = UIStackView(arrangedSubviews: [infoLabel, likeCountLabel, likeControll])
         bottomStackView.setCustomSpacing(10, after: likeCountLabel)
         bottomStackView.setCustomSpacing(10, after: likeControll)
         bottomStackView.backgroundColor = .white
 
         contentMode = .scaleAspectFit
-        view.addSubview(imageView)
-        view.addSubview(bottomStackView)
+        contentView.addSubview(shadowView)
+        shadowView.addSubview(imageView)
+        shadowView.addSubview(bottomStackView)
     }
 
     private func setupConstraints() {
@@ -178,6 +159,12 @@ extension FriendCollectionCell {
     
     @objc private func likeTap() {
         onLike?()
+        isLiked = !isLiked
+        likeControll?.setBackgroundImage(isLiked ? R.image.liked() : R.image.disliked(), for: .normal)
+        if let text = likeCountLabel?.text, var number = Int(text) {
+            number = isLiked ? number + 1 : number - 1
+            likeCountLabel?.text = String(number)
+        }
     }
 
 }
