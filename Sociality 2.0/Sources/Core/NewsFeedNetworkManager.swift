@@ -17,7 +17,7 @@ enum HTTPMethod {
 // MARK: - NewsFeedProtocol
 
 protocol NewsFeedProtocol: AnyObject {
-    func getNewsPosts(httpMethod: HTTPMethod, completion: @escaping (Result<NewsFeedItems, Error>) -> Void)
+    func getNewsPosts(httpMethod: HTTPMethod, url: URL, completion: @escaping (Result<NewsFeedItems, Error>, String) -> Void)
 }
 
 // MARK: - NewsFeedNetworkManager
@@ -26,11 +26,15 @@ final class NewsFeedNetworkManager {
     
     // MARK: - Methods
     
-    private func getData(url: URL, completion: @escaping (Result<NewsFeedItems, Error>) -> Void) {
+    private func getData(url: URL, completion: @escaping (Result<NewsFeedItems, Error>, String) -> Void) {
+        self.decodeObjects(url: url, completion: completion)
+    }
+    
+    private func decodeObjects(url: URL,
+                               completion: @escaping (Result<NewsFeedItems, Error>, String) -> Void) {
         
         let session = URLSession.shared
-        
-        session.dataTask(with: url) { data, _, error in
+        let dataTask = session.dataTask(with: url) { data, _, error in
             do {
                 guard let data = data else { return }
                 
@@ -38,13 +42,15 @@ final class NewsFeedNetworkManager {
                 
                 let response = jsonObject.response
                 let dispatchGroup = DispatchGroup()
+                
+                let nextFromStr = response.next_from
 
                 var profiles = [ProfileModel]()
                 var groups = [GroupModel]()
                 var items = [ItemsModel]()
 
                 DispatchQueue.global(qos: .userInteractive).async(group: dispatchGroup) {
-                    groups = response.groups.map { GroupModel(id: $0.id, name: $0.name, photo: $0.photo, date: Date()) }
+                    groups = response.groups.map { GroupModel(id: $0.id, name: $0.name, photo: $0.photo, date: 0) }
                 }
 
                 DispatchQueue.global(qos: .userInteractive).async(group: dispatchGroup) {
@@ -72,13 +78,15 @@ final class NewsFeedNetworkManager {
                 }
 
                 dispatchGroup.notify(queue: .main) {
-                    let newsFeedItems = NewsFeedItems(groups: groups, items: items, profiles: profiles)
-                    completion(.success(newsFeedItems))
+                    let newsFeedItems = NewsFeedItems(groups: groups, items: items, profiles: profiles, nextFrom: nextFromStr ?? "")
+                    completion((.success(newsFeedItems)), nextFromStr ?? "")
                 }
             } catch {
-                completion(.failure(error))
+                completion((.failure(error)), "")
             }
-        }.resume()
+        }
+        
+        dataTask.resume()
     }
     
 }
@@ -87,10 +95,11 @@ final class NewsFeedNetworkManager {
 
 extension NewsFeedNetworkManager: NewsFeedProtocol {
     
-    func getNewsPosts(httpMethod: HTTPMethod, completion: @escaping (Result<NewsFeedItems, Error>) -> Void) {
+    func getNewsPosts(httpMethod: HTTPMethod,
+                      url: URL,
+                      completion: @escaping (Result<NewsFeedItems, Error>, String) -> Void) {
         switch httpMethod {
         case .GET:
-            let url = URLs.getNewsPostURL()
             getData(url: url, completion: completion)
         case .POST:
             break

@@ -88,7 +88,8 @@ final class URLs {
         return url
     }
     
-    static func getNewsPostURL() -> URL {
+    static func getNewsPostURL(startTime: String? = nil, startFrom: String? = "") -> URL {
+        print(startFrom)
         var urlComponents = URLComponents()
         urlComponents.scheme = scheme
         urlComponents.host = host
@@ -96,8 +97,14 @@ final class URLs {
         urlComponents.queryItems = [
             URLQueryItem(name: "access_token", value: token),
             URLQueryItem(name: "filters", value: "post"),
-            URLQueryItem(name: "v", value: v)
+            URLQueryItem(name: "count", value: "15"),
+            URLQueryItem(name: "v", value: v),
+            URLQueryItem(name: "start_from", value: startFrom)
         ]
+        
+        if startTime != nil {
+            urlComponents.queryItems?.append(URLQueryItem(name: "start_time", value: startTime))
+        }
         
         guard let url = urlComponents.url else { return URL(fileURLWithPath: "") }
         

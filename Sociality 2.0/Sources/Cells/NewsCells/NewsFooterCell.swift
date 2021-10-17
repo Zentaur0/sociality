@@ -60,12 +60,15 @@ extension NewsFooterCell {
         
         likeButton.setBackgroundImage(R.image.disliked(), for: .normal)
         likeButton.addTarget(self, action: #selector(likeOrDislike), for: .touchUpInside)
-        likeCountLabel.text = "0"
+        
+        commentButton.setBackgroundImage(R.image.commentIcon(), for: .normal)
         
         backgroundColor = .white
         
         contentView.addSubview(likeButton)
         contentView.addSubview(likeCountLabel)
+        contentView.addSubview(commentButton)
+        contentView.addSubview(commentCountLabel)
     }
     
     private func setupConstraints() {
@@ -77,6 +80,17 @@ extension NewsFooterCell {
         likeCountLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalTo(likeButton.snp.trailing).offset(10)
+        }
+        
+        commentButton.snp.makeConstraints {
+            $0.width.height.equalTo(likeButton)
+            $0.top.bottom.equalToSuperview().inset(15)
+            $0.leading.equalTo(likeCountLabel.snp.trailing).offset(15)
+        }
+        
+        commentCountLabel.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalTo(commentButton.snp.trailing).offset(10)
         }
     }
     

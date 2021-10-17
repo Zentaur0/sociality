@@ -23,7 +23,12 @@ final class NewsVC: UIViewController {
     private var tableView = UITableView(frame: .zero, style: .insetGrouped)
     private var groups: [GroupModel] = []
     private var items: [ItemsModel] = []
+    private var nextFrom = ""
+    private var isLoading = false
     private var profiles: [ProfileModel] = []
+    private let refresh = UIRefreshControl()
+    private var textHeight = CGFloat()
+    private var imageHeight = CGFloat()
     
     // MARK: - Init
     
@@ -55,6 +60,7 @@ extension NewsVC {
     private func setupVC() {
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.prefetchDataSource = self
         tableView.separatorInset = .zero
         tableView.register(NewsCell.self, forCellReuseIdentifier: NewsCell.reuseID)
         tableView.register(NewsHeaderCell.self, forCellReuseIdentifier: NewsHeaderCell.reuseID)
@@ -65,6 +71,7 @@ extension NewsVC {
         navigationController?.navigationBar.prefersLargeTitles = true
         
         title = AppContainer.shared.newsTitle
+        setupRefresh()
     }
     
     private func setupConstraints() {
@@ -74,7 +81,8 @@ extension NewsVC {
     }
     
     private func loadNewsPosts() {
-        network?.getNewsPosts(httpMethod: .GET) { result in
+        let url = URLs.getNewsPostURL()
+        network?.getNewsPosts(httpMethod: .GET, url: url) { result, _  in
             switch result {
             case .failure(let error):
                 print(error)
@@ -82,7 +90,50 @@ extension NewsVC {
                 self.groups = success.groups
                 self.items = success.items
                 self.profiles = success.profiles
+                self.nextFrom = success.nextFrom ?? ""
                 self.tableView.reloadData()
+            }
+        }
+    }
+    
+    private func setupRefresh() {
+        refresh.attributedTitle = NSAttributedString(string: "Refreshing")
+        refresh.addTarget(self, action: #selector(refreshNews), for: .valueChanged)
+        tableView.addSubview(refresh)
+    }
+    
+}
+
+// MARK: - Actions
+
+extension NewsVC {
+    
+    @objc private func refreshNews() {
+        refresh.beginRefreshing()
+        let mostFreshNewsDate = items.first?.date ?? Date().timeIntervalSince1970
+        let startTime = String(mostFreshNewsDate + 1)
+        let url = URLs.getNewsPostURL(startTime: startTime)
+        network?.getNewsPosts(httpMethod: .GET, url: url) { [weak self] result, _  in
+            switch result {
+            case .failure(let error):
+                print(error)
+            case .success(let news):
+                self?.refresh.endRefreshing()
+                guard let self = self else { return }
+                guard self.items.count > 0 else { return }
+                
+                let oldItemsCount = self.items.count
+                let newItemsCount = news.items.count + self.items.count
+                
+                self.groups = news.groups + self.groups
+                self.profiles = news.profiles + self.profiles
+                self.items = news.items + self.items
+                
+                let indexSet = IndexSet(integersIn: 0..<news.items.count)
+                
+                if oldItemsCount < newItemsCount {
+                    self.tableView.insertSections(indexSet, with: .fade)
+                }
             }
         }
     }
@@ -114,10 +165,11 @@ extension NewsVC: UITableViewDataSource {
             
             for group in groups {
                 if "-\(group.id)" == String(item.sourceID) {
-                    let groupModel = GroupModel(id: group.id,
-                                                name: group.name,
-                                                photo: group.photo,
-                                                date: item.date
+                    let groupModel = GroupModel(
+                        id: group.id,
+                        name: group.name,
+                        photo: group.photo,
+                        date: item.date
                     )
                     cell.configure(model: groupModel)
                 }
@@ -125,10 +177,11 @@ extension NewsVC: UITableViewDataSource {
             
             for profile in profiles {
                 if profile.id == item.sourceID {
-                    let profileModel = GroupModel(id: profile.id,
-                                                  name: profile.firstName + " " + profile.lastName,
-                                                  photo: profile.photo,
-                                                  date: item.date
+                    let profileModel = GroupModel(
+                        id: profile.id,
+                        name: profile.firstName + " " + profile.lastName,
+                        photo: profile.photo,
+                        date: item.date
                     )
                     cell.configure(model: profileModel)
                 }
@@ -142,6 +195,10 @@ extension NewsVC: UITableViewDataSource {
             }
             
             cell.configure(news: item)
+            cell.onButton = { [weak self] in
+                self?.textHeight = cell.textHeight
+                self?.imageHeight = cell.imageHeight
+            }
             
             return cell
         case .footer:
@@ -189,7 +246,7 @@ extension NewsVC: UITableViewDelegate {
                 let oldHeight = CGFloat(items[indexPath.section].photoHeight ?? 0)
                 let scaleFactor = view.frame.width / oldWidth
                 let newHeight = CGFloat(oldHeight) * scaleFactor
-                return newHeight
+                return newHeight + textHeight
             } else {
                 return UITableView.automaticDimension
             }
@@ -200,6 +257,37 @@ extension NewsVC: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         0
+    }
+    
+}
+
+// MARK: - UITableViewDataSourcePrefetching
+
+extension NewsVC: UITableViewDataSourcePrefetching {
+    
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        guard let maxSection = indexPaths.map({ $0.section }).max() else { return }
+        
+        if maxSection > items.count - 3, !isLoading {
+            isLoading = true
+            
+            let url = URLs.getNewsPostURL(startFrom: nextFrom)
+            network?.getNewsPosts(httpMethod: .GET, url: url) { [weak self] response, nextFrom in
+                switch response {
+                case .failure(let error):
+                    print(error)
+                case .success(let news):
+                    guard let self = self else { return }
+                    let indexSet = IndexSet(integersIn: self.items.count..<self.items.count + news.items.count)
+                    self.groups.append(contentsOf: news.groups)
+                    self.profiles.append(contentsOf: news.profiles)
+                    self.items.append(contentsOf: news.items)
+                    self.nextFrom = news.nextFrom
+                    self.tableView.insertSections(indexSet, with: .fade)
+                    self.isLoading = false
+                }
+            }
+        }
     }
     
 }

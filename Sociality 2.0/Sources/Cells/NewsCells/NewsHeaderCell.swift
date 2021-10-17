@@ -62,7 +62,7 @@ extension NewsHeaderCell {
     func configure(model: GroupModel) {
         authorImageView.kf.setImage(with: URL(string: model.photo))
         nameLabel.text = model.name
-        timeLabel.text = dateFormatter.string(from: model.date)
+        timeLabel.text = dateFormatter.string(from: Date(timeIntervalSince1970: model.date))
     }
     
     private func setupCell() {
