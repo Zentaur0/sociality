@@ -238,10 +238,10 @@
 		231E035426B87C3E001E9C0F /* Tabbar */ = {
 			isa = PBXGroup;
 			children = (
+				231E035B26B87E38001E9C0F /* RootTBC.swift */,
 				231E035526B87C4D001E9C0F /* Friends */,
 				231E035626B87C54001E9C0F /* Groups */,
 				231E035726B87C5A001E9C0F /* News */,
-				231E035B26B87E38001E9C0F /* RootTBC.swift */,
 			);
 			path = Tabbar;
 			sourceTree = "<group>";
