@@ -32,6 +32,7 @@ extension SaveGroupsToRealmOperation {
               let groups = objects.groups else { return }
         
         self.groups = groups
+        DataProvider.shared.myGroups = groups
         RealmManager.shared.saveToRealm(object: groups)
     }
     

@@ -95,7 +95,6 @@ final class URLs {
         urlComponents.path = path + URLMethods.news.rawValue
         urlComponents.queryItems = [
             URLQueryItem(name: "access_token", value: token),
-            URLQueryItem(name: "user_id", value: userID),
             URLQueryItem(name: "filters", value: "post"),
             URLQueryItem(name: "v", value: v)
         ]

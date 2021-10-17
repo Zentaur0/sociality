@@ -33,6 +33,7 @@ final class NewsVC: UIViewController {
         loadNewsPosts()
     }
     
+    @available (*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -78,55 +79,10 @@ extension NewsVC {
             case .failure(let error):
                 print(error)
             case .success(let success):
-                let response = success.response
-                let dispatchGroup = DispatchGroup()
-                
-                var profiles = [ProfileModel]()
-                var groups = [GroupModel]()
-                var items = [ItemsModel]()
-                
-                DispatchQueue.global(qos: .userInteractive).async(group: dispatchGroup) {
-                    for group in response.groups {
-                        let model = GroupModel(id: group.id, name: group.name, photo: group.photo)
-                        groups.append(model)
-                    }
-                }
-                
-                DispatchQueue.global(qos: .userInteractive).async(group: dispatchGroup) {
-                    for profile in response.profiles {
-                        let model = ProfileModel(id: profile.id,
-                                                 firstName: profile.firstName,
-                                                 lastName: profile.lastName,
-                                                 photo: profile.photo
-                        )
-                        profiles.append(model)
-                    }
-                }
-                
-                DispatchQueue.global(qos: .userInteractive).async(group: dispatchGroup) {
-                    for item in response.items {
-                        let model = ItemsModel(
-                            id: item.id,
-                            sourceID: item.sourceID,
-                            comments: item.comments?.count ?? 0,
-                            likes: item.likes?.count ?? 0,
-                            text: item.text,
-                            photoURL: item.attachments?.last?.photo?.sizes.last?.url ?? "",
-                            photoWidth: item.attachments?.last?.photo?.sizes.last?.width ?? 0,
-                            photoHeight: item.attachments?.last?.photo?.sizes.last?.height ?? 0,
-                            isLiked: item.likes?.userLikes == 1 ? true : false
-                        )
-                        items.append(model)
-                    }
-                }
-                
-                dispatchGroup.notify(queue: .main) {
-                    self.groups = groups
-                    self.items = items
-                    self.profiles = profiles
-                    
-                    self.tableView.reloadData()
-                }
+                self.groups = success.groups
+                self.items = success.items
+                self.profiles = success.profiles
+                self.tableView.reloadData()
             }
         }
     }
@@ -147,6 +103,7 @@ extension NewsVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cellType = NewsCellType(rawValue: indexPath.row)
+        let item = self.items[indexPath.section]
         
         switch cellType {
         case .header:
@@ -154,18 +111,25 @@ extension NewsVC: UITableViewDataSource {
                                                            for: indexPath) as? NewsHeaderCell else {
                 return UITableViewCell()
             }
-            let item = self.items[indexPath.section]
             
             for group in groups {
                 if "-\(group.id)" == String(item.sourceID) {
-                    cell.configure(model: group)
+                    let groupModel = GroupModel(id: group.id,
+                                                name: group.name,
+                                                photo: group.photo,
+                                                date: item.date
+                    )
+                    cell.configure(model: groupModel)
                 }
             }
             
             for profile in profiles {
                 if profile.id == item.sourceID {
-                    let profileModel = GroupModel(id: profile.id, name: profile.firstName + " " + profile.lastName, photo: profile.photo)
-                    print(profileModel)
+                    let profileModel = GroupModel(id: profile.id,
+                                                  name: profile.firstName + " " + profile.lastName,
+                                                  photo: profile.photo,
+                                                  date: item.date
+                    )
                     cell.configure(model: profileModel)
                 }
             }
@@ -177,7 +141,7 @@ extension NewsVC: UITableViewDataSource {
                 return UITableViewCell()
             }
             
-            cell.configure(news: items[indexPath.section])
+            cell.configure(news: item)
             
             return cell
         case .footer:
@@ -186,14 +150,14 @@ extension NewsVC: UITableViewDataSource {
                 return UITableViewCell()
             }
             
-            let item = items[indexPath.section]
-            
             cell.onLike = { [weak self] in
-                var likedItem = self?.items[indexPath.section]
-                likedItem?.likeOrDislike()
-                self?.items.remove(at: indexPath.section)
-                guard let likedItem = likedItem else { return }
-                self?.items.insert(likedItem, at: indexPath.section)
+                DispatchQueue.main.async() {
+                    var likedItem = self?.items[indexPath.section]
+                    likedItem?.likeOrDislike()
+                    self?.items.remove(at: indexPath.section)
+                    guard let likedItem = likedItem else { return }
+                    self?.items.insert(likedItem, at: indexPath.section)
+                }
             }
             
             cell.configure(model: item)

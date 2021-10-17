@@ -17,7 +17,6 @@ final class FriendsVC: UIViewController, NavigationControllerSearchDelegate {
     // MARK: - Properties
     // Private Properties
     
-    weak var network: NetworkManagerProtocol?
     private var tableView: UITableView?
     private var filteredFriends: [Friend] = []
     private var sortedFirstLetters = [String]()
@@ -25,18 +24,6 @@ final class FriendsVC: UIViewController, NavigationControllerSearchDelegate {
     private var notificationToken: NotificationToken?
     private let refreshControll = UIRefreshControl()
     private let realmCheck: [Friend] = RealmManager.shared.readFromRealm()
-    
-    // MARK: - Init
-    
-    init(network: NetworkManagerProtocol? = nil) {
-        self.network = network
-        super.init(nibName: nil, bundle: nil)
-        setupBindings()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     // MARK: - Life cycle
     
@@ -158,7 +145,7 @@ extension FriendsVC {
         }.done { [weak self] in
             self?.setupsForSectionsAndHeaders()
             self?.tableView?.reloadData()
-        }.catch { error in
+        }.catch(policy: .allErrors) { error in
             print(error.localizedDescription)
         }
     }
