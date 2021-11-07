@@ -56,7 +56,7 @@ final class AppContainer {
         return AllGroupsVC(network: network)
     }
     
-    static func makeFriendInfoVC(friend: Friend) -> FriendInformationVC {
+    static func makeFriendInfoVC(friend: RLMFriend) -> FriendInformationVC {
         return FriendInformationVC(friend: friend)
     }
     

@@ -14,7 +14,7 @@ final class DataProvider {
     private init() {}
     
     // MARK: - Properties
-    var allFriends: [Friend] = []
+    var allFriends: [RLMFriend] = []
     
     var myGroups: [Group] = []
     

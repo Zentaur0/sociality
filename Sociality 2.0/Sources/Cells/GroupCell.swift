@@ -62,7 +62,7 @@ extension GroupCell: TableViewCellSetupDelegate {
               let avatar = avatar,
               let shadowView = shadowView else { return }
         
-        name.font = .systemFont(ofSize: 17, weight: .semibold)
+        name.font = .friendNameFont
         name.textColor = R.color.blackWhite()
         name.numberOfLines = 0
         

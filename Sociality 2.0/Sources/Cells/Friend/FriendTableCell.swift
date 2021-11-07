@@ -43,7 +43,7 @@ final class FriendTableCell: UITableViewCell {
 
 extension FriendTableCell {
     
-    func configure(friend: Friend) {
+    func configure(friend: RLMFriend) {
         guard let name = name,
               let age = age,
               let avatar = avatar else { return }
@@ -70,10 +70,10 @@ extension FriendTableCell: TableViewCellSetupDelegate {
               let avatar = avatar,
               let shadowView = shadowView else { return }
         
-        name.font = .systemFont(ofSize: 17, weight: .semibold)
+        name.font = .friendNameFont
         name.textColor = R.color.blackWhite()
         
-        age.font = .systemFont(ofSize: 13, weight: .thin)
+        age.font = .friendAgeFont
         
         avatar.frame = shadowView.bounds
         

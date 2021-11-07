@@ -26,7 +26,7 @@ final class Photo: Object {
     @objc dynamic var photoID: Int = 0
     
     /// photo owner
-    let friend = LinkingObjects(fromType: Friend.self, property: "images")
+    let friend = LinkingObjects(fromType: RLMFriend.self, property: "images")
 
     // MARK: - Init
     convenience init(json: SwiftyJSON.JSON) {

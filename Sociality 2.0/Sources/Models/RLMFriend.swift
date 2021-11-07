@@ -11,7 +11,7 @@ import RealmSwift
 
 // MARK: - Friend
 
-final class Friend: Object, Decodable {
+final class RLMFriend: Object, Decodable {
     
     // MARK: - Info
     
@@ -66,7 +66,7 @@ final class Friend: Object, Decodable {
 
 // MARK: - PrimaryKey
 
-extension Friend {
+extension RLMFriend {
     
     override class func primaryKey() -> String? {
         "id"

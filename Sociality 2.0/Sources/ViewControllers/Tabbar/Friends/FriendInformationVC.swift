@@ -15,14 +15,15 @@ final class FriendInformationVC: UIViewController {
     
     // MARK: - Properties
     
-    var friend: Friend
+    var friend: RLMFriend
     private let refreshControll = UIRefreshControl()
     private var notificationToken: NotificationToken?
     private var collectionView: UICollectionView?
+    private let networkManager = NetworkManager()
     
     // MARK: - Init
     
-    init(friend: Friend) {
+    init(friend: RLMFriend) {
         self.friend = friend
         super.init(nibName: nil, bundle: nil)
         provideFriendPhotos()
@@ -92,7 +93,7 @@ extension FriendInformationVC {
     private func notificate() {
         do {
             let realm = try Realm()
-            let realmObject = realm.objects(Friend.self)
+            let realmObject = realm.objects(RLMFriend.self)
             notificationToken = realmObject.observe { (change: RealmCollectionChange) in
                 switch change {
                 case .error(let error):
@@ -113,7 +114,7 @@ extension FriendInformationVC {
     }
     
     private func fetchData() {
-        NetworkManager.shared.loadFriendsPhotos(friend: friend) { [weak self] result in
+        networkManager.loadFriendsPhotos(friend: friend) { [weak self] result in
             switch result {
             case .success(_):
                 DispatchQueue.main.async {

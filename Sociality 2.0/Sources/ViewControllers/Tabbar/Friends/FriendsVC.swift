@@ -18,12 +18,12 @@ final class FriendsVC: UIViewController, NavigationControllerSearchDelegate {
     // Private Properties
     
     private var tableView: UITableView?
-    private var filteredFriends: [Friend] = []
+    private var filteredFriends: [RLMFriend] = []
     private var sortedFirstLetters = [String]()
-    private var sections = [[Friend]]()
+    private var sections = [[RLMFriend]]()
     private var notificationToken: NotificationToken?
     private let refreshControll = UIRefreshControl()
-    private let realmCheck: [Friend] = RealmManager.shared.readFromRealm()
+    private let realmCheck: [RLMFriend] = RealmManager.shared.readFromRealm()
     
     // MARK: - Life cycle
     
@@ -111,7 +111,7 @@ extension FriendsVC {
     private func notificate() {
         do {
             let realm = try Realm()
-            let realmObject = realm.objects(Friend.self)
+            let realmObject = realm.objects(RLMFriend.self)
             notificationToken = realmObject.observe { (change: RealmCollectionChange) in
                 switch change {
                 case .error(let error):

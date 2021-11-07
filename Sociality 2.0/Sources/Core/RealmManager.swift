@@ -85,7 +85,7 @@ final class RealmManager {
         }
     }
     
-    func updateFriendPhotoRealm(photos: [Photo], friend: Friend) {
+    func updateFriendPhotoRealm(photos: [Photo], friend: RLMFriend) {
         do {
             let config = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
             let realm = try Realm(configuration: config)
