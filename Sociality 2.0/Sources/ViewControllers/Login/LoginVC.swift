@@ -82,7 +82,7 @@ extension LoginVC {
         scrollView.keyboardDismissMode = .onDrag
 
         socialityLabel.text = "Sociality"
-        socialityLabel.font = .systemFont(ofSize: 27, weight: .semibold)
+        socialityLabel.font = .loginLabelFont
         socialityLabel.textAlignment = .center
 
         view.addSubview(scrollView)
@@ -153,8 +153,7 @@ extension LoginVC {
     
     private func setupTextField(text: String, contentType: UITextContentType) -> UITextField {
         let attStr = NSAttributedString(string: text,
-                                        attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17,
-                                                                                                    weight: .medium)])
+                                        attributes: [NSAttributedString.Key.font: UIFont.textFieldFont])
         let textField = UITextField()
         textField.backgroundColor = .white
         textField.clearsOnBeginEditing = true
@@ -193,7 +192,7 @@ extension LoginVC {
         button.backgroundColor = color
         button.setTitle(text, for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
+        button.titleLabel?.font = .buttonFont
         button.layer.cornerRadius = 25
         button.addTarget(self, action: action, for: .touchUpInside)
         button.imageEdgeInsets = UIEdgeInsets(top: 5, left: 100, bottom: 5, right: 5)

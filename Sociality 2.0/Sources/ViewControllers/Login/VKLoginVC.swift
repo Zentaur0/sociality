@@ -15,6 +15,7 @@ final class VKLoginVC: UIViewController {
     // MARK: - Properties
     
     private var webView: WKWebView?
+    private let authorizationManager = AuthorizationManager()
 
     // MARK: - Life Cycle
     
@@ -109,7 +110,7 @@ extension VKLoginVC: WKNavigationDelegate {
         }
         
         guard !token.isEmpty && !userIdString.isEmpty else {
-            NetworkManager.shared.authorize(sender: self, isAuthorized: false)
+            authorizationManager.authorize(sender: self, isAuthorized: false)
             decisionHandler(.allow)
             return 
         }
@@ -117,7 +118,7 @@ extension VKLoginVC: WKNavigationDelegate {
         UserDefaults.standard.set(token, forKey: "token")
         UserDefaults.standard.set(Int(userIdString), forKey: "userID")
         
-        NetworkManager.shared.authorize(sender: self, isAuthorized: true)
+        authorizationManager.authorize(sender: self, isAuthorized: true)
         
         decisionHandler(.cancel)
     }

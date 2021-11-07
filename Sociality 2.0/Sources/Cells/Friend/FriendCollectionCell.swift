@@ -67,7 +67,7 @@ final class FriendCollectionCell: UICollectionViewCell {
 
 extension FriendCollectionCell {
     
-    func config(friend: Friend, for indexPath: IndexPath) {
+    func config(friend: RLMFriend, for indexPath: IndexPath) {
         guard let imageView = imageView,
               let infoLabel = infoLabel,
               let likeControll = likeControll,

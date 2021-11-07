@@ -13,13 +13,13 @@ final class AllGroupsVC: UIViewController, NavigationControllerSearchDelegate {
     
     // MARK: - Properties
     
-    weak var network: NetworkManagerProtocol?
+    weak var network: NetworkManagerAdapter?
     private var tableView: UITableView?
     private var filteredGroups: [Group] = DataProvider.shared.allGroups
     
     // MARK: - Init
     
-    init(network: NetworkManagerProtocol) {
+    init(network: NetworkManagerAdapter) {
         self.network = network
         super.init(nibName: nil, bundle: nil)
     }

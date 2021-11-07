@@ -10,70 +10,16 @@ import SwiftyJSON
 
 // MARK: - NetworkManagerProtocol
 
-protocol NetworkManagerProtocol: AnyObject {
-    func loadFriends(url: URL, completion: @escaping (Result<[Friend], Error>) -> Void)
+protocol NetworkManagerAdapter: AnyObject {
+    func loadFriendsPhotos(friend: RLMFriend, completion: @escaping (Result<[Photo], Error>) -> Void)
     func loadGlobalGroups(url: URL, completion: @escaping (Result<Group, Error>) -> Void)
 }
 
 // MARK: - NetworkManager
 
-final class NetworkManager {
-
-    // MARK: - Static
-    static let shared = NetworkManager()
+final class NetworkManager: NetworkManagerAdapter {
     
-}
-
-// MARK: - Methods
-
-extension NetworkManager: NetworkManagerProtocol {
-    
-    func authorize(sender: UIViewController, isAuthorized: Bool) {
-        if isAuthorized {
-            UserDefaults.standard.set(true, forKey: "isAuthorized")
-            
-            DispatchQueue.main.async {
-                sender.dismiss(animated: true) {
-                    AppContainer.createSpinnerView(UIApplication.topViewController() ?? UIViewController(),
-                                                   AppContainer.makeRootController())
-                }
-            }
-        } else {
-            UserDefaults.standard.set(false, forKey: "isAuthorized")
-
-            DispatchQueue.main.async {
-                sender.dismiss(animated: true) {
-                    AppContainer.createSpinnerView(UIApplication.topViewController() ?? UIViewController(),
-                                                   AppContainer.makeRootController())
-                }
-            }
-        }
-    }
-
-    func loadFriends(url: URL, completion: @escaping (Result<[Friend], Error>) -> Void) {
-        let session = URLSession.shared
-
-        session.dataTask(with: url) { data, response, error in
-            do {
-                guard let data = data else { return }
-
-                let json = try JSON(data: data)
-                let friendJSON = json["response"]["items"].arrayValue
-                let friends = friendJSON.map { Friend(json: $0) }
-                
-                completion(.success(friends))
-                
-                DispatchQueue.main.async {
-                    RealmManager.shared.saveToRealm(object: friends)
-                }
-            } catch {
-                print(error, "<--- Friends Error")
-                completion(.failure(error))
-            }
-        }.resume()
-    }
-    
-    func loadFriendsPhotos(friend: Friend, completion: @escaping (Result<[Photo], Error>) -> Void) {
+    func loadFriendsPhotos(friend: RLMFriend, completion: @escaping (Result<[Photo], Error>) -> Void) {
 
         let url = "https://api.vk.com/method/photos.getAll?access_token=\(Session.shared.token)&owner_id=\(friend.id)&extended=1&v=5.131"
         

@@ -24,6 +24,8 @@ protocol NewsFeedProtocol: AnyObject {
 
 final class NewsFeedNetworkManager {
     
+    private let viewModelFactory = NewsViewModelFactory()
+    
     // MARK: - Methods
     
     private func getData(url: URL, completion: @escaping (Result<NewsFeedItems, Error>, String) -> Void) {
@@ -50,35 +52,22 @@ final class NewsFeedNetworkManager {
                 var items = [ItemsModel]()
 
                 DispatchQueue.global(qos: .userInteractive).async(group: dispatchGroup) {
-                    groups = response.groups.map { GroupModel(id: $0.id, name: $0.name, photo: $0.photo, date: 0) }
+                    groups = self.viewModelFactory.constructGroupViewModels(groups: response.groups)
                 }
 
                 DispatchQueue.global(qos: .userInteractive).async(group: dispatchGroup) {
-                    profiles = response.profiles.map { ProfileModel(id: $0.id,
-                                                                    firstName: $0.firstName,
-                                                                    lastName: $0.lastName,
-                                                                    photo: $0.photo)
-                    }
+                    profiles = self.viewModelFactory.constructProfileViewModels(profiles: response.profiles)
                 }
 
                 DispatchQueue.global(qos: .userInteractive).async(group: dispatchGroup) {
-                    items = response.items.map {
-                        ItemsModel(id: $0.id,
-                                   date: $0.date,
-                                   sourceID: $0.sourceID,
-                                   comments: $0.comments?.count ?? 0,
-                                   likes: $0.likes?.count ?? 0,
-                                   text: $0.text,
-                                   photoURL: $0.attachments?.last?.photo?.sizes.last?.url ?? "",
-                                   photoWidth: $0.attachments?.last?.photo?.sizes.last?.width ?? 0,
-                                   photoHeight: $0.attachments?.last?.photo?.sizes.last?.height ?? 0,
-                                   isLiked: $0.likes?.userLikes == 1 ? true : false
-                        )
-                    }
+                    items = self.viewModelFactory.constructItemViewModels(items: response.items)
                 }
 
                 dispatchGroup.notify(queue: .main) {
-                    let newsFeedItems = NewsFeedItems(groups: groups, items: items, profiles: profiles, nextFrom: nextFromStr ?? "")
+                    let newsFeedItems = self.viewModelFactory.constructNewsViewModels(groups: groups,
+                                                                                      items: items,
+                                                                                      profiles: profiles,
+                                                                                      nextFrom: nextFromStr ?? "")
                     completion((.success(newsFeedItems)), nextFromStr ?? "")
                 }
             } catch {
