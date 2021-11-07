@@ -49,9 +49,10 @@ final class NewsFooterCell: UITableViewCell {
 
 extension NewsFooterCell {
     
-    func configure(news: NewsDataSource) {
-        likeCountLabel.text = news.likes
-        commentCountLabel.text = news.comments
+    func configure(model: ItemsModel) {
+        likeButton.setBackgroundImage(model.isLiked ? R.image.liked() : R.image.disliked(), for: .normal)
+        likeCountLabel.text = String(model.likes)
+        commentCountLabel.text = String(model.comments ?? 0)
     }
     
     private func setupCell() {
@@ -59,12 +60,15 @@ extension NewsFooterCell {
         
         likeButton.setBackgroundImage(R.image.disliked(), for: .normal)
         likeButton.addTarget(self, action: #selector(likeOrDislike), for: .touchUpInside)
-        likeCountLabel.text = "0"
+        
+        commentButton.setBackgroundImage(R.image.commentIcon(), for: .normal)
         
         backgroundColor = .white
         
         contentView.addSubview(likeButton)
         contentView.addSubview(likeCountLabel)
+        contentView.addSubview(commentButton)
+        contentView.addSubview(commentCountLabel)
     }
     
     private func setupConstraints() {
@@ -77,6 +81,26 @@ extension NewsFooterCell {
             $0.centerY.equalToSuperview()
             $0.leading.equalTo(likeButton.snp.trailing).offset(10)
         }
+        
+        commentButton.snp.makeConstraints {
+            $0.width.height.equalTo(likeButton)
+            $0.top.bottom.equalToSuperview().inset(15)
+            $0.leading.equalTo(likeCountLabel.snp.trailing).offset(15)
+        }
+        
+        commentCountLabel.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalTo(commentButton.snp.trailing).offset(10)
+        }
+    }
+    
+    private func changeLikeState() {
+        isLiked = !isLiked
+        likeButton.setBackgroundImage(isLiked ? R.image.liked() : R.image.disliked(), for: .normal)
+        if let text = likeCountLabel.text, var number = Int(text) {
+            number = isLiked ? number + 1 : number - 1
+            likeCountLabel.text = String(number)
+        }
     }
     
 }
@@ -86,12 +110,7 @@ extension NewsFooterCell {
 extension NewsFooterCell {
     
     @objc private func likeOrDislike() {
-        isLiked = !isLiked
-        likeButton.setBackgroundImage(isLiked ? R.image.liked() : R.image.disliked(), for: .normal)
-        if let text = likeCountLabel.text, var number = Int(text) {
-            number = isLiked ? number + 1 : number - 1
-            likeCountLabel.text = String(number)
-        }
+        changeLikeState()
         onLike?()
     }
     

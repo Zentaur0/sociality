@@ -8,25 +8,25 @@
 import UIKit
 import SwiftyJSON
 
-class URLs {
-
-    static let getFriends = "https://api.vk.com/method/friends.get?access_token=\(Session.shared.token)&user_id=\(Session.shared.userId)&name_case=nom&fields=photo_100,%20city&v=5.131"
-
-    static let getGroups = "https://api.vk.com/method/groups.get?access_token=\(Session.shared.token)&user_id=\(Session.shared.userId)&extended=1&v=5.131"
-
-    static let getSearchGroups = "https://api.vk.com/method/groups.search?access_token=\(Session.shared.token)&user_id=\(Session.shared.userId)&q=A&sort=0&v=5.131"
-    
-}
+// MARK: - NetworkManagerProtocol
 
 protocol NetworkManagerProtocol: AnyObject {
-    func loadFriends(url: String, completion: @escaping (Result<[Friend], Error>) -> Void)
-    func loadGroups(url: String, completion: @escaping (Result<[Group], Error>) -> Void)
+    func loadFriends(url: URL, completion: @escaping (Result<[Friend], Error>) -> Void)
+    func loadGlobalGroups(url: URL, completion: @escaping (Result<Group, Error>) -> Void)
 }
 
-final class NetworkManager: NetworkManagerProtocol {
+// MARK: - NetworkManager
+
+final class NetworkManager {
 
     // MARK: - Static
     static let shared = NetworkManager()
+    
+}
+
+// MARK: - Methods
+
+extension NetworkManager: NetworkManagerProtocol {
     
     func authorize(sender: UIViewController, isAuthorized: Bool) {
         if isAuthorized {
@@ -50,10 +50,7 @@ final class NetworkManager: NetworkManagerProtocol {
         }
     }
 
-    func loadFriends(url: String, completion: @escaping (Result<[Friend], Error>) -> Void) {
-
-        guard let url = URL(string: url) else { return }
-
+    func loadFriends(url: URL, completion: @escaping (Result<[Friend], Error>) -> Void) {
         let session = URLSession.shared
 
         session.dataTask(with: url) { data, response, error in
@@ -103,35 +100,7 @@ final class NetworkManager: NetworkManagerProtocol {
         }.resume()
     }
 
-    func loadGroups(url: String, completion: @escaping (Result<[Group], Error>) -> Void) {
-
-        guard let url = URL(string: url) else { return }
-
-        let session = URLSession.shared
-
-        session.dataTask(with: url) { data, response, error in
-            do {
-                guard let data = data else { return }
-                let json = try JSON(data: data)
-                let groupJSON = json["response"]["items"].arrayValue
-                let groups = groupJSON.map { Group(json: $0)}
-                completion(.success(groups))
-
-                DispatchQueue.main.async {
-                    RealmManager.shared.saveToRealm(object: groups)
-                }
-                
-            } catch {
-                completion(.failure(error))
-            }
-        }.resume()
-    }
-
-    func loadGlobalGroups(text: String, completion: @escaping (Result<Group, Error>) -> Void) {
-        let url = "https://api.vk.com/method/search.getHints?access_token=\(Session.shared.token)&user_id=\(Session.shared.userId)&q=\(text)&filters=groups&sort=0&search_global=1&v=5.131"
-
-        guard let url = URL(string: url) else { return }
-        
+    func loadGlobalGroups(url: URL, completion: @escaping (Result<Group, Error>) -> Void) {
         let session = URLSession.shared
 
         session.dataTask(with: url) { data, response, error in
@@ -148,5 +117,5 @@ final class NetworkManager: NetworkManagerProtocol {
             }
         }.resume()
     }
-
+    
 }

@@ -21,6 +21,12 @@ final class NewsHeaderCell: UITableViewCell {
     private let nameLabel = UILabel()
     private let timeLabel = UILabel()
     private let closeButton = UIButton(type: .system)
+    private let dateFormatter: DateFormatter = {
+        let formater = DateFormatter()
+        formater.dateFormat = "dd-MMM hh:mm"
+        return formater
+    }()
+    
     private lazy var labelStack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [nameLabel, timeLabel])
         stack.axis = .vertical
@@ -53,18 +59,14 @@ final class NewsHeaderCell: UITableViewCell {
 
 extension NewsHeaderCell {
     
-    func configure(news: NewsDataSource) {
-        authorImageView.image = UIImage(named: news.avatar)
-        nameLabel.text = news.author
-        timeLabel.text = news.time
+    func configure(model: GroupModel) {
+        authorImageView.kf.setImage(with: URL(string: model.photo))
+        nameLabel.text = model.name
+        timeLabel.text = dateFormatter.string(from: Date(timeIntervalSince1970: model.date))
     }
     
     private func setupCell() {
         selectionStyle = .none
-        
-        authorImageView.image = R.image.accecoriesAvatar()
-        nameLabel.text = "alskdfjlkasdjf"
-        timeLabel.text = "19:32:22"
         
         timeLabel.textColor = .lightGray
         

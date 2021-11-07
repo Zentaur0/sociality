@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import RealmSwift
+import PromiseKit
 
 // MARK: - FriendsVC
 
@@ -16,25 +17,13 @@ final class FriendsVC: UIViewController, NavigationControllerSearchDelegate {
     // MARK: - Properties
     // Private Properties
     
-    weak var network: NetworkManagerProtocol?
     private var tableView: UITableView?
     private var filteredFriends: [Friend] = []
     private var sortedFirstLetters = [String]()
     private var sections = [[Friend]]()
     private var notificationToken: NotificationToken?
     private let refreshControll = UIRefreshControl()
-    
-    // MARK: - Init
-    
-    init(network: NetworkManagerProtocol? = nil) {
-        self.network = network
-        super.init(nibName: nil, bundle: nil)
-        setupBindings()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    private let realmCheck: [Friend] = RealmManager.shared.readFromRealm()
     
     // MARK: - Life cycle
     
@@ -110,7 +99,6 @@ extension FriendsVC {
     }
 
     private func provideFriends() {
-        let realmCheck: [Friend] = RealmManager.shared.readFromRealm()
         if realmCheck.isEmpty {
             setupBindings()
         } else {
@@ -148,17 +136,17 @@ extension FriendsVC {
     }
     
     private func setupBindings() {
-        network?.loadFriends(url: URLs.getFriends) { [weak self] result in
-            switch result {
-            case .failure(let error):
-                print(error)
-            case .success(let friends):
-                self?.filteredFriends = friends
-                self?.setupsForSectionsAndHeaders()
-                DispatchQueue.main.async { [weak self] in
-                    self?.tableView?.reloadData()
-                }
-            }
+        firstly {
+            FriendsNetworkManager.shared.loadFriendsWithPromise(url: URLs.getFriendsURL())
+        }.get { friends in
+            RealmManager.shared.saveToRealm(object: friends)
+        }.map { [weak self] friends in
+            self?.filteredFriends = friends
+        }.done { [weak self] in
+            self?.setupsForSectionsAndHeaders()
+            self?.tableView?.reloadData()
+        }.catch(policy: .allErrors) { error in
+            print(error.localizedDescription)
         }
     }
     
@@ -201,10 +189,10 @@ extension FriendsVC: UISearchResultsUpdating {
         sortedFirstLetters = []
 
         if text.isEmpty {
-            filteredFriends = DataProvider.shared.allFriends
+            filteredFriends = realmCheck
             setupsForSectionsAndHeaders()
         } else {
-            for friend in DataProvider.shared.allFriends {
+            for friend in realmCheck {
                 if friend.givenName.lowercased().contains(text.lowercased()) || friend.familyName.lowercased().contains(text.lowercased()) {
                     filteredFriends.append(friend)
                     setupsForSectionsAndHeaders()

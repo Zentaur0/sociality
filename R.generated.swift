@@ -168,7 +168,7 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.image` struct is generated, and contains static references to 13 images.
+  /// This `R.image` struct is generated, and contains static references to 20 images.
   struct image {
     /// Image `FedericoBruno_Avatar`.
     static let federicoBruno_Avatar = Rswift.ImageResource(bundle: R.hostingBundle, name: "FedericoBruno_Avatar")
@@ -184,6 +184,8 @@ struct R: Rswift.Validatable {
     static let accecoriesAvatar = Rswift.ImageResource(bundle: R.hostingBundle, name: "accecoriesAvatar")
     /// Image `carsAvatar`.
     static let carsAvatar = Rswift.ImageResource(bundle: R.hostingBundle, name: "carsAvatar")
+    /// Image `comment.icon`.
+    static let commentIcon = Rswift.ImageResource(bundle: R.hostingBundle, name: "comment.icon")
     /// Image `disliked`.
     static let disliked = Rswift.ImageResource(bundle: R.hostingBundle, name: "disliked")
     /// Image `images`.
@@ -192,8 +194,20 @@ struct R: Rswift.Validatable {
     static let liked = Rswift.ImageResource(bundle: R.hostingBundle, name: "liked")
     /// Image `memsAvatar`.
     static let memsAvatar = Rswift.ImageResource(bundle: R.hostingBundle, name: "memsAvatar")
+    /// Image `newspaper.fill`.
+    static let newspaperFill = Rswift.ImageResource(bundle: R.hostingBundle, name: "newspaper.fill")
+    /// Image `newspaper`.
+    static let newspaper = Rswift.ImageResource(bundle: R.hostingBundle, name: "newspaper")
+    /// Image `person.2.fill`.
+    static let person2Fill = Rswift.ImageResource(bundle: R.hostingBundle, name: "person.2.fill")
+    /// Image `person.2`.
+    static let person2 = Rswift.ImageResource(bundle: R.hostingBundle, name: "person.2")
     /// Image `psychologyAvatar`.
     static let psychologyAvatar = Rswift.ImageResource(bundle: R.hostingBundle, name: "psychologyAvatar")
+    /// Image `rectangles.group.fill`.
+    static let rectanglesGroupFill = Rswift.ImageResource(bundle: R.hostingBundle, name: "rectangles.group.fill")
+    /// Image `rectangles.group`.
+    static let rectanglesGroup = Rswift.ImageResource(bundle: R.hostingBundle, name: "rectangles.group")
     /// Image `travelAvatar`.
     static let travelAvatar = Rswift.ImageResource(bundle: R.hostingBundle, name: "travelAvatar")
 
@@ -247,6 +261,13 @@ struct R: Rswift.Validatable {
     #endif
 
     #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "comment.icon", bundle: ..., traitCollection: ...)`
+    static func commentIcon(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.commentIcon, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
     /// `UIImage(named: "disliked", bundle: ..., traitCollection: ...)`
     static func disliked(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
       return UIKit.UIImage(resource: R.image.disliked, compatibleWith: traitCollection)
@@ -275,9 +296,51 @@ struct R: Rswift.Validatable {
     #endif
 
     #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "newspaper", bundle: ..., traitCollection: ...)`
+    static func newspaper(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.newspaper, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "newspaper.fill", bundle: ..., traitCollection: ...)`
+    static func newspaperFill(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.newspaperFill, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "person.2", bundle: ..., traitCollection: ...)`
+    static func person2(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.person2, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "person.2.fill", bundle: ..., traitCollection: ...)`
+    static func person2Fill(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.person2Fill, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
     /// `UIImage(named: "psychologyAvatar", bundle: ..., traitCollection: ...)`
     static func psychologyAvatar(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
       return UIKit.UIImage(resource: R.image.psychologyAvatar, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "rectangles.group", bundle: ..., traitCollection: ...)`
+    static func rectanglesGroup(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.rectanglesGroup, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "rectangles.group.fill", bundle: ..., traitCollection: ...)`
+    static func rectanglesGroupFill(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.rectanglesGroupFill, compatibleWith: traitCollection)
     }
     #endif
 

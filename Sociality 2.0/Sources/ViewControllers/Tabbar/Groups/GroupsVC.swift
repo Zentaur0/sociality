@@ -14,28 +14,17 @@ final class GroupsVC: UIViewController, NavigationControllerSearchDelegate {
     
     // MARK: - Properties
     
-    weak var network: NetworkManagerProtocol?
-    private let tableView = UITableView()
+    var filteredGroups: [Group] = []
+    let tableView = UITableView()
+    
     private var notificationToken: NotificationToken?
-    private var filteredGroups: [Group] = []
     private let refreshControll = UIRefreshControl()
-    
-    // MARK: - Init
-    
-    init(network: NetworkManagerProtocol? = nil) {
-        self.network = network
-        super.init(nibName: nil, bundle: nil)
-        setupBindings()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     // MARK: - Life cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupBindings()
         provideGroups()
         setupVC()
         setupConstraints()
@@ -55,6 +44,7 @@ extension GroupsVC {
     
     private func setupVC() {
         tableView.tableFooterView = UIView()
+        tableView.backgroundColor = R.color.whiteBlack()
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(GroupCell.self, forCellReuseIdentifier: GroupCell.reuseID)
@@ -81,17 +71,21 @@ extension GroupsVC {
     }
     
     private func setupBindings() {
-        network?.loadGroups(url: URLs.getGroups) { [weak self] result in
-            switch result {
-            case .failure(let error):
-                print(error)
-            case .success(let groups):
-                self?.filteredGroups = groups
-                DispatchQueue.main.async { [weak self] in
-                    self?.tableView.reloadData()
-                }
-            }
-        }
+        let operationQueue = OperationQueue()
+        
+        let groupRequest = GroupsRequestOperation()
+        let loadGroups = GroupsLoadAsyncOperation()
+        let displayGroups = DisplayGroupsOperation(groupsVC: self)
+        let saveGroupsToRealm = SaveGroupsToRealmOperation()
+        
+        operationQueue.addOperation(groupRequest)
+        loadGroups.addDependency(groupRequest)
+        operationQueue.addOperation(loadGroups)
+        displayGroups.addDependency(loadGroups)
+        saveGroupsToRealm.addDependency(loadGroups)
+        
+        OperationQueue.main.addOperation(saveGroupsToRealm)
+        OperationQueue.main.addOperation(displayGroups)
     }
 
     private func provideGroups() {
@@ -145,23 +139,13 @@ extension GroupsVC {
     }
     
     @objc func refresh() {
-        
-        let network = NetworkManager()
-        network.loadGroups(url: URLs.getGroups) { result in
-            switch result {
-            case .failure(let error):
-                print(error)
-            case .success(let groups):
-                self.filteredGroups = groups
-                DispatchQueue.main.async { [weak self] in
-                    self?.tableView.reloadData()
-                }
-            }
-        }
+        setupBindings()
         
         notificate()
         
-        refreshControll.endRefreshing()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+            self?.refreshControll.endRefreshing()
+        }
     }
     
 }

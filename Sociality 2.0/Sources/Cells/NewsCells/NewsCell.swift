@@ -17,8 +17,13 @@ final class NewsCell: UITableViewCell {
     
     // MARK: - Properties
     
+    var textHeight = CGFloat()
+    var imageHeight = CGFloat()
     private let newsImageView = UIImageView()
     private let newsTextLabel = UILabel()
+    private let expandableButton = UIButton(type: .system)
+    private var isExpanded = false
+    var onButton: EmptyClosure?
     
     // MARK: - Init
     
@@ -46,13 +51,17 @@ final class NewsCell: UITableViewCell {
 
 extension NewsCell {
     
-    func configure(news: NewsDataSource) {
-        if let image = news.image {
-            newsImageView.image = UIImage(named: image)
-//        newsImageView.kf.setImage(with: URL(string: News.self))
+    func configure(news: ItemsModel) {
+        if let photoURL = news.photoURL {
+            newsImageView.kf.setImage(with: URL(string: photoURL))
+            imageHeight = CGFloat(news.aspectRatio)
         }
         if let text = news.text {
             newsTextLabel.text = text
+            
+            if text.count > 200 {
+                expandableButton.isHidden = false
+            }
         }
     }
     
@@ -62,22 +71,52 @@ extension NewsCell {
         newsImageView.contentMode = .scaleAspectFill
         newsImageView.clipsToBounds = true
         
-        newsTextLabel.numberOfLines = 0
+        newsTextLabel.lineBreakMode = .byTruncatingTail
+        newsTextLabel.numberOfLines = 6
+        
+        expandableButton.setTitle("Show more", for: .normal)
+        expandableButton.addTarget(self, action: #selector(expandableButtonTapped), for: .touchUpInside)
+        expandableButton.isHidden = true
+        textHeight = newsTextLabel.intrinsicContentSize.height
         
         contentView.addSubview(newsTextLabel)
         contentView.addSubview(newsImageView)
+        contentView.addSubview(expandableButton)
     }
     
     private func setupConstraints() {
         newsTextLabel.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview().inset(10)
-            $0.bottom.equalTo(newsImageView.snp.top).offset(-5)
         }
         
         newsImageView.snp.makeConstraints {
-            $0.height.equalToSuperview().priority(.low)
+            $0.top.equalTo(expandableButton.snp.bottom).offset(5)
             $0.leading.trailing.bottom.equalToSuperview()
         }
+        
+        expandableButton.snp.makeConstraints {
+            $0.top.equalTo(newsTextLabel.snp.bottom).offset(5)
+            $0.leading.equalToSuperview().inset(10)
+        }
+    }
+    
+}
+
+// MARK: - Actions
+
+extension NewsCell {
+    
+    @objc private func expandableButtonTapped() {
+        isExpanded = !isExpanded
+        let showMore = "Show more"
+        let showLess = "Show less"
+        
+        expandableButton.setTitle(isExpanded ? showLess : showMore, for: .normal)
+        newsTextLabel.numberOfLines = isExpanded ? 0 : 6
+        
+        textHeight = isExpanded ? newsTextLabel.intrinsicContentSize.height : 0
+        
+        onButton?()
     }
     
 }

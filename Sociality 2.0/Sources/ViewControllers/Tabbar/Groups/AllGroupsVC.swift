@@ -12,9 +12,21 @@ import UIKit
 final class AllGroupsVC: UIViewController, NavigationControllerSearchDelegate {
     
     // MARK: - Properties
-    // Private Properties
+    
+    weak var network: NetworkManagerProtocol?
     private var tableView: UITableView?
     private var filteredGroups: [Group] = DataProvider.shared.allGroups
+    
+    // MARK: - Init
+    
+    init(network: NetworkManagerProtocol) {
+        self.network = network
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Life cycle
     
@@ -86,7 +98,8 @@ extension AllGroupsVC: UISearchResultsUpdating {
             filteredGroups = DataProvider.shared.allGroups
             tableView?.reloadData()
         } else {
-            NetworkManager.shared.loadGlobalGroups(text: text) { [weak self] result in
+            let url = URLs.getSearchGroupsURL(q: text)
+            network?.loadGlobalGroups(url: url) { [weak self] result in
                 switch result {
                 case .failure(let error):
                     print(error)

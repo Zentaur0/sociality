@@ -177,6 +177,9 @@ extension FriendInformationVC: UICollectionViewDelegateFlowLayout {
         let oldHeight = CGFloat(friend.images[indexPath.item].height)
         let scaleFactor = view.frame.width / oldWidth
         let newHeight = CGFloat(oldHeight) * scaleFactor
+        
+        guard newHeight > 0 else { return CGSize(width: view.frame.width - 50, height: view.frame.width - 50) }
+        
         let size = CGSize(width: view.frame.width - 50, height: newHeight)
         return size
     }
